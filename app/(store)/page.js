@@ -50,37 +50,47 @@ export default async function HomePage() {
     .filter(Boolean)
     .slice(0, 6);
 
+  // Hero product image block (rendered in two spots: right column on desktop, inline on mobile)
+  const heroMediaInner = (
+    <>
+      <div className="hero-frame" style={{ position: "absolute", inset: 14, border: "1px solid rgba(227,183,166,.28)", borderRadius: 3, transform: "rotate(-2deg)" }} />
+      <img src={heroImage} alt={heroProduct?.name} className="float hero-img" style={{ width: "100%", aspectRatio: "3/4", objectFit: "cover", borderRadius: 3, position: "relative", boxShadow: "0 40px 90px rgba(0,0,0,.6)" }} />
+      {heroProduct && (
+        <div className="hero-card" style={{ position: "absolute", bottom: 26, left: -26, background: "rgba(10,10,11,.9)", backdropFilter: "blur(10px)", border: "1px solid rgba(227,183,166,.3)", padding: "16px 22px", borderRadius: 2 }}>
+          <div style={{ fontFamily: "var(--serif)", fontSize: 19 }}>{heroProduct.name}</div>
+          <div style={{ fontSize: 12, letterSpacing: ".14em", color: "var(--rose-light)", marginTop: 5 }}>{rs(heroProduct.price)}</div>
+        </div>
+      )}
+    </>
+  );
+
   return (
     <div>
       {/* HERO */}
       <section className="hero-section">
         <div className="hero-glow" />
-        <div className="rise hero-label" style={{ ...label }}>Best Seller · Almond Collection</div>
-        <h1 className="rise hero-headline" style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: "clamp(40px,5.6vw,82px)", lineHeight: 1.02, letterSpacing: "-.01em" }}>{heroHeadline}</h1>
-        <div className="rise text-gradient hero-script" style={{ fontFamily: "var(--script)", fontSize: "clamp(32px,4vw,44px)" }}>{heroScript}</div>
-        <p className="rise hero-para" style={{ fontSize: 15, lineHeight: 1.85, color: "rgba(247,241,237,.62)", fontWeight: 300 }}>Hand-painted press-on sets, made to your exact nail size. Salon-grade shine in ten minutes — no appointment, no damage, no drying time.</p>
-        <div className="rise-slow hero-media">
-          <div className="hero-frame" style={{ position: "absolute", inset: 14, border: "1px solid rgba(227,183,166,.28)", borderRadius: 3, transform: "rotate(-2deg)" }} />
-          <img src={heroImage} alt={heroProduct?.name} className="float hero-img" style={{ width: "100%", aspectRatio: "3/4", objectFit: "cover", borderRadius: 3, position: "relative", boxShadow: "0 40px 90px rgba(0,0,0,.6)" }} />
-          {heroProduct && (
-            <div className="hero-card" style={{ position: "absolute", bottom: 26, left: -26, background: "rgba(10,10,11,.9)", backdropFilter: "blur(10px)", border: "1px solid rgba(227,183,166,.3)", padding: "16px 22px", borderRadius: 2 }}>
-              <div style={{ fontFamily: "var(--serif)", fontSize: 19 }}>{heroProduct.name}</div>
-              <div style={{ fontSize: 12, letterSpacing: ".14em", color: "var(--rose-light)", marginTop: 5 }}>{rs(heroProduct.price)}</div>
-            </div>
-          )}
+        <div className="hero-text">
+          <div className="rise hero-label" style={{ ...label }}>Best Seller · Almond Collection</div>
+          <h1 className="rise hero-headline" style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: "clamp(40px,5.6vw,82px)", lineHeight: 1.02, letterSpacing: "-.01em" }}>{heroHeadline}</h1>
+          <div className="rise text-gradient hero-script" style={{ fontFamily: "var(--script)", fontSize: "clamp(32px,4vw,44px)" }}>{heroScript}</div>
+          <p className="rise hero-para" style={{ fontSize: 15, lineHeight: 1.85, color: "rgba(247,241,237,.62)", fontWeight: 300 }}>Hand-painted press-on sets, made to your exact nail size. Salon-grade shine in ten minutes — no appointment, no damage, no drying time.</p>
+          {/* image shows here on mobile only */}
+          <div className="rise-slow hero-media hero-media-mobile">{heroMediaInner}</div>
+          <div className="rise hero-btns">
+            <Link href="/shop" className="shimmer" style={{ padding: "17px 40px", fontSize: 12, letterSpacing: ".26em", textTransform: "uppercase", borderRadius: 2 }}>Shop the sets</Link>
+            <a href={waLink("Hi M&S! I want to order a custom set")} target="_blank" rel="noreferrer" className="btn-outline" style={{ padding: "17px 34px", fontSize: 12, letterSpacing: ".26em", textTransform: "uppercase", borderRadius: 2 }}>Order on WhatsApp</a>
+          </div>
+          <div className="rise hero-stats">
+            {[["4.9", "1,200+ reviews"], ["10 min", "Application"], ["3 weeks", "Wear time"]].map(([v, l]) => (
+              <div key={l}>
+                <div style={{ fontFamily: "var(--serif)", fontSize: 30, color: "var(--rose-light)" }}>{v}</div>
+                <div style={{ fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.45)", marginTop: 4 }}>{l}</div>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="rise hero-btns">
-          <Link href="/shop" className="shimmer" style={{ padding: "17px 40px", fontSize: 12, letterSpacing: ".26em", textTransform: "uppercase", borderRadius: 2 }}>Shop the sets</Link>
-          <a href={waLink("Hi M&S! I want to order a custom set")} target="_blank" rel="noreferrer" className="btn-outline" style={{ padding: "17px 34px", fontSize: 12, letterSpacing: ".26em", textTransform: "uppercase", borderRadius: 2 }}>Order on WhatsApp</a>
-        </div>
-        <div className="rise hero-stats">
-          {[["4.9", "1,200+ reviews"], ["10 min", "Application"], ["3 weeks", "Wear time"]].map(([v, l]) => (
-            <div key={l}>
-              <div style={{ fontFamily: "var(--serif)", fontSize: 30, color: "var(--rose-light)" }}>{v}</div>
-              <div style={{ fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.45)", marginTop: 4 }}>{l}</div>
-            </div>
-          ))}
-        </div>
+        {/* image on the right on desktop only */}
+        <div className="rise-slow hero-media hero-media-desktop">{heroMediaInner}</div>
       </section>
 
       {/* CATEGORIES */}
