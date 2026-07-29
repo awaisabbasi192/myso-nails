@@ -34,7 +34,7 @@ a:hover { color: var(--rose-light); }
 ::selection { background: var(--bronze); color: var(--bg); }
 input, textarea, select, button { font-family: var(--sans); }
 /* Never let form controls push the page wider than the screen */
-input, textarea, select { max-width: 100%; box-sizing: border-box; }
+input, textarea, select { max-width: 100%; min-width: 0; box-sizing: border-box; }
 html { overflow-x: hidden; }
 
 @keyframes msFloat { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-9px) } }
@@ -282,6 +282,9 @@ html { overflow-x: hidden; }
 
   /* Account dashboard — stat & quick-link grids to 2 columns */
   .acct-stats, .acct-quick { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Checkout — delivery-details form to single column so fields fit */
+  .checkout-fields { grid-template-columns: 1fr !important; gap: 14px !important; }
 
   /* Contact nail-size chart — keep 5 cols but shrink to fit */
   .contact-size-chart .csc-cell { padding: 11px 3px !important; }

@@ -50,3 +50,6 @@ cookies.txt
 # local sqlite (no longer used — Postgres in production)
 /prisma/*.db
 /prisma/*.db-journal
+
+.vercel
+.env*

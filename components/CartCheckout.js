@@ -84,7 +84,7 @@ export default function CartCheckout({ prefill }) {
   function next() { setStep((s) => Math.min(4, s + 1)); window.scrollTo(0, 0); }
   function prev() { setStep((s) => Math.max(1, s - 1)); }
 
-  const inputStyle = { background: "transparent", border: "1px solid rgba(227,183,166,.25)", color: "var(--ink)", padding: 14, fontSize: 13, outline: "none" };
+  const inputStyle = { background: "transparent", border: "1px solid rgba(227,183,166,.25)", color: "var(--ink)", padding: 14, fontSize: 13, outline: "none", width: "100%", minWidth: 0 };
   const lab = { fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.45)" };
   const STEP_LABELS = ["Bag", "Details", "Payment", "Done"];
 
@@ -142,7 +142,7 @@ export default function CartCheckout({ prefill }) {
         <div data-r="split" style={{ display: "grid", gridTemplateColumns: "1.4fr .9fr", gap: 44, alignItems: "start" }}>
           <div>
             <h1 style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 42, margin: "0 0 28px" }}>Delivery details</h1>
-            <div data-r="steps4" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div className="checkout-fields" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
               <Field label="Full name" style={lab} inputStyle={inputStyle} value={details.customerName} onChange={set("customerName")} placeholder="Areeba Khan" />
               <Field label="WhatsApp number" style={lab} inputStyle={inputStyle} value={details.phone} onChange={set("phone")} placeholder="0300 1234567" />
               <div style={{ gridColumn: "span 2", display: "flex", flexDirection: "column", gap: 8 }}><span style={lab}>Address</span><input value={details.address} onChange={set("address")} placeholder="House, street, area" style={inputStyle} /></div>
@@ -227,7 +227,7 @@ export default function CartCheckout({ prefill }) {
 
 function Field({ label, style, inputStyle, ...props }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 0 }}>
       <span style={style}>{label}</span>
       <input style={inputStyle} {...props} />
     </div>

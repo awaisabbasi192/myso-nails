@@ -1,6 +1,14 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import { waLink } from "@/lib/format";
 
 export default function WhatsAppFab() {
+  const pathname = usePathname();
+  // Hide on checkout & account — they have their own WhatsApp buttons and the
+  // floating button overlaps the order summary / total on small screens.
+  if (pathname === "/cart" || pathname?.startsWith("/account")) return null;
+
   return (
     <a
       href={waLink("Hi M&S!")}
