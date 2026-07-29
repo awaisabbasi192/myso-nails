@@ -179,9 +179,12 @@ html { overflow-x: hidden; }
 @media (max-width: 860px) {
   [data-r="split"], [data-r="sidebar"], [data-r="footer"], [data-r="admin"] { grid-template-columns: 1fr !important; }
   [data-r="sidebar"] > aside { position: static !important; }
-  [data-r="admin"] > aside { border-right: none !important; border-bottom: 1px solid rgba(227,183,166,.12) !important; display: flex; flex-wrap: wrap; align-items: center; padding: 14px 10px !important; }
-  [data-r="admin"] > aside > div.admin-tab { padding: 10px 14px !important; border-left: none !important; }
+  [data-r="admin"] > aside { position: sticky; top: 0; z-index: 30; border-right: none !important; border-bottom: 1px solid rgba(227,183,166,.14) !important; display: flex; flex-wrap: nowrap; align-items: center; gap: 2px; padding: 8px 6px !important; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  [data-r="admin"] > aside::-webkit-scrollbar { display: none; }
+  [data-r="admin"] > aside > div:first-child { display: none !important; } /* hide "Studio admin" label */
+  [data-r="admin"] > aside > div.admin-tab { padding: 9px 14px !important; border-left: none !important; white-space: nowrap; flex: 0 0 auto; font-size: 12px !important; border-radius: 4px; }
   [data-r="admin"] > aside > .admin-side-foot { display: none !important; }
+  [data-r="admin"] > div { padding: 20px 14px 90px !important; } /* content padding */
   [data-r="hero"] { min-height: 0 !important; padding-top: 44px !important; }
   [data-r="modal"] { grid-template-columns: 1fr !important; }
   [data-r="modal"] > img { max-height: 280px; }
@@ -248,15 +251,9 @@ html { overflow-x: hidden; }
   div[style*="minmax(280px"],
   div[style*="minmax(270px"] { grid-template-columns: 1fr !important; }
 
-  /* Two-column fixed-ratio grids → stack */
-  div[style*="1.4fr 1fr"],
-  div[style*="1.5fr .9fr"],
-  div[style*="1.05fr .95fr"],
-  div[style*="1.6fr 1fr"],
-  div[style*="1.3fr 1fr"],
-  div[style*="1.4fr .9fr"],
-  div[style*="230px 1fr"],
-  section[style*="1fr 1fr"] { grid-template-columns: 1fr !important; }
+  /* Storefront two-column splits already stack via [data-r="split"].
+     (Removed broad div[style*="Xfr Yfr"] rules — they were collapsing the
+      admin data tables, which are meant to scroll horizontally instead.) */
 
   /* Homepage: categories & best sellers = 2 small boxes per row */
   .home-cat-grid,
@@ -290,6 +287,12 @@ html { overflow-x: hidden; }
   .bag-item { gap: 12px !important; }
   .bag-item > img { width: 74px !important; height: 88px !important; }
   .bag-item > div > div:first-child { font-size: 18px !important; }
+
+  /* Admin — let action-button rows wrap instead of overflowing */
+  .admin-flex-row { flex-wrap: wrap !important; }
+  .admin-flex-actions { flex-wrap: wrap !important; margin-left: 0 !important; }
+  /* Admin tables stay swipeable (horizontal scroll) with a soft hint */
+  [data-r="admin"] [data-scroll-x] { border-radius: 4px; }
 
   /* Bridal bottom CTA — stack, tidy padding, full-width wrapping button */
   .bridal-cta { padding: 28px 20px !important; text-align: center; }

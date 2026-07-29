@@ -394,12 +394,12 @@ function Coupons({ coupons, call, busy }) {
         <h1 style={h1}>Coupons</h1>
         <div style={{ border: "1px solid rgba(227,183,166,.16)", background: "var(--panel)" }}>
           {coupons.map((c) => (
-            <div key={c.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 14, padding: "20px 22px", borderBottom: "1px solid rgba(227,183,166,.08)" }}>
+            <div key={c.id} className="admin-flex-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 14, padding: "20px 22px", borderBottom: "1px solid rgba(227,183,166,.08)" }}>
               <div>
                 <div style={{ fontFamily: "var(--serif)", fontSize: 22, letterSpacing: ".12em", color: "var(--rose-light)" }}>{c.code}</div>
                 <div style={{ fontSize: 11.5, color: "rgba(247,241,237,.42)", marginTop: 5 }}>{c.detail || (c.type === "percentage" ? `${c.value}% off` : `Rs ${c.value} off`)} · used {c.usedCount}×</div>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div className="admin-flex-actions" style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <span style={{ fontSize: 10, letterSpacing: ".16em", textTransform: "uppercase", border: "1px solid rgba(227,183,166,.28)", padding: "6px 10px", color: c.active ? "#8FD6A6" : "rgba(247,241,237,.4)" }}>{c.active ? "Active" : "Off"}</span>
                 <div onClick={() => call(`/api/admin/coupons/${c.id}`, "PATCH", { active: !c.active })} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(227,183,166,.28)", padding: "8px 11px", color: "rgba(247,241,237,.7)" }}>{c.active ? "Disable" : "Enable"}</div>
                 <div onClick={() => confirm(`Delete ${c.code}?`) && call(`/api/admin/coupons/${c.id}`, "DELETE")} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E39B9B", padding: "8px 11px" }}>Delete</div>
@@ -878,9 +878,9 @@ function MessagesTab({ messages, subscribers }) {
   const [view, setView] = useState("messages");
   return (
     <div>
-      <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24 }}>
+      <div className="admin-flex-row" style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24 }}>
         <h1 style={{ ...h1, marginBottom: 0 }}>{view === "messages" ? "Messages" : "Newsletter subscribers"}</h1>
-        <div style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
+        <div className="admin-flex-actions" style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
           <div onClick={() => setView("messages")} style={{ cursor: "pointer", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", padding: "9px 16px", border: `1px solid ${view === "messages" ? "var(--bronze)" : "rgba(227,183,166,.25)"}`, color: view === "messages" ? "var(--rose-light)" : "rgba(247,241,237,.6)" }}>Messages ({messages.length})</div>
           <div onClick={() => setView("subscribers")} style={{ cursor: "pointer", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", padding: "9px 16px", border: `1px solid ${view === "subscribers" ? "var(--bronze)" : "rgba(227,183,166,.25)"}`, color: view === "subscribers" ? "var(--rose-light)" : "rgba(247,241,237,.6)" }}>Subscribers ({subscribers.length})</div>
         </div>
