@@ -112,12 +112,12 @@ export default function CartCheckout({ prefill }) {
               <div style={{ border: "1px dashed rgba(227,183,166,.25)", padding: 40, textAlign: "center", color: "rgba(247,241,237,.5)", fontSize: 13.5 }}>Your bag is empty. <Link href="/shop" style={{ color: "var(--rose)", borderBottom: "1px solid rgba(227,183,166,.4)" }}>Browse the sets</Link></div>
             )}
             {cart.map((c, i) => (
-              <div key={c.slug + c.size + i} style={{ display: "grid", gridTemplateColumns: "96px 1fr auto", gap: 20, alignItems: "center", borderTop: "1px solid rgba(227,183,166,.14)", padding: "22px 0" }}>
+              <div key={c.slug + c.size + i} className="bag-item" style={{ display: "grid", gridTemplateColumns: "96px 1fr auto", gap: 20, alignItems: "center", borderTop: "1px solid rgba(227,183,166,.14)", padding: "22px 0" }}>
                 <img src={c.image} alt={c.name} style={{ width: 96, height: 112, objectFit: "cover" }} />
-                <div>
+                <div style={{ minWidth: 0 }}>
                   <div style={{ fontFamily: "var(--serif)", fontSize: 23 }}>{c.name}</div>
                   <div style={{ fontSize: 11.5, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(247,241,237,.42)", margin: "7px 0 14px" }}>{c.size} · {rs(c.price)} each</div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
                     <div style={{ display: "flex", alignItems: "center", border: "1px solid rgba(227,183,166,.28)" }}>
                       <div onClick={() => decItem(i)} style={{ cursor: "pointer", padding: "5px 13px", color: "rgba(247,241,237,.6)" }}>−</div>
                       <div style={{ minWidth: 26, textAlign: "center", fontSize: 13 }}>{c.qty}</div>
@@ -126,7 +126,7 @@ export default function CartCheckout({ prefill }) {
                     <div onClick={() => removeItem(i)} style={{ cursor: "pointer", fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(247,241,237,.35)" }}>Remove</div>
                   </div>
                 </div>
-                <div style={{ fontSize: 15, color: "var(--rose-light)" }}>{rs(c.price * c.qty)}</div>
+                <div style={{ fontSize: 15, color: "var(--rose-light)", whiteSpace: "nowrap" }}>{rs(c.price * c.qty)}</div>
               </div>
             ))}
           </div>

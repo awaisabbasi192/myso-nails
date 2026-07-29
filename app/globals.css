@@ -286,6 +286,11 @@ html { overflow-x: hidden; }
   /* Checkout — delivery-details form to single column so fields fit */
   .checkout-fields { grid-template-columns: 1fr !important; gap: 14px !important; }
 
+  /* Checkout — bag line item: smaller image so name + price fit the row */
+  .bag-item { gap: 12px !important; }
+  .bag-item > img { width: 74px !important; height: 88px !important; }
+  .bag-item > div > div:first-child { font-size: 18px !important; }
+
   /* Bridal bottom CTA — stack, tidy padding, full-width wrapping button */
   .bridal-cta { padding: 28px 20px !important; text-align: center; }
   .bridal-cta > div { max-width: 100% !important; }
