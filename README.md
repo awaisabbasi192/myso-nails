@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Miso Nails Studio
 
-## Getting Started
+Hand-painted press-on nail storefront with a full admin panel — built with **Next.js 16**, **Prisma**, and **SQLite**.
 
-First, run the development server:
+## Chalane ka tareeqa (Run)
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install          # sirf pehli baar
+npm run dev          # website chalao -> http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Pehli baar database set karna ho to:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+npx prisma migrate dev   # database + tables banao
+npm run seed             # asli shuruati data daalo
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Logins
 
-## Learn More
+- **Admin panel:** http://localhost:3000/admin
+  - Email: `admin@misonails.pk`
+  - Password: `miso786`
+- **Demo customer:** `areeba.k@gmail.com` / `password`
 
-To learn more about Next.js, take a look at the following resources:
+Admin panel se products, orders, customers, coupons aur homepage — sab edit/delete ho sakta hai.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `app/(store)/` — storefront (home, shop, product, cart/checkout, account, about, contact, login)
+- `app/admin/` — admin dashboard
+- `app/api/` — backend (orders, auth, upload, admin CRUD, coupons)
+- `prisma/schema.prisma` — database schema · `prisma/seed.js` — starting data
+- `components/` — UI · `lib/` — prisma client, auth session, helpers
+- `public/assets/` — product & studio images
 
-## Deploy on Vercel
+## Deploy karne se pehle (Production)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+SQLite local development ke liye hai. Live karte waqt:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. `prisma/schema.prisma` mein `provider = "postgresql"` karo
+2. `.env` mein `DATABASE_URL` ko Postgres (Supabase / Neon — free) pe set karo
+3. `SESSION_SECRET` ko lamba random string banao
+4. Uploads (JazzCash screenshots) ke liye cloud storage use karo — Vercel pe local files persist nahi hote
+5. Vercel pe deploy karo
+
+## Payments
+
+- **JazzCash:** customer screenshot upload karta hai → admin verify karta hai
+- **Cash on Delivery:** Rs 100 handling
+- **WhatsApp:** har jagah direct order button (0302 090 9786)

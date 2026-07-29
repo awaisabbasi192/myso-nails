@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# dev artifacts
+/shots
+/dev.log
+dev-log.txt
+cookies.txt
+/public/uploads
+
+# local sqlite (no longer used — Postgres in production)
+/prisma/*.db
+/prisma/*.db-journal

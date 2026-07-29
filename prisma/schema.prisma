@@ -1,0 +1,191 @@
+// Myso Nails Studio — database schema
+// PostgreSQL (works on Vercel/Railway/Neon/Supabase). Set DATABASE_URL in .env.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL") // pooled connection (Supabase port 6543)
+  directUrl = env("DIRECT_URL")   // direct connection (Supabase port 5432) — used for db push / migrations
+}
+
+model Category {
+  id         String    @id @default(cuid())
+  name       String
+  slug       String    @unique
+  image      String
+  sortOrder  Int       @default(0)
+  showOnHome Boolean   @default(true)
+  products   Product[]
+  createdAt  DateTime  @default(now())
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  image       String
+  images      String   @default("[]")
+  price       Int
+  wasPrice    Int?
+  shape       String
+  finish      String
+  occasion    String
+  length      String
+  badge       String?
+  colorway    String
+  blurb       String
+  rating      Float    @default(5)
+  reviewsCount Int     @default(0)
+  stock       Int      @default(10)
+  featured    Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id])
+  reviews     Review[]
+  orderItems  OrderItem[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name      String
+  rating    Int      @default(5)
+  body      String
+  image     String?
+  image2    String?
+  verified  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model Customer {
+  id        String    @id @default(cuid())
+  name      String
+  email     String    @unique
+  phone     String?
+  password  String
+  role      String    @default("customer") // "customer" | "admin"
+  city      String?
+  nailSizes String?   // saved 10-finger size profile, comma-separated
+  orders    Order[]
+  addresses Address[]
+  createdAt DateTime  @default(now())
+}
+
+model Address {
+  id         String   @id @default(cuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  label      String   @default("Home")
+  line1      String
+  line2      String?
+  city       String
+  phone      String
+  isDefault  Boolean  @default(false)
+}
+
+model Order {
+  id             String      @id @default(cuid())
+  code           String      @unique
+  customerId     String?
+  customer       Customer?   @relation(fields: [customerId], references: [id])
+  customerName   String
+  phone          String
+  address        String
+  city           String
+  nailSizes      String?
+  notes          String?
+  items          OrderItem[]
+  subtotal       Int
+  shipping       Int         @default(0)
+  total          Int
+  paymentMethod  String      @default("jazzcash") // "jazzcash" | "cod"
+  paymentProof   String?     // uploaded screenshot path
+  status         String      @default("Pending") // Pending | Confirmed | Shipped | Delivered | Rejected | Cancelled
+  trackingNumber String?
+  cancelledAt    DateTime?
+  couponCode     String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id])
+  name      String
+  image     String
+  size      String
+  unitPrice Int
+  qty       Int
+}
+
+model Coupon {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  type      String   @default("percentage") // "percentage" | "flat"
+  value     Int
+  minSpend  Int      @default(0)
+  detail    String?
+  expiresAt DateTime?
+  active    Boolean  @default(true)
+  usedCount Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model SiteContent {
+  id             Int    @id @default(1)
+  heroHeadline   String
+  heroScript     String
+  heroImage      String
+  announcement   String
+  studioImage    String @default("/assets/p4-nude.jpeg")
+  studioHeadline String @default("Every set is painted by hand — mine.")
+  studioBody1    String @default("I started M&S in my bedroom with one brush and a lamp, because brides kept asking for nails that would last past the mehndi. Four years later every set still leaves my table finished, filed and fitted to a real nail chart — never mass-moulded.")
+  studioBody2    String @default("If you can send me a photo of it, I can paint it.")
+  studioFounder  String @default("Maya")
+  studioRole     String @default("Founder & nail artist")
+  aboutImage1    String @default("/assets/p1-french.jpeg")
+  aboutHeadline  String @default("One brush, one lamp, a lot of brides.")
+  aboutBody1     String @default("Myso Nails Studio started in 2022 as a side table in Maya's bedroom in Lahore. Salons were charging for hours in a chair and brides were still leaving with nails that chipped before the mehndi. So she started painting reusable sets by hand, one order at a time, sized to real nails instead of standard moulds.")
+  aboutBody2     String @default("Four years and thousands of sets later nothing about the process has changed: every nail is still painted, cured, filed and inspected by hand before it goes in the box.")
+  aboutArtistImg String @default("/assets/p4-nude.jpeg")
+  aboutArtistName String @default("Maya, founder")
+  aboutArtistBio String @default("I answer the WhatsApp myself, so when you send a reference photo at 1am you're talking to the person who will paint it. Bridal sets take me four to six days; everything else ships in 48 hours.")
+  aboutArtistSign String @default("Maya")
+  waConfirmed    String @default("Assalam o Alaikum {name}! 🎉 Aapka order *{code}* confirm ho gaya hai. Hum aapke nails tayaar kar rahe hain — jald dispatch ho ga. Shukriya! — Myso Nails Studio")
+  waShipped      String @default("Assalam o Alaikum {name}! 📦 Aapka order *{code}* ship ho gaya! Aapke nails raaste mein hain, 1-2 din mein mil jaenge inshAllah. — Myso Nails Studio")
+  waDelivered    String @default("Assalam o Alaikum {name}! ✅ Aapka order *{code}* deliver ho gaya. Umeed hai nails pasand aayi hongi! Koi masla ho to reply karein. — Myso Nails Studio")
+  waRejected     String @default("Assalam o Alaikum {name}! Aapka order *{code}* ke baray mein kuch masla hai — kripya hamen reply karein. — Myso Nails Studio")
+  deliveryFee      Int     @default(250)
+  freeDeliveryOver Int     @default(5000)
+  codHandling      Int     @default(100)
+  storeClosed      Boolean @default(false)
+  storeClosedMsg   String  @default("We're temporarily closed. Check back soon!")
+  flashSalePercent Int     @default(0)
+  instagramHandle  String  @default("_myso.nails")
+  instagramPosts   String  @default("[]")
+  updatedAt      DateTime @updatedAt
+}
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String?
+  topic     String?
+  body      String
+  createdAt DateTime @default(now())
+}
