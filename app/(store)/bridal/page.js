@@ -122,12 +122,12 @@ export default function BridalPage() {
       </div>
 
       {/* CTA */}
-      <div style={{ border: "1px solid rgba(227,183,166,.2)", background: "var(--panel)", padding: "52px 48px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 28 }}>
+      <div className="bridal-cta" style={{ border: "1px solid rgba(227,183,166,.2)", background: "var(--panel)", padding: "52px 48px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 28 }}>
         <div>
           <div style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 36, marginBottom: 10 }}>Book at least 2 weeks early</div>
           <div style={{ fontSize: 13.5, color: "rgba(247,241,237,.55)", lineHeight: 1.8, maxWidth: 520 }}>Bridal slots fill up fast around Eid and wedding season. WhatsApp me now to check availability for your date.</div>
         </div>
-        <a href={waLink("Hi Myso Nails! I'd like to book a bridal set. My wedding date is ")} target="_blank" rel="noreferrer" className="btn-wa" style={{ padding: "18px 34px", fontSize: 11.5, letterSpacing: ".24em", textTransform: "uppercase", whiteSpace: "nowrap" }}>Check availability on WhatsApp</a>
+        <a href={waLink("Hi Myso Nails! I'd like to book a bridal set. My wedding date is ")} target="_blank" rel="noreferrer" className="btn-wa bridal-cta-btn" style={{ padding: "18px 34px", fontSize: 11.5, letterSpacing: ".24em", textTransform: "uppercase", textAlign: "center" }}>Check availability on WhatsApp</a>
       </div>
     </div>
   );

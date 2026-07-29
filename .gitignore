@@ -53,3 +53,5 @@ cookies.txt
 
 .vercel
 .env*
+
+deploy-out*.txt

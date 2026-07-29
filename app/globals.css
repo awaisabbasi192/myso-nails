@@ -286,6 +286,11 @@ html { overflow-x: hidden; }
   /* Checkout — delivery-details form to single column so fields fit */
   .checkout-fields { grid-template-columns: 1fr !important; gap: 14px !important; }
 
+  /* Bridal bottom CTA — stack, tidy padding, full-width wrapping button */
+  .bridal-cta { padding: 28px 20px !important; text-align: center; }
+  .bridal-cta > div { max-width: 100% !important; }
+  .bridal-cta-btn { width: 100%; white-space: normal !important; letter-spacing: .14em !important; padding: 15px 18px !important; }
+
   /* Contact nail-size chart — keep 5 cols but shrink to fit */
   .contact-size-chart .csc-cell { padding: 11px 3px !important; }
   .contact-size-chart .csc-mm { font-size: 15px !important; margin-top: 4px !important; }
