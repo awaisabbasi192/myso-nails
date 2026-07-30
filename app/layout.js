@@ -1,6 +1,7 @@
 import { Cormorant_Garamond, Jost, Parisienne } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/CartContext";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -31,10 +32,9 @@ export default function RootLayout({ children }) {
       <head>
         {/* Apply saved theme before first paint — prevents flash */}
         <script dangerouslySetInnerHTML={{ __html: `(function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();` }} />
-        {/* Scroll-reveal: fade/slide sections as they enter viewport */}
-        <script dangerouslySetInnerHTML={{ __html: `document.addEventListener('DOMContentLoaded',function(){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('revealed');io.unobserve(e.target);}});},{threshold:0.07});document.querySelectorAll('.scroll-reveal,.reveal-left,.reveal-right').forEach(function(el){io.observe(el);});});` }} />
       </head>
       <body>
+        <ScrollReveal />
         <CartProvider>{children}</CartProvider>
       </body>
     </html>
