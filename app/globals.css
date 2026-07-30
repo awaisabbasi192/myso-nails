@@ -1,19 +1,50 @@
+/* ── LIGHT MODE (default: white + cherry red) ─────────────────────── */
 :root {
-  --bg: #0A0A0B;
-  --panel: #0E0E10;
-  --panel-2: #08080A;
-  --ink: #F7F1ED;
-  --rose: #E3B7A6;
-  --rose-light: #F2CDBB;
-  --bronze: #C08A72;
-  --brown: #B87A62;
-  --dark-brown: #8E5A45;
+  --bg: #FDFAF9;
+  --panel: #F5EDEE;
+  --panel-2: #EDE0E1;
+  --ink: #1A080C;
+  --rose: #9B1B2A;
+  --rose-light: #C4233D;
+  --bronze: #7A1520;
+  --brown: #5E0F18;
+  --dark-brown: #3D0910;
   --wa: #25D366;
-  --danger: #E39B9B;
-  --good: #8FD6A6;
+  --danger: #C0392B;
+  --good: #27AE60;
   --serif: var(--font-cormorant), 'Cormorant Garamond', serif;
   --sans: var(--font-jost), 'Jost', sans-serif;
   --script: var(--font-parisienne), 'Parisienne', cursive;
+  /* theme-aware surfaces used in inline overrides */
+  --header-bg: rgba(253,250,249,.96);
+  --header-border: rgba(155,27,42,.15);
+  --drawer-bg: rgba(253,250,249,.99);
+  --ink-muted: rgba(26,8,12,.6);
+  --ink-faint: rgba(26,8,12,.35);
+  --card-b: rgba(155,27,42,.14);
+  --card-b-h: rgba(155,27,42,.42);
+}
+
+/* ── DARK MODE ────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --bg: #0B0407;
+  --panel: #180B0E;
+  --panel-2: #080205;
+  --ink: #F7EDEF;
+  --rose: #C4233D;
+  --rose-light: #E03858;
+  --bronze: #9B1B2A;
+  --brown: #8B1626;
+  --dark-brown: #6A0F1C;
+  --danger: #E39B9B;
+  --good: #8FD6A6;
+  --header-bg: rgba(11,4,7,.96);
+  --header-border: rgba(196,35,61,.18);
+  --drawer-bg: rgba(11,4,7,.99);
+  --ink-muted: rgba(247,237,239,.62);
+  --ink-faint: rgba(247,237,239,.35);
+  --card-b: rgba(196,35,61,.18);
+  --card-b-h: rgba(196,35,61,.48);
 }
 
 * { box-sizing: border-box; }
@@ -31,7 +62,7 @@ body {
 
 a { color: var(--rose); text-decoration: none; }
 a:hover { color: var(--rose-light); }
-::selection { background: var(--bronze); color: var(--bg); }
+::selection { background: var(--rose); color: #fff; }
 input, textarea, select, button { font-family: var(--sans); }
 /* Never let form controls push the page wider than the screen */
 input, textarea, select { max-width: 100%; min-width: 0; box-sizing: border-box; }
@@ -75,18 +106,18 @@ html { overflow-x: hidden; }
 
 /* Shimmer gradient buttons */
 .shimmer {
-  background: linear-gradient(100deg, #8E5A45, #E3B7A6 45%, #B87A62 70%, #F2CDBB);
+  background: linear-gradient(100deg, #5E0F18, #9B1B2A 35%, #C4233D 65%, #9B1B2A);
   background-size: 200% 100%;
   animation: msShimmer 7s linear infinite;
-  color: #1A0F0A;
+  color: #fff;
 }
-.shimmer:hover { filter: brightness(1.08); }
+.shimmer:hover { filter: brightness(1.1); }
 .gradient-warm {
-  background: linear-gradient(100deg, #B87A62, #F2CDBB);
-  color: #1A0F0A;
+  background: linear-gradient(100deg, #9B1B2A, #C4233D);
+  color: #fff;
 }
 .text-gradient {
-  background: linear-gradient(100deg, #B87A62, #F2CDBB 55%, #C58F76);
+  background: linear-gradient(100deg, #9B1B2A, #C4233D 55%, #7A1520);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -98,19 +129,19 @@ html { overflow-x: hidden; }
   font-size: 12px;
   letter-spacing: .2em;
   text-transform: uppercase;
-  color: rgba(247,241,237,.78);
+  color: var(--ink-muted);
   padding: 6px 0;
   border-bottom: 1px solid transparent;
   transition: color .2s, border-color .2s;
 }
-.nav-link:hover { color: var(--rose-light); border-bottom: 1px solid var(--bronze); }
-.nav-link.accent { color: rgba(227,183,166,.7); }
+.nav-link:hover { color: var(--rose); border-bottom: 1px solid var(--rose); }
+.nav-link.accent { color: var(--rose); }
 
 /* Cards that brighten border on hover */
-.card { border: 1px solid rgba(227,183,166,.14); transition: border-color .3s; }
-.card:hover { border-color: rgba(227,183,166,.42); }
-.card-soft { border: 1px solid rgba(227,183,166,.16); transition: border-color .3s; }
-.card-soft:hover { border-color: rgba(227,183,166,.5); }
+.card { border: 1px solid var(--card-b); transition: border-color .3s; }
+.card:hover { border-color: var(--card-b-h); }
+.card-soft { border: 1px solid var(--card-b); transition: border-color .3s; }
+.card-soft:hover { border-color: var(--card-b-h); }
 
 /* Image zoom inside overflow-hidden parents */
 .zoom { transition: transform .8s ease, opacity .5s, filter .6s; }
@@ -118,17 +149,17 @@ html { overflow-x: hidden; }
 
 /* Outlined buttons */
 .btn-outline {
-  border: 1px solid rgba(227,183,166,.4);
+  border: 1px solid var(--card-b);
   color: var(--ink);
   transition: border-color .2s, background .2s;
 }
-.btn-outline:hover { border-color: var(--bronze); background: rgba(227,183,166,.08); }
+.btn-outline:hover { border-color: var(--rose); background: rgba(155,27,42,.06); }
 .btn-wa { border: 1px solid rgba(37,211,102,.45); color: var(--ink); transition: background .2s; }
 .btn-wa:hover { background: rgba(37,211,102,.12); }
 
-.pill:hover { border-color: var(--bronze) !important; color: var(--rose-light) !important; }
+.pill:hover { border-color: var(--rose) !important; color: var(--rose-light) !important; }
 .add-btn { transition: background .2s, color .2s, border-color .2s; }
-.add-btn:hover { background: linear-gradient(100deg, #B87A62, #F2CDBB); color: #1A0F0A; border-color: transparent; }
+.add-btn:hover { background: linear-gradient(100deg, #9B1B2A, #C4233D); color: #fff; border-color: transparent; }
 .ig:hover img { opacity: 1 !important; transform: scale(1.05); }
 
 [data-scroll-x] { overflow-x: auto; }
@@ -149,7 +180,7 @@ html { overflow-x: hidden; }
   column-gap: 40px;
   align-items: center;
 }
-.hero-glow { position: absolute; top: -120px; left: -160px; width: 520px; height: 520px; background: radial-gradient(circle, rgba(192,138,114,.22), transparent 70%); pointer-events: none; }
+.hero-glow { position: absolute; top: -120px; left: -160px; width: 520px; height: 520px; background: radial-gradient(circle, rgba(155,27,42,.12), transparent 70%); pointer-events: none; }
 .hero-text     { display: flex; flex-direction: column; justify-content: center; }
 .hero-label    { margin-bottom: 22px; }
 .hero-headline { margin: 0 0 6px; }
@@ -174,7 +205,7 @@ html { overflow-x: hidden; }
 @media (max-width: 860px) {
   [data-r="split"], [data-r="sidebar"], [data-r="footer"], [data-r="admin"] { grid-template-columns: 1fr !important; }
   [data-r="sidebar"] > aside { position: static !important; }
-  [data-r="admin"] > aside { position: sticky; top: 0; z-index: 30; border-right: none !important; border-bottom: 1px solid rgba(227,183,166,.14) !important; display: flex; flex-wrap: nowrap; align-items: center; gap: 2px; padding: 8px 6px !important; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  [data-r="admin"] > aside { position: sticky; top: 0; z-index: 30; border-right: none !important; border-bottom: 1px solid var(--card-b) !important; display: flex; flex-wrap: nowrap; align-items: center; gap: 2px; padding: 8px 6px !important; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   [data-r="admin"] > aside::-webkit-scrollbar { display: none; }
   [data-r="admin"] > aside > div:first-child { display: none !important; } /* hide "Studio admin" label */
   [data-r="admin"] > aside > div.admin-tab { padding: 9px 14px !important; border-left: none !important; white-space: nowrap; flex: 0 0 auto; font-size: 12px !important; border-radius: 4px; }
@@ -329,3 +360,39 @@ html { overflow-x: hidden; }
   [style*="padding:56px 24px"],
   [style*="padding:34px 24px"] { padding-left: 16px !important; padding-right: 16px !important; }
 }
+
+/* ── THEME-AWARE HEADER & DRAWER OVERRIDES ────────────────────────── */
+/* Header sticky bar — override inline rgba() background */
+header {
+  background: var(--header-bg) !important;
+  border-bottom-color: var(--header-border) !important;
+}
+/* Mobile drawer */
+.mobile-drawer {
+  background: var(--drawer-bg) !important;
+  color: var(--ink);
+}
+.mobile-drawer a { color: var(--ink); }
+.mobile-drawer a:hover { color: var(--rose); }
+
+/* Dark mode: restore nav-link muted color properly */
+[data-theme="dark"] .nav-link { color: rgba(247,237,239,.7); }
+[data-theme="dark"] .nav-link:hover { color: var(--rose-light); }
+
+/* Logo circle border adapts */
+header img[alt="Myso Nails Studio"] { border-color: var(--card-b) !important; }
+
+/* ── THEME TOGGLE BUTTON ─────────────────────────────────────────── */
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--card-b);
+  border-radius: 20px;
+  cursor: pointer;
+  padding: 5px 11px;
+  font-size: 15px;
+  color: var(--ink);
+  transition: border-color .2s, background .2s;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.theme-toggle:hover { border-color: var(--rose); background: rgba(155,27,42,.06); }

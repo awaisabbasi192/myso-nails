@@ -27,7 +27,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" className={`${cormorant.variable} ${jost.variable} ${parisienne.variable}`}>
+    <html lang="en" data-theme="light" className={`${cormorant.variable} ${jost.variable} ${parisienne.variable}`}>
+      <head>
+        {/* Apply saved theme before first paint — prevents flash */}
+        <script dangerouslySetInnerHTML={{ __html: `(function(){var t=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-theme',t);})();` }} />
+      </head>
       <body>
         <CartProvider>{children}</CartProvider>
       </body>
