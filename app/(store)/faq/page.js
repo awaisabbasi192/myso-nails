@@ -87,29 +87,29 @@ export default function FAQPage() {
   return (
     <div>
       {/* HERO */}
-      <section style={{ background: "var(--panel)", borderBottom: "1px solid var(--card-b)", padding: "80px 24px 72px", textAlign: "center" }}>
-        <div style={{ ...label, marginBottom: 18 }}>Got questions?</div>
-        <h1 style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: "clamp(38px,5vw,64px)", margin: "0 0 20px", lineHeight: 1.1 }}>
+      <section style={{ background: "var(--panel)", borderBottom: "1px solid var(--card-b)", padding: "44px 24px 36px", textAlign: "center" }}>
+        <div style={{ ...label, marginBottom: 12 }}>Got questions?</div>
+        <h1 style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: "clamp(32px,4.5vw,52px)", margin: "0 0 14px", lineHeight: 1.1 }}>
           Frequently asked questions
         </h1>
-        <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--ink-muted)", maxWidth: 480, margin: "0 auto 32px" }}>
-          Everything you need to know about Myso Nails. Can&apos;t find your answer? WhatsApp us directly.
+        <p style={{ fontSize: 14, lineHeight: 1.75, color: "var(--ink-muted)", maxWidth: 420, margin: "0 auto 22px" }}>
+          Can&apos;t find your answer? WhatsApp us directly.
         </p>
         <a
           href={waLink("Hi! I have a question about Myso Nails.")}
           target="_blank"
           rel="noreferrer"
-          style={{ display: "inline-flex", alignItems: "center", gap: 8, border: "1px solid #25D366", color: "var(--ink)", padding: "14px 28px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", borderRadius: 2 }}
+          style={{ display: "inline-flex", alignItems: "center", gap: 7, border: "1px solid #25D366", color: "var(--ink)", padding: "11px 22px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", borderRadius: 2 }}
         >
-          <span style={{ fontSize: 18 }}>💬</span> Ask on WhatsApp
+          <span style={{ fontSize: 16 }}>💬</span> Ask on WhatsApp
         </a>
       </section>
 
       {/* FAQ SECTIONS */}
-      <div style={{ maxWidth: 780, margin: "0 auto", padding: "70px 24px 100px" }}>
+      <div style={{ maxWidth: 760, margin: "0 auto", padding: "36px 24px 60px" }}>
         {FAQS.map((section) => (
-          <div key={section.category} className="scroll-reveal" style={{ marginBottom: 60 }}>
-            <div style={{ ...label, marginBottom: 28 }}>{section.category}</div>
+          <div key={section.category} style={{ marginBottom: 36 }}>
+            <div style={{ ...label, marginBottom: 16, paddingBottom: 10, borderBottom: "1px solid var(--card-b)" }}>{section.category}</div>
             {section.items.map((item) => (
               <details key={item.q} className="faq-item">
                 <summary>{item.q}</summary>
@@ -120,16 +120,16 @@ export default function FAQPage() {
         ))}
 
         {/* CTA */}
-        <div className="scroll-reveal" style={{ marginTop: 70, textAlign: "center", padding: "52px 40px", border: "1px solid var(--card-b)", borderRadius: 3, background: "var(--panel)" }}>
-          <div style={{ fontFamily: "var(--script)", fontSize: 44, color: "var(--rose)", marginBottom: 12 }}>Still not sure?</div>
-          <p style={{ fontSize: 14.5, lineHeight: 1.8, color: "var(--ink-muted)", marginBottom: 26, maxWidth: 380, margin: "0 auto 26px" }}>
-            I personally answer every WhatsApp message. Ask me anything — design questions, sizing, custom quotes, or anything else.
+        <div style={{ marginTop: 40, textAlign: "center", padding: "36px 32px", border: "1px solid var(--card-b)", borderRadius: 3, background: "var(--panel)" }}>
+          <div style={{ fontFamily: "var(--script)", fontSize: 38, color: "var(--rose)", marginBottom: 8 }}>Still not sure?</div>
+          <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "var(--ink-muted)", maxWidth: 360, margin: "0 auto 20px" }}>
+            I personally answer every WhatsApp message — design questions, sizing, custom quotes, anything.
           </p>
-          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <a href={waLink("Hi! I have a question about my order.")} target="_blank" rel="noreferrer" className="shimmer" style={{ padding: "15px 32px", fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", borderRadius: 2 }}>
+          <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+            <a href={waLink("Hi! I have a question about my order.")} target="_blank" rel="noreferrer" className="shimmer" style={{ padding: "13px 28px", fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", borderRadius: 2 }}>
               WhatsApp Maya
             </a>
-            <Link href="/shop" className="btn-outline" style={{ padding: "15px 32px", fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", borderRadius: 2 }}>
+            <Link href="/shop" className="btn-outline" style={{ padding: "13px 28px", fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", borderRadius: 2 }}>
               Shop the sets
             </Link>
           </div>
