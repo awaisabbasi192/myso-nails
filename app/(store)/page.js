@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { rs, waLink } from "@/lib/format";
+import { rs, waLink, applyFlashSale } from "@/lib/format";
 import ProductCard from "@/components/ProductCard";
 import NewsletterForm from "@/components/NewsletterForm";
 
@@ -33,6 +33,10 @@ export default async function HomePage() {
   } catch (e) {
     console.error("HomePage fetch error:", e.message);
   }
+
+  // Apply admin flash-sale discount to displayed prices
+  const flashSalePercent = content?.flashSalePercent ?? 0;
+  products = products.map((p) => applyFlashSale(p, flashSalePercent));
 
   const heroImage = content?.heroImage || "/assets/p1-french.jpeg";
   const heroHeadline = content?.heroHeadline || "Nails that finish the whole look.";

@@ -80,13 +80,19 @@ export async function POST(request) {
     }
 
     const slugs = items.filter((i) => i.slug).map((i) => i.slug);
-    const dbProducts = await prisma.product.findMany({ where: { slug: { in: slugs } } });
+    const [dbProducts, siteContent] = await Promise.all([
+      prisma.product.findMany({ where: { slug: { in: slugs } } }),
+      prisma.siteContent.findUnique({ where: { id: 1 }, select: { flashSalePercent: true } }),
+    ]);
     const bySlug = Object.fromEntries(dbProducts.map((p) => [p.slug, p]));
+    // Server recomputes prices from DB (trusted) and applies the active flash sale.
+    const flashPct = siteContent?.flashSalePercent ?? 0;
+    const withFlash = (price) => (flashPct > 0 ? Math.round(price * (1 - flashPct / 100)) : price);
 
     let subtotal = 0;
     const orderItems = items.map((i) => {
       const p = i.slug ? bySlug[i.slug] : null;
-      const unitPrice = p ? p.price : Number(i.price) || 0;
+      const unitPrice = p ? withFlash(p.price) : Number(i.price) || 0;
       const qty = Math.max(1, Number(i.qty) || 1);
       subtotal += unitPrice * qty;
       return {

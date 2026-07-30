@@ -8,8 +8,14 @@ export async function PUT(request) {
     const b = await request.json();
     const data = {};
     const ALLOWED = ["heroHeadline", "heroScript", "heroImage", "announcement", "studioImage", "studioHeadline", "studioBody1", "studioBody2", "studioFounder", "studioRole", "aboutImage1", "aboutHeadline", "aboutBody1", "aboutBody2", "aboutArtistImg", "aboutArtistName", "aboutArtistBio", "aboutArtistSign", "waConfirmed", "waShipped", "waDelivered", "waRejected", "deliveryFee", "freeDeliveryOver", "codHandling", "storeClosed", "storeClosedMsg", "flashSalePercent", "instagramHandle", "instagramPosts"];
+    // These DB columns are Int/Boolean — coerce so string form values don't crash Prisma.
+    const INT_FIELDS = ["deliveryFee", "freeDeliveryOver", "codHandling", "flashSalePercent"];
+    const BOOL_FIELDS = ["storeClosed"];
     for (const k of ALLOWED) {
-      if (b[k] !== undefined) data[k] = b[k];
+      if (b[k] === undefined) continue;
+      if (INT_FIELDS.includes(k)) data[k] = parseInt(b[k], 10) || 0;
+      else if (BOOL_FIELDS.includes(k)) data[k] = Boolean(b[k]);
+      else data[k] = b[k];
     }
     const content = await prisma.siteContent.upsert({
       where: { id: 1 },

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { applyFlashSale } from "@/lib/format";
 import ProductDetail from "@/components/ProductDetail";
 
 export const dynamic = "force-dynamic";
@@ -28,22 +29,22 @@ export default async function ProductPage({ params }) {
   });
   if (!product) notFound();
 
-  const relatedRaw = await prisma.product.findMany({
-    where: { slug: { not: slug } },
-    orderBy: { sortOrder: "asc" },
-    take: 3,
-  });
+  const [relatedRaw, content] = await Promise.all([
+    prisma.product.findMany({ where: { slug: { not: slug } }, orderBy: { sortOrder: "asc" }, take: 3 }),
+    prisma.siteContent.findUnique({ where: { id: 1 }, select: { flashSalePercent: true } }),
+  ]);
+  const flashSalePercent = content?.flashSalePercent ?? 0;
 
-  const plain = {
+  const plain = applyFlashSale({
     id: product.id, slug: product.slug, name: product.name, image: product.image, images: product.images,
     price: product.price, wasPrice: product.wasPrice, shape: product.shape, finish: product.finish,
     occasion: product.occasion, length: product.length, badge: product.badge, colorway: product.colorway,
     blurb: product.blurb, rating: product.rating, reviewsCount: product.reviewsCount, stock: product.stock,
-  };
+  }, flashSalePercent);
   const reviews = product.reviews.map((r) => ({
     id: r.id, name: r.name, rating: r.rating, body: r.body, image: r.image, image2: r.image2, date: fmtDate(r.createdAt),
   }));
-  const related = relatedRaw.map((p) => ({ slug: p.slug, name: p.name, image: p.image, price: p.price }));
+  const related = relatedRaw.map((p) => applyFlashSale({ slug: p.slug, name: p.name, image: p.image, price: p.price, wasPrice: p.wasPrice }, flashSalePercent));
 
   return <ProductDetail product={plain} reviews={reviews} related={related} />;
 }
