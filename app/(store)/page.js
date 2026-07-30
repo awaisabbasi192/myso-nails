@@ -19,7 +19,7 @@ const TESTIMONIALS = [
   { quote: "Ordered on WhatsApp at midnight, delivered in two days, and the sizing was exact. Third set already.", name: "Zoya R.", city: "Islamabad", img: "/assets/p3-leopard.jpeg" },
 ];
 
-const label = { fontSize: 11, letterSpacing: ".4em", textTransform: "uppercase", color: "rgba(227,183,166,.75)" };
+const label = { fontSize: 11, letterSpacing: ".4em", textTransform: "uppercase", color: "var(--rose)" };
 const h2 = { fontFamily: "var(--serif)", fontWeight: 300, margin: 0 };
 
 export default async function HomePage() {
@@ -53,12 +53,12 @@ export default async function HomePage() {
   // Hero product image block (rendered in two spots: right column on desktop, inline on mobile)
   const heroMediaInner = (
     <>
-      <div className="hero-frame" style={{ position: "absolute", inset: 14, border: "1px solid rgba(227,183,166,.28)", borderRadius: 3, transform: "rotate(-2deg)" }} />
-      <img src={heroImage} alt={heroProduct?.name} className="float hero-img" style={{ width: "100%", aspectRatio: "3/4", objectFit: "cover", borderRadius: 3, position: "relative", boxShadow: "0 40px 90px rgba(0,0,0,.6)" }} />
+      <div className="hero-frame" style={{ position: "absolute", inset: 14, border: "1px solid var(--card-b)", borderRadius: 3, transform: "rotate(-2deg)" }} />
+      <img src={heroImage} alt={heroProduct?.name} className="float hero-img" style={{ width: "100%", aspectRatio: "3/4", objectFit: "cover", borderRadius: 3, position: "relative", boxShadow: "0 40px 90px rgba(0,0,0,.35)" }} />
       {heroProduct && (
-        <div className="hero-card" style={{ position: "absolute", bottom: 26, left: -26, background: "rgba(10,10,11,.9)", backdropFilter: "blur(10px)", border: "1px solid rgba(227,183,166,.3)", padding: "16px 22px", borderRadius: 2 }}>
-          <div style={{ fontFamily: "var(--serif)", fontSize: 19 }}>{heroProduct.name}</div>
-          <div style={{ fontSize: 12, letterSpacing: ".14em", color: "var(--rose-light)", marginTop: 5 }}>{rs(heroProduct.price)}</div>
+        <div className="hero-card" style={{ position: "absolute", bottom: 26, left: -26, background: "var(--panel)", backdropFilter: "blur(10px)", border: "1px solid var(--card-b)", padding: "16px 22px", borderRadius: 2 }}>
+          <div style={{ fontFamily: "var(--serif)", fontSize: 19, color: "var(--ink)" }}>{heroProduct.name}</div>
+          <div style={{ fontSize: 12, letterSpacing: ".14em", color: "var(--rose)", marginTop: 5 }}>{rs(heroProduct.price)}</div>
         </div>
       )}
     </>
@@ -100,7 +100,7 @@ export default async function HomePage() {
             <div style={{ ...label, marginBottom: 14 }}>Shop by category</div>
             <h2 style={{ ...h2, fontSize: 42 }}>Find your finish</h2>
           </div>
-          <Link href="/shop" style={{ fontSize: 11.5, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--rose)", borderBottom: "1px solid rgba(227,183,166,.4)", paddingBottom: 5 }}>View all {categories.length} collections</Link>
+          <Link href="/shop" style={{ fontSize: 11.5, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--rose)", borderBottom: "1px solid var(--rose)", paddingBottom: 5 }}>View all {categories.length} collections</Link>
         </div>
         <div className="home-cat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 16 }}>
           {categories.map((cat) => (
@@ -128,11 +128,11 @@ export default async function HomePage() {
       </section>
 
       {/* STUDIO */}
-      <section style={{ background: "var(--panel)", borderTop: "1px solid rgba(227,183,166,.12)", borderBottom: "1px solid rgba(227,183,166,.12)" }}>
+      <section style={{ background: "var(--panel)", borderTop: "1px solid var(--card-b)", borderBottom: "1px solid var(--card-b)" }}>
         <div data-r="split" style={{ maxWidth: 1240, margin: "0 auto", padding: "90px 24px", display: "grid", gridTemplateColumns: ".9fr 1.1fr", gap: 70, alignItems: "center" }}>
           <div style={{ position: "relative" }}>
             <img src={studioImage} alt="Studio" style={{ width: "100%", aspectRatio: "4/5", objectFit: "cover", borderRadius: 3 }} />
-            <div style={{ position: "absolute", inset: -14, border: "1px solid rgba(227,183,166,.22)", borderRadius: 3, pointerEvents: "none" }} />
+            <div style={{ position: "absolute", inset: -14, border: "1px solid var(--card-b)", borderRadius: 3, pointerEvents: "none" }} />
           </div>
           <div>
             <div style={{ ...label, marginBottom: 20 }}>The studio</div>
@@ -152,7 +152,7 @@ export default async function HomePage() {
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 20 }}>
           {STEPS.map((s) => (
-            <div key={s.n} style={{ borderTop: "1px solid rgba(227,183,166,.25)", paddingTop: 22 }}>
+            <div key={s.n} style={{ borderTop: "1px solid var(--card-b)", paddingTop: 22 }}>
               <div style={{ fontFamily: "var(--serif)", fontSize: 15, color: "var(--bronze)", letterSpacing: ".3em" }}>{s.n}</div>
               <div style={{ fontFamily: "var(--serif)", fontSize: 26, margin: "12px 0 10px" }}>{s.title}</div>
               <div style={{ fontSize: 13.5, lineHeight: 1.8, color: "rgba(247,241,237,.55)", fontWeight: 300 }}>{s.body}</div>
@@ -176,7 +176,7 @@ export default async function HomePage() {
             ))}
           </div>
         ) : (
-          <a href={`https://instagram.com/${igHandle}`} target="_blank" rel="noreferrer" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14, textAlign: "center", padding: "60px 24px", border: "1px dashed rgba(227,183,166,.3)", borderRadius: 3, background: "var(--panel)" }}>
+          <a href={`https://instagram.com/${igHandle}`} target="_blank" rel="noreferrer" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14, textAlign: "center", padding: "60px 24px", border: "1px dashed var(--card-b)", borderRadius: 3, background: "var(--panel)" }}>
             <div style={{ fontSize: 40 }}>📸</div>
             <div style={{ fontFamily: "var(--serif)", fontSize: 26, color: "var(--ink)" }}>See our latest work on Instagram</div>
             <div style={{ fontSize: 13.5, color: "rgba(247,241,237,.5)", maxWidth: 420, lineHeight: 1.7 }}>Fresh sets, bridal reveals and behind-the-scenes — all on our feed.</div>
@@ -186,12 +186,12 @@ export default async function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section style={{ background: "var(--panel)", borderTop: "1px solid rgba(227,183,166,.12)", padding: "88px 24px" }}>
+      <section style={{ background: "var(--panel)", borderTop: "1px solid var(--card-b)", padding: "88px 24px" }}>
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
           <h2 style={{ ...h2, fontSize: 42, marginBottom: 44, textAlign: "center" }}>Loved in Lahore, Karachi &amp; beyond</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 22 }}>
             {TESTIMONIALS.map((t) => (
-              <div key={t.name} style={{ border: "1px solid rgba(227,183,166,.16)", padding: 32, borderRadius: 2, background: "var(--bg)" }}>
+              <div key={t.name} style={{ border: "1px solid var(--card-b)", padding: 32, borderRadius: 2, background: "var(--bg)" }}>
                 <div style={{ color: "var(--bronze)", letterSpacing: ".28em", fontSize: 13 }}>★★★★★</div>
                 <p style={{ fontFamily: "var(--serif)", fontSize: 20, lineHeight: 1.6, fontStyle: "italic", color: "rgba(247,241,237,.86)", margin: "18px 0 24px" }}>“{t.quote}”</p>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>

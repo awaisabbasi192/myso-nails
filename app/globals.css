@@ -361,6 +361,31 @@ html { overflow-x: hidden; }
   [style*="padding:34px 24px"] { padding-left: 16px !important; padding-right: 16px !important; }
 }
 
+/* ── LIGHT MODE: fix 290 hardcoded dark-theme inline text colors ──── */
+/* All rgba(247,241,237,...) values are near-white text designed for dark bg.
+   On white they're invisible — override them to the dark ink variable. */
+:root:not([data-theme="dark"]) [style*="rgba(247,241,237"] {
+  color: var(--ink-muted) !important;
+}
+/* All rgba(227,183,166,...) border-only uses — switch to cherry-red border */
+:root:not([data-theme="dark"]) [style*="rgba(227,183,166"] {
+  border-color: var(--card-b) !important;
+}
+/* Section label colours (rgba(227,183,166,.75) used as text) → ink-muted */
+:root:not([data-theme="dark"]) .hero-label,
+:root:not([data-theme="dark"]) [style*="letterSpacing: \".4em\""],
+:root:not([data-theme="dark"]) [style*='letterSpacing:".4em"'] {
+  color: var(--ink-muted) !important;
+}
+/* Panels/sections that used a very dark bg in dark mode → keep as panel var */
+:root:not([data-theme="dark"]) [style*="rgba(10,10,11"] {
+  background: var(--panel) !important;
+}
+/* Dark category/image overlays should stay dark (they're on top of photos) */
+:root:not([data-theme="dark"]) [style*="linear-gradient(to top,rgba(10,10,11"] {
+  background: linear-gradient(to top,rgba(10,10,11,.88) 5%,transparent 65%) !important;
+}
+
 /* ── THEME-AWARE HEADER & DRAWER OVERRIDES ────────────────────────── */
 /* Header sticky bar — override inline rgba() background */
 header {
