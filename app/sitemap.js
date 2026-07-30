@@ -13,7 +13,7 @@ export default async function sitemap() {
 
   // Fetch products for dynamic URLs (if needed in future)
   try {
-    const res = await fetch(`${baseUrl}/api/products`, { cache: "revalidate" });
+    const res = await fetch(`${baseUrl}/api/products`, { cache: "force-cache" });
     if (res.ok) {
       const products = await res.json();
       const productPages = products.map((p) => ({
