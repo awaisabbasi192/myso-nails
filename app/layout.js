@@ -31,6 +31,8 @@ export default function RootLayout({ children }) {
       <head>
         {/* Apply saved theme before first paint — prevents flash */}
         <script dangerouslySetInnerHTML={{ __html: `(function(){var t=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-theme',t);})();` }} />
+        {/* Scroll-reveal: add 'revealed' class when elements enter viewport */}
+        <script dangerouslySetInnerHTML={{ __html: `document.addEventListener('DOMContentLoaded',function(){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('revealed');io.unobserve(e.target);}});},{threshold:0.08});document.querySelectorAll('.scroll-reveal').forEach(function(el){io.observe(el);});});` }} />
       </head>
       <body>
         <CartProvider>{children}</CartProvider>

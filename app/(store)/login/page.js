@@ -26,13 +26,13 @@ export default function LoginPage() {
     } catch { setError("Network error"); } finally { setLoading(false); }
   }
 
-  const inputStyle = { background: "transparent", border: "1px solid rgba(227,183,166,.25)", color: "var(--ink)", padding: 14, fontSize: 13, outline: "none" };
-  const lab = { fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.45)" };
+  const inputStyle = { background: "var(--bg)", border: "1px solid var(--card-b)", color: "var(--ink)", padding: 14, fontSize: 13, outline: "none" };
+  const lab = { fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--ink-muted)" };
   const tabs = [{ k: "login", l: "Log in" }, { k: "signup", l: "Create account" }];
 
   return (
     <div style={{ maxWidth: 1000, margin: "0 auto", padding: "60px 24px 110px" }}>
-      <div data-r="split" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, border: "1px solid rgba(227,183,166,.18)", background: "var(--panel)" }}>
+      <div data-r="split" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, border: "1px solid var(--card-b)", background: "var(--panel)" }}>
         <div style={{ position: "relative", minHeight: 520 }}>
           <img src="/assets/p4-nude.jpeg" alt="Pearl Bloom Nude set" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.72 }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top,rgba(10,10,11,.92),rgba(10,10,11,.25))", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: 36 }}>
@@ -41,9 +41,9 @@ export default function LoginPage() {
           </div>
         </div>
         <div style={{ padding: "44px 40px" }}>
-          <div style={{ display: "flex", gap: 24, borderBottom: "1px solid rgba(227,183,166,.14)", marginBottom: 30 }}>
+          <div style={{ display: "flex", gap: 24, borderBottom: "1px solid var(--card-b)", marginBottom: 30 }}>
             {tabs.map((t) => (
-              <div key={t.k} onClick={() => { setMode(t.k); setError(""); }} style={{ cursor: "pointer", fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", paddingBottom: 13, color: mode === t.k ? "var(--rose-light)" : "rgba(247,241,237,.45)", borderBottom: `2px solid ${mode === t.k ? "var(--bronze)" : "transparent"}` }}>{t.l}</div>
+              <div key={t.k} onClick={() => { setMode(t.k); setError(""); }} style={{ cursor: "pointer", fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", paddingBottom: 13, color: mode === t.k ? "var(--rose)" : "var(--ink-muted)", borderBottom: `2px solid ${mode === t.k ? "var(--rose)" : "transparent"}` }}>{t.l}</div>
             ))}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>

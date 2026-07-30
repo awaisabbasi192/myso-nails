@@ -93,8 +93,20 @@ export default async function HomePage() {
         <div className="rise-slow hero-media hero-media-desktop">{heroMediaInner}</div>
       </section>
 
+      {/* TRUST STRIP */}
+      <div style={{ borderTop: "1px solid var(--card-b)", borderBottom: "1px solid var(--card-b)", background: "var(--panel)", padding: "16px 24px", overflow: "hidden" }}>
+        <div style={{ maxWidth: 1240, margin: "0 auto", display: "flex", gap: 0, justifyContent: "center", flexWrap: "wrap", alignItems: "center" }}>
+          {["FREE SIZING KIT", "NATIONWIDE DELIVERY", "HAND-PAINTED BY HAND", "REUSABLE 15+ TIMES", "100% ADVANCE — JAZZCASH", "WHATSAPP SUPPORT"].map((t, i, a) => (
+            <div key={t} style={{ display: "flex", alignItems: "center", gap: 0 }}>
+              <span style={{ fontSize: 10, letterSpacing: ".22em", color: "var(--rose)", padding: "0 18px", whiteSpace: "nowrap" }}>{t}</span>
+              {i < a.length - 1 && <span style={{ color: "var(--card-b)", fontSize: 18, lineHeight: 1 }}>|</span>}
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* CATEGORIES */}
-      <section style={{ maxWidth: 1240, margin: "0 auto", padding: "70px 24px" }}>
+      <section className="scroll-reveal" style={{ maxWidth: 1240, margin: "0 auto", padding: "70px 24px" }}>
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 20, marginBottom: 38, flexWrap: "wrap" }}>
           <div>
             <div style={{ ...label, marginBottom: 14 }}>Shop by category</div>
@@ -115,7 +127,7 @@ export default async function HomePage() {
       </section>
 
       {/* BEST SELLERS */}
-      <section style={{ maxWidth: 1240, margin: "0 auto", padding: "60px 24px 80px" }}>
+      <section className="scroll-reveal" style={{ maxWidth: 1240, margin: "0 auto", padding: "60px 24px 80px" }}>
         <div style={{ textAlign: "center", marginBottom: 44 }}>
           <div style={{ ...label, marginBottom: 14 }}>Best sellers</div>
           <h2 style={{ ...h2, fontSize: 44 }}>The four everyone orders</h2>
@@ -146,7 +158,7 @@ export default async function HomePage() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section style={{ maxWidth: 1240, margin: "0 auto", padding: "88px 24px" }}>
+      <section className="scroll-reveal" style={{ maxWidth: 1240, margin: "0 auto", padding: "88px 24px" }}>
         <div style={{ textAlign: "center", marginBottom: 52 }}>
           <div style={label}>How it works</div>
         </div>
@@ -208,7 +220,7 @@ export default async function HomePage() {
       </section>
 
       {/* NEWSLETTER */}
-      <section style={{ padding: "90px 24px", textAlign: "center" }}>
+      <section className="scroll-reveal" style={{ padding: "90px 24px", textAlign: "center" }}>
         <div style={{ maxWidth: 560, margin: "0 auto" }}>
           <div style={{ ...label, marginBottom: 18 }}>Get 10% off your first set</div>
           <h2 style={{ ...h2, fontSize: 40, marginBottom: 26 }}>Join the M&amp;S list</h2>

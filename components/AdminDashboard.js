@@ -89,14 +89,14 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
   return (
     <div data-r="admin" style={{ display: "grid", gridTemplateColumns: "214px 1fr", minHeight: "100vh", background: "var(--bg)" }}>
       {/* Sidebar */}
-      <aside style={{ borderRight: "1px solid rgba(227,183,166,.12)", background: "var(--panel-2)", padding: "30px 0" }}>
-        <div style={{ fontSize: 10, letterSpacing: ".3em", textTransform: "uppercase", color: "rgba(247,241,237,.35)", padding: "0 24px 18px" }}>Studio admin</div>
+      <aside style={{ borderRight: "1px solid var(--card-b)", background: "var(--panel-2)", padding: "30px 0" }}>
+        <div style={{ fontSize: 10, letterSpacing: ".3em", textTransform: "uppercase", color: "var(--ink-muted)", padding: "0 24px 18px" }}>Studio admin</div>
         {TABS.map((t) => (
-          <div key={t} className="admin-tab" onClick={() => setTab(t)} style={{ cursor: "pointer", padding: "13px 24px", fontSize: 12.5, letterSpacing: ".1em", color: tab === t ? "var(--rose-light)" : "rgba(247,241,237,.5)", background: tab === t ? "rgba(227,183,166,.08)" : "transparent", borderLeft: `2px solid ${tab === t ? "var(--bronze)" : "transparent"}` }}>{t}</div>
+          <div key={t} className="admin-tab" onClick={() => setTab(t)} style={{ cursor: "pointer", padding: "13px 24px", fontSize: 12.5, letterSpacing: ".1em", color: tab === t ? "var(--rose)" : "var(--ink-muted)", background: tab === t ? "rgba(155,27,42,.08)" : "transparent", borderLeft: `2px solid ${tab === t ? "var(--rose)" : "transparent"}` }}>{t}</div>
         ))}
-        <div className="admin-side-foot" style={{ margin: "26px 24px 0", paddingTop: 20, borderTop: "1px solid rgba(227,183,166,.12)", fontSize: 11.5, lineHeight: 1.9, color: "rgba(247,241,237,.4)" }}>
+        <div className="admin-side-foot" style={{ margin: "26px 24px 0", paddingTop: 20, borderTop: "1px solid var(--card-b)", fontSize: 11.5, lineHeight: 1.9, color: "var(--ink-muted)" }}>
           Signed in as<br /><span style={{ color: "var(--rose)" }}>{adminEmail}</span>
-          <a href="/" style={{ display: "block", marginTop: 14, fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: "10px 12px", textAlign: "center" }}>↗ Visit site</a>
+          <a href="/" style={{ display: "block", marginTop: 14, fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "10px 12px", textAlign: "center" }}>↗ Visit site</a>
           <div onClick={logout} style={{ cursor: "pointer", marginTop: 10, fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", border: "1px solid rgba(227,183,166,.25)", padding: "9px 12px", textAlign: "center", color: "rgba(247,241,237,.7)" }}>Sign out</div>
         </div>
       </aside>
@@ -128,12 +128,12 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
             </div>
             <div data-scroll-x="1" style={{ border: "1px solid rgba(227,183,166,.16)", background: "var(--panel)" }}>
               <div style={{ minWidth: 1060, display: "grid", gridTemplateColumns: "40px 110px 1.4fr 1fr 110px 160px auto", gap: 14, padding: "16px 22px", borderBottom: "1px solid rgba(227,183,166,.14)", fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.4)", alignItems: "center" }}>
-                <input type="checkbox" checked={shownOrders.length > 0 && selectedOrders.size === shownOrders.length} onChange={toggleAllOrders} style={{ cursor: "pointer", accentColor: "#C08A72", width: 14, height: 14 }} />
+                <input type="checkbox" checked={shownOrders.length > 0 && selectedOrders.size === shownOrders.length} onChange={toggleAllOrders} style={{ cursor: "pointer", accentColor: "#9B1B2A", width: 14, height: 14 }} />
                 <div>Order</div><div>Customer</div><div>Items</div><div>Total</div><div>Status</div><div>Action</div>
               </div>
               {shownOrders.map((o) => (
                 <div key={o.id} style={{ minWidth: 1060, display: "grid", gridTemplateColumns: "40px 110px 1.4fr 1fr 110px 160px auto", gap: 14, padding: "18px 22px", borderBottom: "1px solid rgba(227,183,166,.08)", alignItems: "start", fontSize: 12.5, background: selectedOrders.has(o.id) ? "rgba(227,183,166,.04)" : "transparent" }}>
-                  <input type="checkbox" checked={selectedOrders.has(o.id)} onChange={() => toggleSelectOrder(o.id)} style={{ cursor: "pointer", accentColor: "#C08A72", width: 14, height: 14, marginTop: 3 }} />
+                  <input type="checkbox" checked={selectedOrders.has(o.id)} onChange={() => toggleSelectOrder(o.id)} style={{ cursor: "pointer", accentColor: "#9B1B2A", width: 14, height: 14, marginTop: 3 }} />
                   <div><div style={{ color: "var(--rose-light)" }}>{o.code}</div><div style={{ fontSize: 10.5, color: "rgba(247,241,237,.38)", marginTop: 3 }}>{o.date}</div></div>
                   <div><div>{o.customerName}</div><div style={{ fontSize: 11, color: "rgba(247,241,237,.38)", marginTop: 3 }}>{o.city} · {o.phone}</div></div>
                   <div style={{ color: "rgba(247,241,237,.6)", fontSize: 11.5 }}>{o.items}</div>
@@ -155,10 +155,10 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
                   <div style={{ display: "flex", gap: 7, alignItems: "center", flexWrap: "wrap", paddingTop: 2 }}>
                     <div onClick={() => setShot(o)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(227,183,166,.3)", padding: "7px 9px", color: "rgba(247,241,237,.7)", whiteSpace: "nowrap" }}>{o.paymentProof ? "Receipt" : "Details"}</div>
                     {(o.status === "Pending" || o.status === "Confirmed" || o.status === "Shipped") && (
-                      <div onClick={() => updateStatus(o, nextStatus(o.status))} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: "7px 10px", whiteSpace: "nowrap" }}>{advanceLabel(o.status)}</div>
+                      <div onClick={() => updateStatus(o, nextStatus(o.status))} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "7px 10px", whiteSpace: "nowrap" }}>{advanceLabel(o.status)}</div>
                     )}
                     {(o.status === "Rejected" || o.status === "Cancelled") && (
-                      <div onClick={() => updateStatus(o, "Pending")} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: "7px 10px", whiteSpace: "nowrap" }}>Reopen</div>
+                      <div onClick={() => updateStatus(o, "Pending")} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "7px 10px", whiteSpace: "nowrap" }}>Reopen</div>
                     )}
                     {(o.status === "Pending" || o.status === "Confirmed" || o.status === "Shipped") && (
                       <div onClick={() => updateStatus(o, "Rejected")} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.4)", color: "#E39B9B", padding: "7px 9px", whiteSpace: "nowrap" }}>Reject</div>
@@ -178,8 +178,8 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
               <h1 style={{ ...h1, marginBottom: 0 }}>Products</h1>
               <div style={{ display: "flex", gap: 10 }}>
                 <div onClick={() => { setBulkEdit((b) => !b); setBulkStocks(Object.fromEntries(products.map((p) => [p.id, p.stock]))); }} style={{ cursor: "pointer", border: "1px solid rgba(227,183,166,.3)", color: bulkEdit ? "var(--rose-light)" : "rgba(247,241,237,.7)", padding: "12px 20px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{bulkEdit ? "Cancel bulk edit" : "Bulk edit stock"}</div>
-                {bulkEdit && <div onClick={async () => { setBusy(true); try { for (const [id, stock] of Object.entries(bulkStocks)) { await fetch(`/api/admin/products/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ stock: Number(stock) }) }); } router.refresh(); setBulkEdit(false); } finally { setBusy(false); } }} style={{ cursor: "pointer", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: "12px 20px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "Saving…" : "Save all stock"}</div>}
-                <div onClick={() => setEditProduct({})} style={{ cursor: "pointer", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: "12px 20px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>+ New product</div>
+                {bulkEdit && <div onClick={async () => { setBusy(true); try { for (const [id, stock] of Object.entries(bulkStocks)) { await fetch(`/api/admin/products/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ stock: Number(stock) }) }); } router.refresh(); setBulkEdit(false); } finally { setBusy(false); } }} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "12px 20px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "Saving…" : "Save all stock"}</div>}
+                <div onClick={() => setEditProduct({})} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "12px 20px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>+ New product</div>
               </div>
             </div>
             {bulkEdit ? (
@@ -297,7 +297,7 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
             )}
             <div style={{ marginTop: 16, fontSize: 12.5, color: "rgba(247,241,237,.6)" }}>{shot.customerName} · {shot.phone} · {shot.city}<br />{shot.items} · <span style={{ color: "var(--rose-light)" }}>{rs(shot.total)}</span></div>
             <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
-              <div onClick={() => { updateStatus(shot, "Confirmed"); setShot(null); }} style={{ cursor: "pointer", flex: 1, textAlign: "center", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: 14, fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase" }}>Confirm payment</div>
+              <div onClick={() => { updateStatus(shot, "Confirmed"); setShot(null); }} style={{ cursor: "pointer", flex: 1, textAlign: "center", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: 14, fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase" }}>Confirm payment</div>
               <div onClick={() => { updateStatus(shot, "Rejected"); setShot(null); }} style={{ cursor: "pointer", border: "1px solid rgba(200,90,90,.4)", color: "#E39B9B", padding: "14px 18px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase" }}>Reject</div>
             </div>
           </div>
@@ -318,14 +318,14 @@ function Overview({ kpis, orders, products }) {
     { label: "Revenue this month", value: rs(kpis.revenue), delta: "Confirmed + delivered", color: "#8FD6A6" },
     { label: "Total orders", value: String(kpis.orders), delta: "All time", color: "#8FD6A6" },
     { label: "Customers", value: String(kpis.customers), delta: "Registered", color: "#8FD6A6" },
-    { label: "Pending verification", value: String(kpis.pending), delta: kpis.pending ? "Review now →" : "All clear", color: kpis.pending ? "#F2CDBB" : "#8FD6A6" },
+    { label: "Pending verification", value: String(kpis.pending), delta: kpis.pending ? "Review now →" : "All clear", color: kpis.pending ? "var(--rose)" : "#8FD6A6" },
     { label: "Low stock", value: `${kpis.lowStock} sets`, delta: kpis.lowStockName ? `${kpis.lowStockName} needs restock` : "Stock healthy", color: kpis.lowStock ? "#E39B9B" : "#8FD6A6" },
   ];
 
   const chart = kpis.revenueChart || [];
   const maxVal = Math.max(...chart.map((d) => d.total), 1);
   const alerts = [];
-  if (kpis.pending) alerts.push({ title: `${kpis.pending} order${kpis.pending > 1 ? "s" : ""} pending payment verification`, meta: "Open Orders tab → check receipts", dot: "#F2CDBB" });
+  if (kpis.pending) alerts.push({ title: `${kpis.pending} order${kpis.pending > 1 ? "s" : ""} pending payment verification`, meta: "Open Orders tab → check receipts", dot: "var(--rose)" });
   products.filter((p) => p.stock <= 3).forEach((p) => alerts.push({ title: `${p.name} — only ${p.stock} left`, meta: "Restock or hide from shop", dot: "#E39B9B" }));
   if (alerts.length === 0) alerts.push({ title: "Everything looks good", meta: "No urgent actions needed", dot: "#8FD6A6" });
 
@@ -354,7 +354,7 @@ function Overview({ kpis, orders, products }) {
               const isMax = d.total === maxVal && d.total > 0;
               return (
                 <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4, height: "100%", justifyContent: "flex-end" }} title={`${d.date}: ${rs(d.total)}`}>
-                  <div style={{ width: "100%", height: `${Math.max(pct, 2)}%`, background: isMax ? "linear-gradient(180deg,#F2CDBB,#B87A62)" : "linear-gradient(180deg,#C9916E,#7A4A33)", borderRadius: "1px 1px 0 0", minHeight: 3 }} />
+                  <div style={{ width: "100%", height: `${Math.max(pct, 2)}%`, background: isMax ? "linear-gradient(180deg,#C4233D,#9B1B2A)" : "linear-gradient(180deg,#9B1B2A,#620F1A)", borderRadius: "1px 1px 0 0", minHeight: 3 }} />
                   {i % 4 === 0 && <div style={{ fontSize: 8.5, color: "rgba(247,241,237,.3)", whiteSpace: "nowrap", transform: "rotate(-30deg)", transformOrigin: "top" }}>{d.date.slice(5)}</div>}
                 </div>
               );
@@ -417,7 +417,7 @@ function Coupons({ coupons, call, busy }) {
             <input value={form.value} onChange={set("value")} placeholder={form.type === "percentage" ? "15" : "500"} style={adminInput} />
           </div>
           <input type="date" value={form.expiresAt} onChange={set("expiresAt")} style={adminInput} />
-          <div onClick={create} style={{ cursor: "pointer", textAlign: "center", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: 14, fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "…" : "Create coupon"}</div>
+          <div onClick={create} style={{ cursor: "pointer", textAlign: "center", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: 14, fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "…" : "Create coupon"}</div>
         </div>
       </div>
     </div>
@@ -477,13 +477,13 @@ function Categories({ categories, call, busy, router }) {
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <input value={newForm.name} onChange={setN("name")} placeholder="Category name" style={adminInput} />
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {ASSET_IMAGES.map((img) => <img key={img} src={img} onClick={() => setNewForm((f) => ({ ...f, image: img }))} alt="" style={{ width: 40, height: 48, objectFit: "cover", cursor: "pointer", border: `1px solid ${newForm.image === img ? "#F2CDBB" : "transparent"}` }} />)}
+              {ASSET_IMAGES.map((img) => <img key={img} src={img} onClick={() => setNewForm((f) => ({ ...f, image: img }))} alt="" style={{ width: 40, height: 48, objectFit: "cover", cursor: "pointer", border: `1px solid ${newForm.image === img ? "var(--rose)" : "transparent"}` }} />)}
             </div>
             <label style={{ cursor: "pointer", border: "1px dashed rgba(227,183,166,.4)", padding: "11px 14px", textAlign: "center", fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(247,241,237,.6)" }}>
               {uploading ? "Uploading…" : "Upload photo"}
               <input type="file" accept="image/*" onChange={(e) => uploadImg(e, (p) => setNewForm((f) => ({ ...f, image: p })))} style={{ display: "none" }} />
             </label>
-            <div onClick={createCat} style={{ cursor: "pointer", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: 13, fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", textAlign: "center" }}>{busy ? "…" : "Create category"}</div>
+            <div onClick={createCat} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: 13, fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", textAlign: "center" }}>{busy ? "…" : "Create category"}</div>
           </div>
         </div>
 
@@ -540,7 +540,7 @@ function CategoryEditor({ cat, onClose, onSaved, uploading, setUploading }) {
               <input type="file" accept="image/*" onChange={upload} style={{ display: "none" }} />
             </label>
             <div style={{ display: "flex", gap: 5, marginTop: 8, flexWrap: "wrap" }}>
-              {ASSET_IMAGES.map((img) => <img key={img} src={img} onClick={() => setForm((f) => ({ ...f, image: img }))} alt="" style={{ width: 32, height: 38, objectFit: "cover", cursor: "pointer", border: `1px solid ${form.image === img ? "#F2CDBB" : "transparent"}` }} />)}
+              {ASSET_IMAGES.map((img) => <img key={img} src={img} onClick={() => setForm((f) => ({ ...f, image: img }))} alt="" style={{ width: 32, height: 38, objectFit: "cover", cursor: "pointer", border: `1px solid ${form.image === img ? "var(--rose)" : "transparent"}` }} />)}
             </div>
           </div>
         </div>
@@ -550,7 +550,7 @@ function CategoryEditor({ cat, onClose, onSaved, uploading, setUploading }) {
           <Labeled label="Sort order"><input type="number" value={form.sortOrder} onChange={set("sortOrder")} style={adminInput} /></Labeled>
         </div>
         <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
-          <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: "13px 28px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "Saving…" : "Save changes"}</div>
+          <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "13px 28px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "Saving…" : "Save changes"}</div>
           <div onClick={onClose} style={{ cursor: "pointer", border: "1px solid rgba(227,183,166,.3)", padding: "13px 22px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.7)" }}>Cancel</div>
         </div>
       </div>
@@ -620,7 +620,7 @@ function Homepage({ content, call, busy, waTpls, setWaTpls }) {
           <Labeled label="Hero image">
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               {ASSET_IMAGES.slice(0, 4).map((img) => (
-                <img key={img} src={img} onClick={() => setForm((f) => ({ ...f, heroImage: img }))} alt="" style={{ width: 68, height: 82, objectFit: "cover", border: `1px solid ${form.heroImage === img ? "#F2CDBB" : "rgba(227,183,166,.3)"}`, cursor: "pointer" }} />
+                <img key={img} src={img} onClick={() => setForm((f) => ({ ...f, heroImage: img }))} alt="" style={{ width: 68, height: 82, objectFit: "cover", border: `1px solid ${form.heroImage === img ? "var(--rose)" : "rgba(227,183,166,.3)"}`, cursor: "pointer" }} />
               ))}
             </div>
           </Labeled>
@@ -639,7 +639,7 @@ function Homepage({ content, call, busy, waTpls, setWaTpls }) {
               <input type="file" accept="image/*" onChange={uploadStudio} style={{ display: "none" }} />
             </label>
             <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-              {ASSET_IMAGES.map((img) => <img key={img} src={img} onClick={() => setForm((f) => ({ ...f, studioImage: img }))} alt="" style={{ width: 36, height: 42, objectFit: "cover", cursor: "pointer", border: `1px solid ${form.studioImage === img ? "#F2CDBB" : "transparent"}` }} />)}
+              {ASSET_IMAGES.map((img) => <img key={img} src={img} onClick={() => setForm((f) => ({ ...f, studioImage: img }))} alt="" style={{ width: 36, height: 42, objectFit: "cover", cursor: "pointer", border: `1px solid ${form.studioImage === img ? "var(--rose)" : "transparent"}` }} />)}
             </div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -663,7 +663,7 @@ function Homepage({ content, call, busy, waTpls, setWaTpls }) {
               <input type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (!file) return; setUploading(true); const fd = new FormData(); fd.append("file", file); fetch("/api/upload", { method: "POST", body: fd }).then((r) => r.json()).then((d) => { if (d.path) setForm((f) => ({ ...f, aboutImage1: d.path })); }).finally(() => setUploading(false)); }} style={{ display: "none" }} />
             </label>
             <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-              {ASSET_IMAGES.map((img) => <img key={img} src={img} onClick={() => setForm((f) => ({ ...f, aboutImage1: img }))} alt="" style={{ width: 36, height: 42, objectFit: "cover", cursor: "pointer", border: `1px solid ${form.aboutImage1 === img ? "#F2CDBB" : "transparent"}` }} />)}
+              {ASSET_IMAGES.map((img) => <img key={img} src={img} onClick={() => setForm((f) => ({ ...f, aboutImage1: img }))} alt="" style={{ width: 36, height: 42, objectFit: "cover", cursor: "pointer", border: `1px solid ${form.aboutImage1 === img ? "var(--rose)" : "transparent"}` }} />)}
             </div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -684,7 +684,7 @@ function Homepage({ content, call, busy, waTpls, setWaTpls }) {
               <input type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (!file) return; setUploading(true); const fd = new FormData(); fd.append("file", file); fetch("/api/upload", { method: "POST", body: fd }).then((r) => r.json()).then((d) => { if (d.path) setForm((f) => ({ ...f, aboutArtistImg: d.path })); }).finally(() => setUploading(false)); }} style={{ display: "none" }} />
             </label>
             <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-              {ASSET_IMAGES.map((img) => <img key={img} src={img} onClick={() => setForm((f) => ({ ...f, aboutArtistImg: img }))} alt="" style={{ width: 36, height: 42, objectFit: "cover", cursor: "pointer", border: `1px solid ${form.aboutArtistImg === img ? "#F2CDBB" : "transparent"}` }} />)}
+              {ASSET_IMAGES.map((img) => <img key={img} src={img} onClick={() => setForm((f) => ({ ...f, aboutArtistImg: img }))} alt="" style={{ width: 36, height: 42, objectFit: "cover", cursor: "pointer", border: `1px solid ${form.aboutArtistImg === img ? "var(--rose)" : "transparent"}` }} />)}
             </div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -736,7 +736,7 @@ function Homepage({ content, call, busy, waTpls, setWaTpls }) {
       </div>
 
       <div style={{ display: "flex", gap: 12 }}>
-        <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: "14px 32px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "…" : saved ? "Published ✓" : "Publish changes"}</div>
+        <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "14px 32px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "…" : saved ? "Published ✓" : "Publish changes"}</div>
         <a href="/" style={{ border: "1px solid rgba(227,183,166,.3)", padding: "14px 24px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.7)" }}>Preview storefront</a>
       </div>
     </div>
@@ -819,7 +819,7 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
               <input type="file" accept="image/*" onChange={upload} style={{ display: "none" }} />
             </label>
             <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
-              {ASSET_IMAGES.map((img) => <img key={img} src={img} onClick={() => setForm((f) => ({ ...f, image: img }))} alt="" style={{ width: 34, height: 40, objectFit: "cover", cursor: "pointer", border: `1px solid ${form.image === img ? "#F2CDBB" : "transparent"}` }} />)}
+              {ASSET_IMAGES.map((img) => <img key={img} src={img} onClick={() => setForm((f) => ({ ...f, image: img }))} alt="" style={{ width: 34, height: 40, objectFit: "cover", cursor: "pointer", border: `1px solid ${form.image === img ? "var(--rose)" : "transparent"}` }} />)}
             </div>
           </div>
         </div>
@@ -829,7 +829,7 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
           {extraImages.map((img, i) => (
             <div key={i} style={{ position: "relative" }}>
               <img src={img} alt="" style={{ width: 52, height: 62, objectFit: "cover", border: "1px solid rgba(227,183,166,.3)" }} />
-              <div onClick={() => setExtraImages((imgs) => imgs.filter((_, j) => j !== i))} style={{ position: "absolute", top: -6, right: -6, width: 16, height: 16, borderRadius: "50%", background: "#B87A62", color: "#fff", fontSize: 10, display: "grid", placeItems: "center", cursor: "pointer" }}>×</div>
+              <div onClick={() => setExtraImages((imgs) => imgs.filter((_, j) => j !== i))} style={{ position: "absolute", top: -6, right: -6, width: 16, height: 16, borderRadius: "50%", background: "var(--rose)", color: "#fff", fontSize: 10, display: "grid", placeItems: "center", cursor: "pointer" }}>×</div>
             </div>
           ))}
           <label style={{ cursor: "pointer", width: 52, height: 62, border: "1px dashed rgba(227,183,166,.4)", display: "grid", placeItems: "center", fontSize: 18, color: "rgba(247,241,237,.4)" }}>
@@ -856,7 +856,7 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
           <input type="checkbox" checked={form.featured} onChange={(e) => setForm((f) => ({ ...f, featured: e.target.checked }))} /> Feature on homepage
         </label>
         <div style={{ display: "flex", gap: 12, marginTop: 22 }}>
-          <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: "14px 30px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "Saving…" : isNew ? "Create product" : "Save changes"}</div>
+          <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "14px 30px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "Saving…" : isNew ? "Create product" : "Save changes"}</div>
           <div onClick={onClose} style={{ cursor: "pointer", border: "1px solid rgba(227,183,166,.3)", padding: "14px 24px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.7)" }}>Cancel</div>
         </div>
       </div>
@@ -997,7 +997,7 @@ function SettingsTab({ content, call, busy }) {
       <div style={{ border: "1px solid rgba(227,183,166,.16)", background: "var(--panel)", padding: 28, marginBottom: 18 }}>
         <div style={{ fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 20 }}>Store status</div>
         <label style={{ display: "flex", alignItems: "center", gap: 14, cursor: "pointer", marginBottom: 18 }}>
-          <div onClick={() => setForm((f) => ({ ...f, storeClosed: !f.storeClosed }))} style={{ width: 44, height: 24, borderRadius: 12, background: form.storeClosed ? "#B87A62" : "rgba(227,183,166,.2)", position: "relative", transition: "background .2s", border: "1px solid rgba(227,183,166,.3)", cursor: "pointer" }}>
+          <div onClick={() => setForm((f) => ({ ...f, storeClosed: !f.storeClosed }))} style={{ width: 44, height: 24, borderRadius: 12, background: form.storeClosed ? "var(--rose)" : "var(--panel)", position: "relative", transition: "background .2s", border: "1px solid rgba(227,183,166,.3)", cursor: "pointer" }}>
             <div style={{ width: 18, height: 18, borderRadius: "50%", background: form.storeClosed ? "#1A0F0A" : "rgba(247,241,237,.6)", position: "absolute", top: 2, left: form.storeClosed ? 22 : 2, transition: "left .2s" }} />
           </div>
           <span style={{ fontSize: 13, color: form.storeClosed ? "#E39B9B" : "#8FD6A6" }}>{form.storeClosed ? "Store is CLOSED" : "Store is OPEN"}</span>
@@ -1033,10 +1033,10 @@ function SettingsTab({ content, call, busy }) {
           <input type="number" min="0" max="90" value={form.flashSalePercent} onChange={set("flashSalePercent")} style={{ ...adminInput, width: 120 }} placeholder="0" />
           <span style={{ fontSize: 13, color: "rgba(247,241,237,.6)" }}>% off (0 = no flash sale active)</span>
         </div>
-        {Number(form.flashSalePercent) > 0 && <div style={{ marginTop: 12, fontSize: 12, color: "#F2CDBB", padding: "10px 14px", border: "1px solid rgba(242,205,187,.3)" }}>Flash sale active — {form.flashSalePercent}% off displayed on all product pages</div>}
+        {Number(form.flashSalePercent) > 0 && <div style={{ marginTop: 12, fontSize: 12, color: "var(--rose)", padding: "10px 14px", border: "1px solid rgba(242,205,187,.3)" }}>Flash sale active — {form.flashSalePercent}% off displayed on all product pages</div>}
       </div>
 
-      <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: "14px 34px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>{busy ? "Saving…" : saved ? "Saved ✓" : "Save settings"}</div>
+      <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "14px 34px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>{busy ? "Saving…" : saved ? "Saved ✓" : "Save settings"}</div>
     </div>
   );
 }
@@ -1066,7 +1066,7 @@ function MediaTab() {
       <div>
         <h1 style={{ ...h1, marginBottom: 10 }}>Media</h1>
         <div style={{ fontSize: 12, color: "rgba(247,241,237,.42)", marginBottom: 24 }}>Manage uploaded images in your store.</div>
-        <div onClick={load} style={{ cursor: "pointer", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: "13px 26px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>{loading ? "Loading…" : "Load uploaded files"}</div>
+        <div onClick={load} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "13px 26px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>{loading ? "Loading…" : "Load uploaded files"}</div>
       </div>
     );
   }
@@ -1101,16 +1101,19 @@ function MediaTab() {
 
 /* ---------- styles + helpers ---------- */
 const h1 = { fontFamily: "var(--serif)", fontWeight: 300, fontSize: 38, margin: "0 0 24px" };
-const adminInput = { background: "transparent", border: "1px solid rgba(227,183,166,.25)", color: "var(--ink)", padding: 13, fontSize: 13, outline: "none", width: "100%" };
+const adminInput = { background: "transparent", border: "1px solid var(--card-b)", color: "var(--ink)", padding: 13, fontSize: 13, outline: "none", width: "100%" };
 const modalWrap = { position: "fixed", inset: 0, zIndex: 120, background: "rgba(4,4,5,.85)", backdropFilter: "blur(6px)", display: "grid", placeItems: "center", padding: 24 };
 
 function statusBadge(status) {
   const map = {
-    Pending: ["rgba(242,205,187,.5)", "#F2CDBB"], Confirmed: ["rgba(143,214,166,.4)", "#8FD6A6"],
-    Shipped: ["rgba(143,214,166,.4)", "#8FD6A6"], Delivered: ["rgba(143,214,166,.4)", "#8FD6A6"],
-    Rejected: ["rgba(200,90,90,.4)", "#E39B9B"],
+    Pending:   ["rgba(200,130,0,.5)",   "#C88200"],
+    Confirmed: ["rgba(30,140,60,.45)",  "#1E8C3C"],
+    Shipped:   ["rgba(30,140,60,.45)",  "#1E8C3C"],
+    Delivered: ["rgba(30,140,60,.45)",  "#1E8C3C"],
+    Rejected:  ["rgba(200,50,50,.45)",  "#C83232"],
+    Cancelled: ["rgba(155,27,42,.35)",  "#9B1B2A"],
   };
-  const [border, color] = map[status] || ["rgba(247,241,237,.2)", "rgba(247,241,237,.6)"];
+  const [border, color] = map[status] || ["rgba(155,27,42,.2)", "var(--rose)"];
   return { fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: `1px solid ${border}`, color, padding: "6px 9px" };
 }
 function nextStatus(s) {
