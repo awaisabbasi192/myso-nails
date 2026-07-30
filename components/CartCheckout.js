@@ -5,6 +5,15 @@ import Link from "next/link";
 import { useCart } from "./CartContext";
 import { rs, waLink } from "@/lib/format";
 
+const FLOWERS = ["🌸", "🌺", "🌷", "✨", "💫", "🎀", "🌹", "💅", "🎉", "⭐", "🌼", "💝"];
+const CONFETTI = Array.from({ length: 40 }, (_, i) => ({
+  emoji: FLOWERS[i % FLOWERS.length],
+  x: (i * 2.6) % 100,
+  dur: 2.6 + (i % 7) * 0.3,
+  delay: (i % 10) * 0.16,
+  size: 15 + (i % 4) * 7,
+}));
+
 const FREE_DELIVERY_OVER = 5000;
 const DELIVERY_FEE = 300;
 
@@ -204,22 +213,76 @@ export default function CartCheckout({ prefill }) {
         </div>
       )}
 
-      {/* STEP 4: DONE */}
+      {/* STEP 4: CELEBRATION */}
       {step === 4 && order && (
-        <div style={{ maxWidth: 620, margin: "20px auto", textAlign: "center", border: "1px solid rgba(227,183,166,.2)", padding: "56px 40px", background: "var(--panel)" }}>
-          <div className="text-gradient" style={{ fontFamily: "var(--script)", fontSize: 46 }}>thank you</div>
-          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 34, margin: "14px 0 8px" }}>Order placed</h2>
-          <div style={{ fontSize: 13, color: "rgba(247,241,237,.55)", lineHeight: 1.8 }}>We're verifying your JazzCash payment now — you'll get a WhatsApp confirmation within 30 minutes, then we dispatch within 48 hours.</div>
-          <div style={{ margin: "28px 0", borderTop: "1px solid rgba(227,183,166,.16)", borderBottom: "1px solid rgba(227,183,166,.16)", padding: "22px 0" }}>
-            <div style={{ fontSize: 10.5, letterSpacing: ".3em", textTransform: "uppercase", color: "rgba(247,241,237,.45)" }}>Order ID</div>
-            <div style={{ fontFamily: "var(--serif)", fontSize: 32, color: "var(--rose-light)", marginTop: 8 }}>{order.code}</div>
-            <div style={{ display: "inline-block", marginTop: 14, fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", border: "1px solid rgba(227,183,166,.35)", padding: "7px 12px", color: "var(--rose)" }}>Pending payment verification</div>
+        <>
+          {/* Falling flowers confetti */}
+          <div style={{ position: "fixed", inset: 0, zIndex: 9999, pointerEvents: "none", overflow: "hidden" }}>
+            {CONFETTI.map((p, i) => (
+              <span
+                key={i}
+                className="confetti-particle"
+                style={{
+                  left: p.x + "%",
+                  fontSize: p.size + "px",
+                  animation: `confettiFall ${p.dur}s ease-in ${p.delay}s both`,
+                }}
+              >
+                {p.emoji}
+              </span>
+            ))}
           </div>
-          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <a href={waLink(`Hi! My order ID is ${order.code}`)} target="_blank" rel="noreferrer" style={{ border: "1px solid #25D366", color: "var(--ink)", padding: "15px 26px", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Share on WhatsApp</a>
-            <Link href="/account" className="gradient-warm" style={{ padding: "15px 26px", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Track my order</Link>
+
+          {/* Thank you card */}
+          <div className="celebration-card" style={{ maxWidth: 640, margin: "20px auto", textAlign: "center", padding: "64px 40px 52px", background: "var(--panel)", border: "1px solid var(--card-b)", borderRadius: 4, position: "relative", overflow: "hidden" }}>
+            {/* Background glow */}
+            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 0%, rgba(196,35,61,.13) 0%, transparent 65%)", pointerEvents: "none" }} />
+
+            {/* Script headline */}
+            <div className="text-gradient" style={{ fontFamily: "var(--script)", fontSize: 68, lineHeight: 1, position: "relative" }}>
+              Thank you
+            </div>
+
+            {/* Customer name */}
+            <div className="celebration-name" style={{ fontFamily: "var(--serif)", fontSize: 38, fontWeight: 300, margin: "10px 0 6px", color: "var(--ink)", position: "relative" }}>
+              {details.customerName} 💅
+            </div>
+
+            <div style={{ fontSize: 10.5, letterSpacing: ".3em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 28 }}>
+              Aapka order place ho gaya!
+            </div>
+
+            {/* Order code */}
+            <div className="celebration-order" style={{ margin: "0 auto 28px", maxWidth: 340, border: "1px solid var(--card-b)", padding: "24px 0", background: "var(--bg)" }}>
+              <div style={{ fontSize: 10, letterSpacing: ".34em", textTransform: "uppercase", color: "var(--ink-faint)", marginBottom: 10 }}>Order ID</div>
+              <div style={{ fontFamily: "var(--serif)", fontSize: 36, color: "var(--rose-light)", letterSpacing: ".06em" }}>{order.code}</div>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 14, fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "7px 14px", color: "var(--rose)", borderRadius: 2 }}>
+                <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#f59e0b", display: "inline-block" }} />
+                Pending payment verification
+              </div>
+            </div>
+
+            {/* Info text */}
+            <p style={{ fontSize: 13.5, lineHeight: 1.85, color: "var(--ink-muted)", maxWidth: 440, margin: "0 auto 32px" }}>
+              Aapka JazzCash payment verify hone ke baad <strong style={{ color: "var(--ink)" }}>30 minutes</strong> mein WhatsApp confirmation aayega — phir <strong style={{ color: "var(--ink)" }}>48 hours</strong> mein dispatch! 🚀
+            </p>
+
+            {/* Buttons */}
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+              <a
+                href={waLink(`Assalam o Alaikum! Mera order ID hai ${order.code} — confirm karein please 🌸`)}
+                target="_blank"
+                rel="noreferrer"
+                style={{ display: "flex", alignItems: "center", gap: 8, border: "1px solid #25D366", color: "var(--ink)", padding: "15px 26px", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", borderRadius: 2 }}
+              >
+                <span style={{ fontSize: 16 }}>💬</span> WhatsApp se share karein
+              </a>
+              <Link href="/account" className="gradient-warm" style={{ display: "flex", alignItems: "center", gap: 8, padding: "15px 26px", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", borderRadius: 2 }}>
+                <span style={{ fontSize: 16 }}>📦</span> Track my order
+              </Link>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

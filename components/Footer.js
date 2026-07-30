@@ -27,6 +27,7 @@ export default function Footer() {
         <div>
           <div style={{ fontSize: 10.5, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 18 }}>Help</div>
           <div style={{ display: "flex", flexDirection: "column", gap: 11, fontSize: 13, color: "var(--ink-muted)" }}>
+            <Link href="/faq" style={{ color: "inherit" }}>FAQ</Link>
             <Link href="/policies#delivery" style={{ color: "inherit" }}>Delivery &amp; shipping</Link>
             <Link href="/policies#refund" style={{ color: "inherit" }}>Refund &amp; returns</Link>
             <Link href="/policies#payment" style={{ color: "inherit" }}>Payment &amp; JazzCash</Link>

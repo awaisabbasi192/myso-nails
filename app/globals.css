@@ -58,6 +58,7 @@ body {
   font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  animation: fadeIn .4s ease both;
 }
 
 a { color: var(--rose); text-decoration: none; }
@@ -76,7 +77,13 @@ html { overflow-x: hidden; }
 @keyframes fadeUp   { from { opacity:0; transform:translateY(30px) } to { opacity:1; transform:none } }
 @keyframes fadeIn   { from { opacity:0 } to { opacity:1 } }
 @keyframes slideLeft{ from { opacity:0; transform:translateX(24px) } to { opacity:1; transform:none } }
-@keyframes scaleIn  { from { opacity:0; transform:scale(.94) } to { opacity:1; transform:scale(1) } }
+@keyframes scaleIn       { from { opacity:0; transform:scale(.94) } to { opacity:1; transform:scale(1) } }
+@keyframes confettiFall  { 0% { transform:translateY(-40px) rotate(0deg); opacity:1; } 80% { opacity:1; } 100% { transform:translateY(108vh) rotate(720deg); opacity:0; } }
+@keyframes celebrationPop{ 0% { opacity:0; transform:scale(.8) translateY(32px); } 65% { transform:scale(1.04) translateY(-6px); } 100% { opacity:1; transform:scale(1) translateY(0); } }
+@keyframes namePop       { 0% { opacity:0; transform:scale(.5) rotate(-8deg); } 80% { transform:scale(1.08) rotate(1deg); } 100% { opacity:1; transform:scale(1) rotate(0); } }
+@keyframes orderGlow     { 0%,100% { box-shadow:0 0 0 0 rgba(196,35,61,0); } 50% { box-shadow:0 0 32px 8px rgba(196,35,61,.28); } }
+@keyframes floatHover    { 0%,100% { transform:translateY(0) rotate(0deg); } 50% { transform:translateY(-7px) rotate(4deg); } }
+@keyframes cardSlideIn   { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
 
 /* ── SCROLL REVEAL ──────────────────────────────────────────────── */
 .scroll-reveal {
@@ -535,3 +542,42 @@ button:active, [style*="cursor: pointer"]:active { opacity: .8; }
   white-space: nowrap;
 }
 .admin-action-btn:hover { border-color: var(--rose); color: var(--rose); background: rgba(155,27,42,.06); }
+
+/* ── SMOOTH SITE-WIDE MICRO-INTERACTIONS ────────────────────────── */
+.card-soft {
+  transition: transform .28s cubic-bezier(.22,1,.36,1), box-shadow .28s cubic-bezier(.22,1,.36,1), border-color .2s ease !important;
+}
+.card-soft:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 18px 48px rgba(0,0,0,.22) !important;
+}
+.zoom-wrap .zoom { transition: transform .55s cubic-bezier(.22,1,.36,1); }
+.zoom-wrap:hover .zoom { transform: scale(1.06); }
+
+/* FAQ accordion */
+.faq-item { border-bottom: 1px solid var(--card-b); }
+.faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 22px 0;
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  transition: color .2s ease;
+}
+.faq-item summary:hover { color: var(--rose); }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: "+"; font-size: 24px; color: var(--rose); transition: transform .3s ease; flex-shrink: 0; }
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item .faq-body { padding: 0 0 24px; font-size: 14.5px; line-height: 1.9; color: var(--ink-muted); animation: fadeUp .35s ease both; }
+
+/* Celebration screen */
+.celebration-card { animation: celebrationPop .7s cubic-bezier(.22,1,.36,1) .1s both; }
+.celebration-name { animation: namePop .6s cubic-bezier(.22,1,.36,1) .55s both; }
+.celebration-order { animation: orderGlow 2.4s ease-in-out 1s infinite; border-radius: 3px; }
+.confetti-particle { position: absolute; top: -50px; display: inline-block; will-change: transform; }
