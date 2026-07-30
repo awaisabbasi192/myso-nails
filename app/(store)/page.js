@@ -93,14 +93,15 @@ export default async function HomePage() {
         <div className="rise-slow hero-media hero-media-desktop">{heroMediaInner}</div>
       </section>
 
-      {/* TRUST STRIP */}
-      <div style={{ borderTop: "1px solid var(--card-b)", borderBottom: "1px solid var(--card-b)", background: "var(--panel)", padding: "16px 24px", overflow: "hidden" }}>
-        <div style={{ maxWidth: 1240, margin: "0 auto", display: "flex", gap: 0, justifyContent: "center", flexWrap: "wrap", alignItems: "center" }}>
-          {["FREE SIZING KIT", "NATIONWIDE DELIVERY", "HAND-PAINTED BY HAND", "REUSABLE 15+ TIMES", "100% ADVANCE — JAZZCASH", "WHATSAPP SUPPORT"].map((t, i, a) => (
-            <div key={t} style={{ display: "flex", alignItems: "center", gap: 0 }}>
-              <span style={{ fontSize: 10, letterSpacing: ".22em", color: "var(--rose)", padding: "0 18px", whiteSpace: "nowrap" }}>{t}</span>
-              {i < a.length - 1 && <span style={{ color: "var(--card-b)", fontSize: 18, lineHeight: 1 }}>|</span>}
-            </div>
+      {/* TRUST STRIP — scrolling marquee on all sizes */}
+      <div style={{ borderTop: "1px solid var(--card-b)", borderBottom: "1px solid var(--card-b)", background: "var(--panel)", padding: "13px 0", overflow: "hidden" }}>
+        <div style={{ display: "flex", animation: "announceScroll 22s linear infinite", width: "max-content" }}>
+          {[...["FREE SIZING KIT", "NATIONWIDE DELIVERY", "HAND-PAINTED BY HAND", "REUSABLE 15+ TIMES", "100% ADVANCE — JAZZCASH", "WHATSAPP SUPPORT"],
+            ...["FREE SIZING KIT", "NATIONWIDE DELIVERY", "HAND-PAINTED BY HAND", "REUSABLE 15+ TIMES", "100% ADVANCE — JAZZCASH", "WHATSAPP SUPPORT"]
+          ].map((t, i) => (
+            <span key={i} style={{ display: "inline-flex", alignItems: "center", fontSize: 10, letterSpacing: ".22em", color: "var(--rose)", padding: "0 22px", whiteSpace: "nowrap" }}>
+              {t}<span style={{ marginLeft: 22, color: "var(--card-b)", fontSize: 16 }}>✦</span>
+            </span>
           ))}
         </div>
       </div>
