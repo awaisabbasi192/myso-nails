@@ -25,16 +25,35 @@ export default function ProductDetail({ product, reviews, related }) {
   const extraImages = (() => { try { return JSON.parse(product.images || "[]"); } catch { return []; } })();
   const allImages = [product.image, ...extraImages.filter((x) => x && x !== product.image)];
   const wished = isWished(product.slug);
-  const [reviewForm, setReviewForm] = useState({ name: "", rating: 5, body: "" });
+  const [reviewForm, setReviewForm] = useState({ name: "", rating: 5, body: "", image: "", image2: "" });
   const [reviewStatus, setReviewStatus] = useState(""); // "" | "submitting" | "done" | "error"
+  const [photoUploading, setPhotoUploading] = useState(false);
   const setRF = (k) => (e) => setReviewForm((f) => ({ ...f, [k]: e.target.value }));
+
+  async function uploadReviewPhoto(e) {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow re-selecting the same file
+    if (!file) return;
+    // Fill the first empty slot (image, then image2)
+    const slot = !reviewForm.image ? "image" : !reviewForm.image2 ? "image2" : null;
+    if (!slot) return;
+    setPhotoUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      const data = await res.json();
+      if (res.ok && data.path) setReviewForm((f) => ({ ...f, [slot]: data.path }));
+    } catch {}
+    setPhotoUploading(false);
+  }
 
   async function submitReview() {
     if (!reviewForm.name.trim() || !reviewForm.body.trim() || reviewStatus === "submitting") return;
     setReviewStatus("submitting");
     try {
       const res = await fetch("/api/reviews", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...reviewForm, productId: product.id }) });
-      if (res.ok) { setReviewStatus("done"); setReviewForm({ name: "", rating: 5, body: "" }); }
+      if (res.ok) { setReviewStatus("done"); setReviewForm({ name: "", rating: 5, body: "", image: "", image2: "" }); }
       else setReviewStatus("error");
     } catch { setReviewStatus("error"); }
   }
@@ -191,6 +210,27 @@ export default function ProductDetail({ product, reviews, related }) {
             <div>
               <div style={{ fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(247,241,237,.45)", marginBottom: 8 }}>Your review</div>
               <textarea value={reviewForm.body} onChange={setRF("body")} rows={3} placeholder="How did the set look? How long did it last?" style={{ background: "transparent", border: "1px solid rgba(227,183,166,.25)", color: "var(--ink)", padding: 13, fontSize: 13, outline: "none", width: "100%", resize: "vertical" }} />
+            </div>
+            {/* Photo upload */}
+            <div>
+              <div style={{ fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(247,241,237,.45)", marginBottom: 8 }}>Add photos <span style={{ textTransform: "none", letterSpacing: 0, color: "rgba(247,241,237,.3)" }}>(optional, up to 2)</span></div>
+              <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+                {[reviewForm.image, reviewForm.image2].filter(Boolean).map((src, i) => (
+                  <div key={i} style={{ position: "relative", width: 64, height: 64 }}>
+                    <img src={src} alt="" style={{ width: 64, height: 64, objectFit: "cover", border: "1px solid rgba(227,183,166,.3)", borderRadius: 2 }} />
+                    <div
+                      onClick={() => setReviewForm((f) => (i === 0 ? { ...f, image: f.image2, image2: "" } : { ...f, image2: "" }))}
+                      style={{ position: "absolute", top: -7, right: -7, width: 20, height: 20, borderRadius: "50%", background: "var(--rose)", color: "#fff", display: "grid", placeItems: "center", fontSize: 13, cursor: "pointer", lineHeight: 1 }}
+                    >×</div>
+                  </div>
+                ))}
+                {!(reviewForm.image && reviewForm.image2) && (
+                  <label style={{ width: 64, height: 64, border: "1px dashed rgba(227,183,166,.4)", borderRadius: 2, display: "grid", placeItems: "center", cursor: "pointer", color: "var(--rose)", fontSize: 22, background: "var(--bg)" }}>
+                    {photoUploading ? "…" : "＋"}
+                    <input type="file" accept="image/*" onChange={uploadReviewPhoto} style={{ display: "none" }} disabled={photoUploading} />
+                  </label>
+                )}
+              </div>
             </div>
             {reviewStatus === "error" && <div style={{ fontSize: 12, color: "#E39B9B" }}>Could not submit — please try again.</div>}
             <div onClick={submitReview} className="shimmer" style={{ cursor: "pointer", textAlign: "center", padding: 14, fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", alignSelf: "flex-start", minWidth: 180 }}>{reviewStatus === "submitting" ? "Submitting…" : "Submit review"}</div>

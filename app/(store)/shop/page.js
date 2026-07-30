@@ -13,6 +13,7 @@ export const metadata = {
 export default async function ShopPage({ searchParams }) {
   const sp = await searchParams;
   const cat = typeof sp?.cat === "string" ? sp.cat : null;
+  const q = typeof sp?.q === "string" ? sp.q : "";
 
   const [products, content] = await Promise.all([
     prisma.product.findMany({ orderBy: { sortOrder: "asc" }, include: { category: true } }),
@@ -27,5 +28,5 @@ export default async function ShopPage({ searchParams }) {
     stock: p.stock, sortOrder: p.sortOrder, categorySlug: p.category?.slug || null,
   }, flashSalePercent));
 
-  return <ShopClient products={plain} initialCat={cat} />;
+  return <ShopClient products={plain} initialCat={cat} initialSearch={q} />;
 }

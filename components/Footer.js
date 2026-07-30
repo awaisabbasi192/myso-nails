@@ -20,6 +20,8 @@ export default function Footer() {
             <Link href="/shop" style={{ color: "inherit" }}>All sets</Link>
             <Link href="/bridal" style={{ color: "inherit" }}>Bridal sets</Link>
             <Link href="/custom" style={{ color: "inherit" }}>Custom order</Link>
+            <Link href="/gift-cards" style={{ color: "inherit" }}>Gift cards</Link>
+            <Link href="/wishlist" style={{ color: "inherit" }}>My wishlist</Link>
             <Link href="/size-guide" style={{ color: "inherit" }}>Size guide</Link>
             <Link href="/track" style={{ color: "inherit" }}>Track my order</Link>
           </div>

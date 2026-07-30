@@ -6,7 +6,14 @@ export async function POST(request) {
     if (!b.productId || !b.name?.trim() || !b.body?.trim()) return Response.json({ error: "Name and review required" }, { status: 400 });
     const rating = Math.max(1, Math.min(5, Number(b.rating) || 5));
     const review = await prisma.review.create({
-      data: { productId: b.productId, name: b.name.trim(), body: b.body.trim(), rating },
+      data: {
+        productId: b.productId,
+        name: b.name.trim(),
+        body: b.body.trim(),
+        rating,
+        image: b.image || null,
+        image2: b.image2 || null,
+      },
     });
     await prisma.product.update({
       where: { id: b.productId },

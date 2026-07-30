@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "./CartContext";
@@ -12,14 +12,17 @@ const FILTER_GROUPS = [
   { name: "Occasion", key: "occasion", opts: ["Bridal", "Party", "Everyday"] },
 ];
 
-export default function ShopClient({ products, initialCat }) {
+export default function ShopClient({ products, initialCat, initialSearch = "" }) {
   const { addToCart, toggleWish, isWished } = useCart();
   const router = useRouter();
   const [filters, setFilters] = useState({ shape: [], finish: [], occasion: [] });
   const [sort, setSort] = useState("Popularity");
   const [quick, setQuick] = useState(null);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(initialSearch);
   const [priceMax, setPriceMax] = useState(6000);
+
+  // Keep search in sync when the ?q= param changes (e.g. searched again from header)
+  useEffect(() => { setSearch(initialSearch); }, [initialSearch]);
 
   function toggleFilter(group, val) {
     setFilters((f) => {

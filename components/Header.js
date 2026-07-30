@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useCart } from "./CartContext";
 import ThemeToggle from "./ThemeToggle";
+import SearchBar from "./SearchBar";
 
 const NAV = [
   { href: "/", label: "Home" },
@@ -57,9 +58,11 @@ export default function Header({ announcement, user }) {
 
           <div style={{ flex: 1 }} />
 
+          <SearchBar style={{ width: 200 }} />
+
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <ThemeToggle />
-            <Link href="/account" style={{ position: "relative", fontSize: 18, color: "var(--rose)" }}>
+            <Link href="/wishlist" aria-label="Wishlist" style={{ position: "relative", fontSize: 18, color: "var(--rose)" }}>
               ♡
               {wishCount > 0 && <span style={{ position: "absolute", top: -6, right: -9, fontFamily: "var(--sans)", fontSize: 9, background: "var(--rose)", color: "#fff", borderRadius: 9, padding: "1px 5px" }}>{wishCount}</span>}
             </Link>
@@ -112,6 +115,11 @@ export default function Header({ announcement, user }) {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 20px", height: 58, borderBottom: "1px solid var(--header-border)" }}>
             <div className="text-gradient" style={{ fontFamily: "var(--serif)", fontSize: 22 }}>Menu</div>
             <button onClick={() => setMobileOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 26, color: "var(--ink-muted)", lineHeight: 1, padding: 4 }}>×</button>
+          </div>
+
+          {/* Search */}
+          <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--card-b)" }}>
+            <SearchBar autoFocus={false} onDone={() => setMobileOpen(false)} />
           </div>
 
           {/* Nav links */}

@@ -24,6 +24,14 @@ export const metadata = {
   title: "Myso Nails Studio — Hand-painted press-on nail sets",
   description:
     "Hand-painted press-on nail sets, custom bridal work and size-fitted reusable sets. Shipped nationwide from Lahore.",
+  appleWebApp: { capable: true, title: "Myso Nails", statusBarStyle: "black-translucent" },
+  icons: { apple: "/assets/logo.png" },
+};
+
+export const viewport = {
+  themeColor: "#9B1B2A",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }) {
