@@ -36,31 +36,33 @@ export default function Header({ announcement, user }) {
 
       <header style={{ position: "sticky", top: 0, zIndex: 80, background: "rgba(10,10,11,.94)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(227,183,166,.14)" }}>
         {/* Desktop header */}
-        <div className="header-desktop" style={{ maxWidth: 1240, margin: "0 auto", padding: "14px 24px", display: "flex", alignItems: "center", gap: 28 }}>
-          <Link href="/" style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0, position: "relative", height: 56, width: 120 }}>
+        <div className="header-desktop" style={{ maxWidth: 1240, margin: "0 auto", padding: "14px 24px", display: "flex", alignItems: "center", gap: 16 }}>
+          <Link href="/" style={{ display: "flex", alignItems: "center", flexShrink: 0, position: "relative", height: 50, width: 100 }}>
             <Image src="/assets/logo.png" alt="Myso Nails Studio" fill style={{ objectFit: "contain" }} />
           </Link>
 
-          <nav className="desktop-nav" style={{ display: "flex", gap: 26, marginLeft: 14, flexWrap: "wrap" }}>
+          <nav className="desktop-nav" style={{ display: "flex", gap: 16, marginLeft: 6, flexWrap: "nowrap" }}>
             {NAV.map((n) => (
-              <Link key={n.href} href={n.href} className="nav-link" style={pathname === n.href ? { color: "var(--rose-light)", borderBottom: "1px solid var(--bronze)" } : undefined}>
+              <Link key={n.href} href={n.href} className="nav-link" style={{ whiteSpace: "nowrap", ...(pathname === n.href ? { color: "var(--rose-light)", borderBottom: "1px solid var(--bronze)" } : {}) }}>
                 {n.label}
               </Link>
             ))}
             {user?.role === "admin" ? (
-              <Link href="/admin" className="nav-link accent">Admin</Link>
+              <Link href="/admin" className="nav-link accent" style={{ whiteSpace: "nowrap" }}>Admin</Link>
             ) : user ? (
-              <Link href="/account" className="nav-link accent">{user.name?.split(" ")[0] || "Account"}</Link>
+              <Link href="/account" className="nav-link accent" style={{ whiteSpace: "nowrap" }}>{user.name?.split(" ")[0] || "Account"}</Link>
             ) : (
-              <Link href="/login" className="nav-link accent">Login</Link>
+              <Link href="/login" className="nav-link accent" style={{ whiteSpace: "nowrap" }}>Login</Link>
             )}
           </nav>
 
-          <div style={{ flex: 1 }} />
+          <div style={{ flex: 1, minWidth: 12 }} />
 
-          <SearchBar style={{ width: 200 }} />
+          <div className="header-search" style={{ flexShrink: 0 }}>
+            <SearchBar style={{ width: 160 }} />
+          </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
             <ThemeToggle />
             <Link href="/wishlist" aria-label="Wishlist" style={{ position: "relative", fontSize: 18, color: "var(--rose)" }}>
               ♡

@@ -239,6 +239,16 @@ html { overflow-x: hidden; }
   [data-r="modal"] > img { max-height: 280px; }
 }
 
+/* Medium desktop — keep the full nav on one line by tightening it and
+   hiding the header search (shop page still has its own search box). */
+@media (max-width: 1120px) {
+  .desktop-nav { gap: 13px !important; margin-left: 4px !important; }
+  .desktop-nav .nav-link { letter-spacing: .11em !important; font-size: 11.5px !important; }
+}
+@media (max-width: 1000px) {
+  .header-search { display: none !important; }
+}
+
 /* Mobile — 720px and below */
 @media (max-width: 720px) {
   /* Show bottom nav and mobile header; hide desktop */
