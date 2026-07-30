@@ -46,7 +46,6 @@ model Product {
   category    Category? @relation(fields: [categoryId], references: [id])
   reviews     Review[]
   orderItems  OrderItem[]
-  stockAlerts StockAlert[] @relation("StockAlerts")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -180,16 +179,6 @@ model Subscriber {
   id        String   @id @default(cuid())
   email     String   @unique
   createdAt DateTime @default(now())
-}
-
-model StockAlert {
-  id        String   @id @default(cuid())
-  email     String
-  productId String
-  product   Product  @relation("StockAlerts", fields: [productId], references: [id], onDelete: Cascade)
-  notified  Boolean  @default(false)
-  createdAt DateTime @default(now())
-  @@unique([email, productId])
 }
 
 model Message {

@@ -33,13 +33,6 @@ export default function RootLayout({ children }) {
         <script dangerouslySetInnerHTML={{ __html: `(function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();` }} />
         {/* Scroll-reveal: fade/slide sections as they enter viewport */}
         <script dangerouslySetInnerHTML={{ __html: `document.addEventListener('DOMContentLoaded',function(){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('revealed');io.unobserve(e.target);}});},{threshold:0.07});document.querySelectorAll('.scroll-reveal,.reveal-left,.reveal-right').forEach(function(el){io.observe(el);});});` }} />
-        {/* Google Analytics — set NEXT_PUBLIC_GA_ID in Vercel env vars */}
-        {process.env.NEXT_PUBLIC_GA_ID && (
-          <>
-            <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
-            <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${process.env.NEXT_PUBLIC_GA_ID}');` }} />
-          </>
-        )}
       </head>
       <body>
         <CartProvider>{children}</CartProvider>
