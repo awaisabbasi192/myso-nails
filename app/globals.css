@@ -580,3 +580,86 @@ button:active, [style*="cursor: pointer"]:active { opacity: .8; }
 .celebration-name { animation: namePop .6s cubic-bezier(.22,1,.36,1) .55s both; }
 .celebration-order { animation: orderGlow 2.4s ease-in-out 1s infinite; border-radius: 3px; }
 .confetti-particle { position: absolute; top: -50px; display: inline-block; will-change: transform; }
+
+/* ══════════════════════════════════════════════════════════════
+   SITE-WIDE MOTION & BUTTON POLISH  (CSS-only — safe, no JS)
+   ══════════════════════════════════════════════════════════════ */
+
+/* All primary/interactive buttons — springy lift, press feedback */
+.shimmer, .gradient-warm, .btn-outline, .btn-wa, .add-btn, .pill {
+  position: relative;
+  overflow: hidden;
+  transition: transform .28s cubic-bezier(.34,1.56,.64,1),
+              box-shadow .28s ease, filter .25s ease,
+              background .25s ease, border-color .2s ease, color .2s ease;
+}
+.shimmer:hover, .gradient-warm:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(155,27,42,.4);
+  filter: brightness(1.08);
+}
+.btn-outline:hover, .btn-wa:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px rgba(0,0,0,.18);
+}
+.shimmer:active, .gradient-warm:active, .btn-outline:active,
+.btn-wa:active, .add-btn:active, .pill:active {
+  transform: translateY(-1px) scale(.96);
+}
+
+/* Glossy sheen that sweeps across primary buttons on hover */
+.shimmer::after, .gradient-warm::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -80%;
+  width: 55%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,.4), transparent);
+  transform: skewX(-22deg);
+  transition: left .65s ease;
+  pointer-events: none;
+}
+.shimmer:hover::after, .gradient-warm:hover::after { left: 135%; }
+
+/* Product cards — lift with a soft rose glow, springy */
+.card {
+  transition: transform .32s cubic-bezier(.22,1,.36,1),
+              box-shadow .32s ease, border-color .3s ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 46px rgba(0,0,0,.24), 0 0 0 1px var(--card-b-h);
+  border-color: var(--card-b-h);
+}
+
+/* Add-to-bag button — grows slightly & fills on hover (fill already set) */
+.add-btn:hover { transform: translateY(-2px); }
+
+/* WhatsApp floating button — friendly grow on hover */
+.whatsapp-fab { transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease; }
+.whatsapp-fab:hover {
+  transform: translateY(-3px) scale(1.06);
+  box-shadow: 0 18px 40px rgba(37,211,102,.5);
+}
+
+/* Inputs — gentle focus glow */
+input, textarea, select {
+  transition: border-color .25s ease, box-shadow .25s ease, background .25s ease;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--rose) !important;
+  box-shadow: 0 0 0 3px rgba(155,27,42,.12);
+}
+
+/* Section headings underline flourish is handled per-page; keep links lively */
+.card-soft:hover { box-shadow: 0 18px 48px rgba(0,0,0,.22), 0 0 0 1px var(--card-b-h) !important; }
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .shimmer::after, .gradient-warm::after { display: none; }
+}
