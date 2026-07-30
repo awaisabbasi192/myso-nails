@@ -6,6 +6,57 @@ import { useRouter } from "next/navigation";
 import { useCart } from "./CartContext";
 import { rs, stars, waLink } from "@/lib/format";
 
+function StockAlertForm({ productId }) {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState(""); // "" | "loading" | "done" | "error"
+
+  async function submit() {
+    if (!email.includes("@") || status === "loading") return;
+    setStatus("loading");
+    try {
+      const r = await fetch("/api/stock-alert", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, productId }),
+      });
+      setStatus(r.ok ? "done" : "error");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  if (status === "done") {
+    return (
+      <div style={{ marginTop: 14, padding: "14px 18px", background: "rgba(39,174,96,.1)", border: "1px solid rgba(39,174,96,.3)", fontSize: 12.5, color: "var(--good)", letterSpacing: ".06em" }}>
+        ✓ Notify kar denge jab yeh wapis aa jaye!
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ marginTop: 14, padding: "16px 18px", background: "rgba(200,90,90,.08)", border: "1px solid rgba(200,90,90,.25)", borderRadius: 2 }}>
+      <div style={{ fontSize: 12, color: "#E39B9B", marginBottom: 10, letterSpacing: ".06em" }}>
+        Abhi sold out hai — email likhein, wapis aane par notify karenge:
+      </div>
+      <div style={{ display: "flex", gap: 8 }}>
+        <input
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && submit()}
+          placeholder="your@email.com"
+          style={{ flex: 1, background: "transparent", border: "1px solid rgba(227,183,166,.25)", color: "var(--ink)", padding: "10px 14px", fontSize: 12.5, outline: "none", minWidth: 0 }}
+        />
+        <div
+          onClick={submit}
+          style={{ cursor: "pointer", padding: "10px 16px", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", background: "rgba(196,35,61,.15)", border: "1px solid rgba(196,35,61,.4)", color: "var(--rose)", whiteSpace: "nowrap" }}
+        >
+          {status === "loading" ? "…" : "Notify me"}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const SHAPES = ["Almond", "Coffin", "Square", "Stiletto"];
 const SIZES = ["Short set", "Medium set", "Long set", "Custom sizes"];
 const ACCORDIONS = [
@@ -118,11 +169,7 @@ export default function ProductDetail({ product, reviews, related }) {
             )}
             <a href={waLink("Hi M&S! I want to order this set: " + product.name)} target="_blank" rel="noreferrer" style={{ border: "1px solid #25D366", color: "var(--ink)", padding: "18px 24px", fontSize: 11.5, letterSpacing: ".18em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 9 }} className="btn-wa">✆ Order via WhatsApp</a>
           </div>
-          {product.stock === 0 && (
-            <div style={{ marginTop: 14, padding: "12px 18px", background: "rgba(200,90,90,.1)", border: "1px solid rgba(200,90,90,.3)", fontSize: 12.5, color: "#E39B9B", letterSpacing: ".08em" }}>
-              This set is currently sold out — <a href={waLink("Hi M&S! I want to be notified when " + product.name + " is back in stock")} target="_blank" rel="noreferrer" style={{ color: "var(--rose-light)", textDecoration: "underline" }}>join the waitlist on WhatsApp</a>.
-            </div>
-          )}
+          {product.stock === 0 && <StockAlertForm productId={product.id} />}
           <div style={{ display: "flex", gap: 22, marginTop: 20, fontSize: 11.5, color: "rgba(247,241,237,.45)", flexWrap: "wrap" }}>
             <span>{product.stock > 0 ? `In stock (${product.stock} left) · ships in 48h` : "Sold out"}</span><span>·</span><span>Free delivery over Rs 5,000</span><span>·</span><span>Secure JazzCash payment</span>
           </div>
