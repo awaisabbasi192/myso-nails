@@ -21,6 +21,8 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
   const [bulkStocks, setBulkStocks] = useState({});
   const [trackingInputs, setTrackingInputs] = useState({});
   const [customerDetail, setCustomerDetail] = useState(null);
+  const [orderPage, setOrderPage] = useState(1);
+  const ORDERS_PER_PAGE = 15;
   const [waTpls, setWaTpls] = useState({
     Confirmed: content?.waConfirmed || "Assalam o Alaikum {name}! 🎉 Aapka order *{code}* confirm ho gaya hai. — Myso Nails Studio",
     Shipped:   content?.waShipped   || "Assalam o Alaikum {name}! 📦 Aapka order *{code}* ship ho gaya! — Myso Nails Studio",
@@ -53,7 +55,7 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
     });
   }
 
-  const shownOrders = orders.filter((o) => {
+  const filteredOrders = orders.filter((o) => {
     if (orderFilter !== "All" && o.status !== orderFilter) return false;
     if (orderSearch.trim()) {
       const q = orderSearch.trim().toLowerCase();
@@ -61,6 +63,9 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
     }
     return true;
   });
+  const totalOrderPages = Math.ceil(filteredOrders.length / ORDERS_PER_PAGE);
+  const paginatedOrders = filteredOrders.slice((orderPage - 1) * ORDERS_PER_PAGE, orderPage * ORDERS_PER_PAGE);
+  const shownOrders = paginatedOrders;
 
   function toggleAllOrders() {
     if (selectedOrders.size === shownOrders.length) setSelectedOrders(new Set());
@@ -119,10 +124,10 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
               </div>
             </div>
             <div style={{ display: "flex", gap: 10, margin: "0 0 14px", flexWrap: "wrap", alignItems: "center" }}>
-              <input value={orderSearch} onChange={(e) => setOrderSearch(e.target.value)} placeholder="Search by code, name or phone…" style={{ ...adminInput, width: 250, padding: "9px 14px" }} />
+              <input value={orderSearch} onChange={(e) => { setOrderSearch(e.target.value); setOrderPage(1); }} placeholder="Search by code, name or phone…" style={{ ...adminInput, width: 250, padding: "9px 14px" }} />
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 {ORDER_FILTERS.map((f) => (
-                  <div key={f} onClick={() => { setOrderFilter(f); setSelectedOrders(new Set()); }} className="pill" style={{ cursor: "pointer", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", padding: "9px 13px", border: `1px solid ${orderFilter === f ? "var(--rose)" : "var(--card-b)"}`, color: orderFilter === f ? "var(--rose)" : "var(--ink-muted)", whiteSpace: "nowrap" }}>{f}</div>
+                  <div key={f} onClick={() => { setOrderFilter(f); setSelectedOrders(new Set()); setOrderPage(1); }} className="pill" style={{ cursor: "pointer", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", padding: "9px 13px", border: `1px solid ${orderFilter === f ? "var(--rose)" : "var(--card-b)"}`, color: orderFilter === f ? "var(--rose)" : "var(--ink-muted)", whiteSpace: "nowrap" }}>{f}</div>
                 ))}
               </div>
             </div>
@@ -169,6 +174,23 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
               ))}
               {shownOrders.length === 0 && <div style={{ padding: 30, color: "var(--ink-faint)", fontSize: 13 }}>No orders match.</div>}
             </div>
+            {filteredOrders.length > 0 && (
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 16, fontSize: 12, color: "var(--ink-muted)" }}>
+                <div>Showing {Math.min((orderPage - 1) * ORDERS_PER_PAGE + 1, filteredOrders.length)}–{Math.min(orderPage * ORDERS_PER_PAGE, filteredOrders.length)} of {filteredOrders.length}</div>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <div onClick={() => setOrderPage((p) => Math.max(1, p - 1))} disabled={orderPage === 1} style={{ cursor: orderPage === 1 ? "not-allowed" : "pointer", border: "1px solid var(--card-b)", padding: "8px 12px", opacity: orderPage === 1 ? 0.5 : 1 }}>← Previous</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                    {Array.from({ length: totalOrderPages }, (_, i) => i + 1).filter(p => Math.abs(p - orderPage) <= 1 || p === 1 || p === totalOrderPages).map((p, i, arr) => (
+                      <span key={p}>
+                        {i > 0 && arr[i - 1] !== p - 1 && "…"}
+                        <div onClick={() => setOrderPage(p)} style={{ cursor: "pointer", padding: "5px 8px", border: `1px solid ${orderPage === p ? "var(--rose)" : "var(--card-b)"}`, color: orderPage === p ? "var(--rose)" : "inherit", minWidth: 28, textAlign: "center" }}>{p}</div>
+                      </span>
+                    ))}
+                  </div>
+                  <div onClick={() => setOrderPage((p) => Math.min(totalOrderPages, p + 1))} disabled={orderPage === totalOrderPages} style={{ cursor: orderPage === totalOrderPages ? "not-allowed" : "pointer", border: "1px solid var(--card-b)", padding: "8px 12px", opacity: orderPage === totalOrderPages ? 0.5 : 1 }}>Next →</div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
