@@ -58,7 +58,6 @@ body {
   font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  animation: fadeIn .4s ease both;
 }
 
 a { color: var(--rose); text-decoration: none; }

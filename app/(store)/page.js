@@ -23,11 +23,16 @@ const label = { fontSize: 11, letterSpacing: ".4em", textTransform: "uppercase",
 const h2 = { fontFamily: "var(--serif)", fontWeight: 300, margin: 0 };
 
 export default async function HomePage() {
-  const [content, products, categories] = await Promise.all([
-    prisma.siteContent.findUnique({ where: { id: 1 } }),
-    prisma.product.findMany({ orderBy: { sortOrder: "asc" } }),
-    prisma.category.findMany({ where: { showOnHome: true }, orderBy: { sortOrder: "asc" } }),
-  ]);
+  let content = null, products = [], categories = [];
+  try {
+    [content, products, categories] = await Promise.all([
+      prisma.siteContent.findUnique({ where: { id: 1 } }),
+      prisma.product.findMany({ orderBy: { sortOrder: "asc" } }),
+      prisma.category.findMany({ where: { showOnHome: true }, orderBy: { sortOrder: "asc" } }),
+    ]);
+  } catch (e) {
+    console.error("HomePage fetch error:", e.message);
+  }
 
   const heroImage = content?.heroImage || "/assets/p1-french.jpeg";
   const heroHeadline = content?.heroHeadline || "Nails that finish the whole look.";
