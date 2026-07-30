@@ -27,10 +27,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-theme="light" className={`${cormorant.variable} ${jost.variable} ${parisienne.variable}`}>
+    <html lang="en" data-theme="dark" className={`${cormorant.variable} ${jost.variable} ${parisienne.variable}`}>
       <head>
         {/* Apply saved theme before first paint — prevents flash */}
-        <script dangerouslySetInnerHTML={{ __html: `(function(){var t=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-theme',t);})();` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();` }} />
         {/* Scroll-reveal: fade/slide sections as they enter viewport */}
         <script dangerouslySetInnerHTML={{ __html: `document.addEventListener('DOMContentLoaded',function(){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('revealed');io.unobserve(e.target);}});},{threshold:0.07});document.querySelectorAll('.scroll-reveal,.reveal-left,.reveal-right').forEach(function(el){io.observe(el);});});` }} />
       </head>
