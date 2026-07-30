@@ -133,9 +133,11 @@ html { overflow-x: hidden; }
 }
 .text-gradient {
   background: linear-gradient(100deg, #9B1B2A, #C4233D 55%, #7A1520);
+  background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  animation: shimmerMove 5s linear infinite;
 }
 
 /* Nav links */
@@ -441,122 +443,86 @@ header img[alt="Myso Nails Studio"] { border-color: var(--card-b) !important; }
 .theme-toggle:hover { opacity: .85; transform: scale(1.05); }
 .theme-toggle:active { transform: scale(.96); }
 
-/* ── EXTREME ANIMATIONS & INTERACTIONS ──────────────────────────── */
+/* ── SMOOTH INTERACTIONS (professional, not overdone) ────────────── */
+/* Easing token: ease-out spring feel */
 
-/* Card lift + glow on hover */
-.card { transition: border-color .3s, box-shadow .35s, transform .3s cubic-bezier(.22,1,.36,1); }
-.card:hover { box-shadow: 0 12px 40px rgba(155,27,42,.15); transform: translateY(-5px) scale(1.01); border-color: var(--card-b-h) !important; }
-[data-theme="dark"] .card:hover { box-shadow: 0 12px 40px rgba(0,0,0,.5); }
+/* Cards — subtle lift, soft shadow */
+.card {
+  transition: border-color .25s ease, box-shadow .3s ease, transform .3s cubic-bezier(.4,0,.2,1);
+}
+.card:hover {
+  box-shadow: 0 8px 28px rgba(155,27,42,.12);
+  transform: translateY(-4px);
+  border-color: var(--card-b-h) !important;
+}
+[data-theme="dark"] .card:hover { box-shadow: 0 8px 28px rgba(0,0,0,.45); }
 
-/* Shimmer button press + glow */
+/* Primary shimmer button */
 .shimmer {
-  transition: filter .2s, transform .15s, box-shadow .3s;
-  box-shadow: 0 4px 18px rgba(155,27,42,.35);
+  transition: filter .2s ease, transform .18s ease, box-shadow .25s ease;
+  box-shadow: 0 3px 14px rgba(155,27,42,.28);
 }
-.shimmer:hover { box-shadow: 0 6px 28px rgba(155,27,42,.55); filter: brightness(1.08); }
-.shimmer:active { transform: scale(.96); box-shadow: 0 2px 8px rgba(155,27,42,.3); }
+.shimmer:hover { filter: brightness(1.06); box-shadow: 0 5px 22px rgba(155,27,42,.42); }
+.shimmer:active { transform: scale(.97); }
 
-/* Image zoom — smoother + scale more */
-.zoom { transition: transform .6s cubic-bezier(.22,1,.36,1), opacity .4s, filter .5s; }
-.zoom-wrap:hover .zoom { transform: scale(1.1); }
+/* Outline button */
+.btn-outline { transition: border-color .2s ease, background .2s ease, color .2s ease; }
 
-/* Button ripple effect */
-.ripple-btn { position: relative; overflow: hidden; }
-.ripple-btn::after {
-  content: "";
-  position: absolute;
-  inset: 50% 50%;
-  background: rgba(255,255,255,.3);
-  border-radius: 50%;
-  transform: scale(0);
+/* Image zoom — fluid */
+.zoom { transition: transform .55s cubic-bezier(.4,0,.2,1); }
+.zoom-wrap:hover .zoom { transform: scale(1.08); }
+
+/* Scroll reveal — smooth spring */
+.scroll-reveal {
   opacity: 0;
-  transition: none;
+  transform: translateY(24px);
+  transition: opacity .65s cubic-bezier(.4,0,.2,1), transform .65s cubic-bezier(.4,0,.2,1);
 }
-.ripple-btn.rippling::after {
-  inset: -50%;
-  transform: scale(1);
-  opacity: 0;
-  transition: inset .5s ease, transform .5s ease, opacity .5s ease;
-}
+.scroll-reveal.revealed  { opacity: 1; transform: none; }
+.scroll-reveal.delay-1   { transition-delay: .1s; }
+.scroll-reveal.delay-2   { transition-delay: .2s; }
+.scroll-reveal.delay-3   { transition-delay: .3s; }
 
-/* Pulse glow on CTA / WA button */
-@keyframes ctaPulse {
-  0%   { box-shadow: 0 0 0 0 rgba(155,27,42,.5); }
-  70%  { box-shadow: 0 0 0 14px rgba(155,27,42,0); }
-  100% { box-shadow: 0 0 0 0 rgba(155,27,42,0); }
-}
-.pulse-cta { animation: ctaPulse 2.4s ease infinite; }
+/* Directional reveals */
+.reveal-left  { opacity: 0; transform: translateX(-28px); transition: opacity .65s cubic-bezier(.4,0,.2,1), transform .65s cubic-bezier(.4,0,.2,1); }
+.reveal-right { opacity: 0; transform: translateX(28px);  transition: opacity .65s cubic-bezier(.4,0,.2,1), transform .65s cubic-bezier(.4,0,.2,1); }
+.reveal-left.revealed, .reveal-right.revealed { opacity: 1; transform: none; }
 
-/* Stagger cards */
-.stagger-card:nth-child(1) { animation-delay: .0s; }
-.stagger-card:nth-child(2) { animation-delay: .1s; }
-.stagger-card:nth-child(3) { animation-delay: .2s; }
-.stagger-card:nth-child(4) { animation-delay: .3s; }
+/* Gradient text — slow drift */
+@keyframes shimmerMove { 0% { background-position:0% 50% } 100% { background-position:200% 50% } }
 
-/* Custom cursor dot */
-#cursor-dot {
-  position: fixed; top: 0; left: 0; z-index: 9999;
-  width: 10px; height: 10px;
-  background: var(--rose); border-radius: 50%;
-  pointer-events: none;
-  transition: transform .12s ease, opacity .2s;
-  transform: translate(-50%,-50%);
-  mix-blend-mode: multiply;
-}
-[data-theme="dark"] #cursor-dot { mix-blend-mode: screen; }
-#cursor-ring {
-  position: fixed; top: 0; left: 0; z-index: 9998;
-  width: 38px; height: 38px;
-  border: 1.5px solid rgba(155,27,42,.5);
-  border-radius: 50%;
-  pointer-events: none;
-  transition: transform .22s cubic-bezier(.22,1,.36,1), width .2s, height .2s, opacity .2s;
-  transform: translate(-50%,-50%);
-}
-
-/* Gradient text animation */
-@keyframes gradientShift {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-.text-gradient {
-  background-size: 200% 200%;
-  animation: gradientShift 4s ease infinite;
-}
-
-/* Button press feedback */
-button { transition: transform .15s; }
-button:active { transform: scale(.95); }
-
-/* Hover underline sweep */
+/* Nav links — underline sweep on hover */
+.nav-link { position: relative; }
 .nav-link::after {
   content: "";
-  display: block;
+  position: absolute;
+  bottom: -2px; left: 0; right: 0;
   height: 1px;
   background: var(--rose);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform .25s ease;
+  transition: transform .22s ease;
 }
-.nav-link:hover::after { transform: scaleX(1); }
+.nav-link:hover::after,
+.nav-link[style*="border-bottom: 1px solid"]::after { transform: scaleX(1); }
 
-/* Scroll reveal directions */
-.reveal-left  { opacity: 0; transform: translateX(-30px); transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
-.reveal-right { opacity: 0; transform: translateX(30px);  transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
-.reveal-left.revealed, .reveal-right.revealed { opacity: 1; transform: none; }
+/* All interactive elements — smooth press */
+a, button, [style*="cursor: pointer"] {
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity .15s ease;
+}
+button:active, [style*="cursor: pointer"]:active { opacity: .8; }
 
-/* Section headings — accent line */
-.section-accent::before {
-  content: "";
-  display: block;
-  width: 36px; height: 2px;
-  background: var(--rose);
-  margin-bottom: 14px;
-  border-radius: 1px;
+/* Theme switch — smooth bg/color transition */
+*, *::before, *::after {
+  transition: background-color .3s ease, border-color .3s ease, color .2s ease;
+}
+/* But never transition transform/opacity globally (breaks animations) */
+.card, .zoom, .scroll-reveal, .reveal-left, .reveal-right, .shimmer, .btn-outline {
+  transition-property: transform, opacity, box-shadow, border-color, filter, background-color;
 }
 
-/* Admin buttons — unified style */
+/* Admin buttons — clean unified style */
 .admin-action-btn {
   cursor: pointer;
   font-size: 10px;
@@ -565,7 +531,7 @@ button:active { transform: scale(.95); }
   border: 1px solid var(--card-b);
   padding: 7px 11px;
   color: var(--ink-muted);
-  transition: border-color .2s, background .2s, color .2s;
+  transition: border-color .2s ease, background .2s ease, color .2s ease;
   white-space: nowrap;
 }
 .admin-action-btn:hover { border-color: var(--rose); color: var(--rose); background: rgba(155,27,42,.06); }

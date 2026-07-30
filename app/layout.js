@@ -1,7 +1,6 @@
 import { Cormorant_Garamond, Jost, Parisienne } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/CartContext";
-import CursorEffect from "@/components/CursorEffect";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -36,7 +35,6 @@ export default function RootLayout({ children }) {
         <script dangerouslySetInnerHTML={{ __html: `document.addEventListener('DOMContentLoaded',function(){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('revealed');io.unobserve(e.target);}});},{threshold:0.07});document.querySelectorAll('.scroll-reveal,.reveal-left,.reveal-right').forEach(function(el){io.observe(el);});});` }} />
       </head>
       <body>
-        <CursorEffect />
         <CartProvider>{children}</CartProvider>
       </body>
     </html>
