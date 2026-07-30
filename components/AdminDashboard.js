@@ -104,6 +104,10 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
           <a href="/" style={{ display: "block", marginTop: 14, fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "10px 12px", textAlign: "center" }}>↗ Visit site</a>
           <div onClick={logout} style={{ cursor: "pointer", marginTop: 10, fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "9px 12px", textAlign: "center", color: "var(--ink-muted)" }}>Sign out</div>
         </div>
+
+        {/* Mobile-only actions — the tab bar scrolls, so these sit at its end */}
+        <a href="/" className="admin-mobile-action" style={{ background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff" }}>↗ Site</a>
+        <div onClick={logout} className="admin-mobile-action" style={{ border: "1px solid var(--card-b)", color: "var(--ink-muted)", cursor: "pointer" }}>Sign out</div>
       </aside>
 
       {/* Content */}
