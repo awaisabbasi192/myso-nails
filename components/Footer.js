@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { waLink } from "@/lib/format";
 
@@ -6,7 +7,9 @@ export default function Footer() {
     <footer style={{ borderTop: "1px solid var(--card-b)", background: "var(--panel-2)", padding: "60px 24px 30px" }}>
       <div data-r="footer" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1fr", gap: 40 }}>
         <div>
-          <img src="/assets/logo.png" alt="Myso Nails Studio" style={{ height: 70, width: "auto", objectFit: "contain" }} />
+          <div style={{ position: "relative", height: 70, width: 150 }}>
+            <Image src="/assets/logo.png" alt="Myso Nails Studio" fill style={{ objectFit: "contain" }} />
+          </div>
           <p style={{ fontSize: 13, lineHeight: 1.85, color: "var(--ink-muted)", fontWeight: 300, maxWidth: 290, margin: "18px 0 0" }}>
             Hand-painted press-on nail sets, custom bridal work and size-fitted reusable sets. Shipped nationwide from Lahore.
           </p>

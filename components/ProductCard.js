@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "./CartContext";
@@ -24,7 +25,7 @@ export default function ProductCard({ p }) {
   return (
     <div className="card zoom-wrap" style={{ background: "var(--panel)", borderRadius: 2, overflow: "hidden" }}>
       <Link href={`/product/${p.slug}`} style={{ position: "relative", aspectRatio: "1/1", overflow: "hidden", display: "block" }}>
-        <img src={p.image} alt={p.name} className="zoom" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        <Image src={p.image} alt={p.name} className="zoom" fill style={{ objectFit: "cover" }} />
         {p.badge && (
           <div style={{ position: "absolute", top: 14, left: 14, background: "var(--rose)", border: "none", fontSize: 9.5, letterSpacing: ".2em", textTransform: "uppercase", padding: "6px 11px", color: "#fff" }}>{p.badge}</div>
         )}

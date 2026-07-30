@@ -14,8 +14,32 @@ export default function LoginPage() {
 
   async function submit() {
     if (loading) return;
-    setLoading(true);
     setError("");
+
+    // Validation
+    if (mode === "signup" && !form.name.trim()) {
+      setError("Please enter your name");
+      return;
+    }
+    if (!form.email.trim()) {
+      setError("Please enter your email");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+    if (!form.password) {
+      setError("Please enter your password");
+      return;
+    }
+    if (form.password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
+    setLoading(true);
     try {
       const url = mode === "signup" ? "/api/auth/signup" : "/api/auth/login";
       const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });

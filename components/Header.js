@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -34,8 +35,8 @@ export default function Header({ announcement, user }) {
       <header style={{ position: "sticky", top: 0, zIndex: 80, background: "rgba(10,10,11,.94)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(227,183,166,.14)" }}>
         {/* Desktop header */}
         <div className="header-desktop" style={{ maxWidth: 1240, margin: "0 auto", padding: "14px 24px", display: "flex", alignItems: "center", gap: 28 }}>
-          <Link href="/" style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
-            <img src="/assets/logo.png" alt="Myso Nails Studio" style={{ height: 56, width: "auto", objectFit: "contain" }} />
+          <Link href="/" style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0, position: "relative", height: 56, width: 120 }}>
+            <Image src="/assets/logo.png" alt="Myso Nails Studio" fill style={{ objectFit: "contain" }} />
           </Link>
 
           <nav className="desktop-nav" style={{ display: "flex", gap: 26, marginLeft: 14, flexWrap: "wrap" }}>
@@ -82,8 +83,8 @@ export default function Header({ announcement, user }) {
           </button>
 
           {/* Logo center */}
-          <Link href="/" style={{ display: "flex", alignItems: "center" }}>
-            <img src="/assets/logo.png" alt="Myso Nails Studio" style={{ height: 40, width: "auto", objectFit: "contain" }} />
+          <Link href="/" style={{ display: "flex", alignItems: "center", position: "relative", height: 40, width: 90 }}>
+            <Image src="/assets/logo.png" alt="Myso Nails Studio" fill style={{ objectFit: "contain" }} />
           </Link>
 
           {/* Dark mode toggle + Cart */}
