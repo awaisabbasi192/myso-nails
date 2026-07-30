@@ -21,8 +21,8 @@
   --drawer-bg: rgba(253,250,249,.99);
   --ink-muted: rgba(26,8,12,.6);
   --ink-faint: rgba(26,8,12,.35);
-  --card-b: rgba(155,27,42,.14);
-  --card-b-h: rgba(155,27,42,.42);
+  --card-b: rgba(155,27,42,.22);
+  --card-b-h: rgba(155,27,42,.55);
 }
 
 /* ── DARK MODE ────────────────────────────────────────────────────── */
@@ -376,28 +376,30 @@ html { overflow-x: hidden; }
   [style*="padding:34px 24px"] { padding-left: 16px !important; padding-right: 16px !important; }
 }
 
-/* ── LIGHT MODE: fix 290 hardcoded dark-theme inline text colors ──── */
-/* All rgba(247,241,237,...) values are near-white text designed for dark bg.
-   On white they're invisible — override them to the dark ink variable. */
-:root:not([data-theme="dark"]) [style*="rgba(247,241,237"] {
+/* ── LIGHT MODE: fix hardcoded dark-theme inline colors ──────────────
+   React/SSR renders without spaces: rgba(247,241,237,.7)
+   Chrome normalizes after hydration: rgba(247, 241, 237, 0.7)
+   We match BOTH formats to cover server + client components.         */
+
+/* Text colors — near-white designed for dark bg */
+:root:not([data-theme="dark"]) [style*="rgba(247,241,237"],
+:root:not([data-theme="dark"]) [style*="247, 241, 237"] {
   color: var(--ink-muted) !important;
 }
-/* All rgba(227,183,166,...) border-only uses — switch to cherry-red border */
-:root:not([data-theme="dark"]) [style*="rgba(227,183,166"] {
+/* Old rose/bronze border + color uses */
+:root:not([data-theme="dark"]) [style*="rgba(227,183,166"],
+:root:not([data-theme="dark"]) [style*="227, 183, 166"] {
   border-color: var(--card-b) !important;
+  color: var(--rose) !important;
 }
-/* Section label colours (rgba(227,183,166,.75) used as text) → ink-muted */
-:root:not([data-theme="dark"]) .hero-label,
-:root:not([data-theme="dark"]) [style*="letterSpacing: \".4em\""],
-:root:not([data-theme="dark"]) [style*='letterSpacing:".4em"'] {
-  color: var(--ink-muted) !important;
-}
-/* Panels/sections that used a very dark bg in dark mode → keep as panel var */
-:root:not([data-theme="dark"]) [style*="rgba(10,10,11"] {
+/* Panels/sections that used a very dark bg */
+:root:not([data-theme="dark"]) [style*="rgba(10,10,11"],
+:root:not([data-theme="dark"]) [style*="10, 10, 11"] {
   background: var(--panel) !important;
 }
-/* Dark category/image overlays should stay dark (they're on top of photos) */
-:root:not([data-theme="dark"]) [style*="linear-gradient(to top,rgba(10,10,11"] {
+/* Dark image overlays — keep dark (they're over photos) */
+:root:not([data-theme="dark"]) [style*="linear-gradient(to top,rgba(10"],
+:root:not([data-theme="dark"]) [style*="linear-gradient(to top, rgba(10"] {
   background: linear-gradient(to top,rgba(10,10,11,.88) 5%,transparent 65%) !important;
 }
 
@@ -439,22 +441,131 @@ header img[alt="Myso Nails Studio"] { border-color: var(--card-b) !important; }
 .theme-toggle:hover { opacity: .85; transform: scale(1.05); }
 .theme-toggle:active { transform: scale(.96); }
 
-/* ── ENHANCED INTERACTIONS ───────────────────────────────────────── */
-/* Card lift on hover */
-.card { transition: border-color .3s, box-shadow .3s, transform .25s; }
-.card:hover { box-shadow: 0 8px 32px rgba(155,27,42,.1); transform: translateY(-3px); }
-[data-theme="dark"] .card:hover { box-shadow: 0 8px 32px rgba(0,0,0,.4); }
+/* ── EXTREME ANIMATIONS & INTERACTIONS ──────────────────────────── */
 
-/* Shimmer button press */
-.shimmer { transition: filter .2s, transform .15s; }
-.shimmer:active { transform: scale(.97); }
+/* Card lift + glow on hover */
+.card { transition: border-color .3s, box-shadow .35s, transform .3s cubic-bezier(.22,1,.36,1); }
+.card:hover { box-shadow: 0 12px 40px rgba(155,27,42,.15); transform: translateY(-5px) scale(1.01); border-color: var(--card-b-h) !important; }
+[data-theme="dark"] .card:hover { box-shadow: 0 12px 40px rgba(0,0,0,.5); }
 
-/* Image zoom speed up */
-.zoom { transition: transform .5s ease, opacity .4s, filter .5s; }
+/* Shimmer button press + glow */
+.shimmer {
+  transition: filter .2s, transform .15s, box-shadow .3s;
+  box-shadow: 0 4px 18px rgba(155,27,42,.35);
+}
+.shimmer:hover { box-shadow: 0 6px 28px rgba(155,27,42,.55); filter: brightness(1.08); }
+.shimmer:active { transform: scale(.96); box-shadow: 0 2px 8px rgba(155,27,42,.3); }
 
-/* Product card zoom-wrap enhanced */
-.zoom-wrap { transition: box-shadow .3s; }
+/* Image zoom — smoother + scale more */
+.zoom { transition: transform .6s cubic-bezier(.22,1,.36,1), opacity .4s, filter .5s; }
+.zoom-wrap:hover .zoom { transform: scale(1.1); }
+
+/* Button ripple effect */
+.ripple-btn { position: relative; overflow: hidden; }
+.ripple-btn::after {
+  content: "";
+  position: absolute;
+  inset: 50% 50%;
+  background: rgba(255,255,255,.3);
+  border-radius: 50%;
+  transform: scale(0);
+  opacity: 0;
+  transition: none;
+}
+.ripple-btn.rippling::after {
+  inset: -50%;
+  transform: scale(1);
+  opacity: 0;
+  transition: inset .5s ease, transform .5s ease, opacity .5s ease;
+}
+
+/* Pulse glow on CTA / WA button */
+@keyframes ctaPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(155,27,42,.5); }
+  70%  { box-shadow: 0 0 0 14px rgba(155,27,42,0); }
+  100% { box-shadow: 0 0 0 0 rgba(155,27,42,0); }
+}
+.pulse-cta { animation: ctaPulse 2.4s ease infinite; }
+
+/* Stagger cards */
+.stagger-card:nth-child(1) { animation-delay: .0s; }
+.stagger-card:nth-child(2) { animation-delay: .1s; }
+.stagger-card:nth-child(3) { animation-delay: .2s; }
+.stagger-card:nth-child(4) { animation-delay: .3s; }
+
+/* Custom cursor dot */
+#cursor-dot {
+  position: fixed; top: 0; left: 0; z-index: 9999;
+  width: 10px; height: 10px;
+  background: var(--rose); border-radius: 50%;
+  pointer-events: none;
+  transition: transform .12s ease, opacity .2s;
+  transform: translate(-50%,-50%);
+  mix-blend-mode: multiply;
+}
+[data-theme="dark"] #cursor-dot { mix-blend-mode: screen; }
+#cursor-ring {
+  position: fixed; top: 0; left: 0; z-index: 9998;
+  width: 38px; height: 38px;
+  border: 1.5px solid rgba(155,27,42,.5);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform .22s cubic-bezier(.22,1,.36,1), width .2s, height .2s, opacity .2s;
+  transform: translate(-50%,-50%);
+}
+
+/* Gradient text animation */
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.text-gradient {
+  background-size: 200% 200%;
+  animation: gradientShift 4s ease infinite;
+}
 
 /* Button press feedback */
-button, [role="button"] { transition: transform .15s; }
-button:active { transform: scale(.96); }
+button { transition: transform .15s; }
+button:active { transform: scale(.95); }
+
+/* Hover underline sweep */
+.nav-link::after {
+  content: "";
+  display: block;
+  height: 1px;
+  background: var(--rose);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .25s ease;
+}
+.nav-link:hover::after { transform: scaleX(1); }
+
+/* Scroll reveal directions */
+.reveal-left  { opacity: 0; transform: translateX(-30px); transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+.reveal-right { opacity: 0; transform: translateX(30px);  transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+.reveal-left.revealed, .reveal-right.revealed { opacity: 1; transform: none; }
+
+/* Section headings — accent line */
+.section-accent::before {
+  content: "";
+  display: block;
+  width: 36px; height: 2px;
+  background: var(--rose);
+  margin-bottom: 14px;
+  border-radius: 1px;
+}
+
+/* Admin buttons — unified style */
+.admin-action-btn {
+  cursor: pointer;
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  border: 1px solid var(--card-b);
+  padding: 7px 11px;
+  color: var(--ink-muted);
+  transition: border-color .2s, background .2s, color .2s;
+  white-space: nowrap;
+}
+.admin-action-btn:hover { border-color: var(--rose); color: var(--rose); background: rgba(155,27,42,.06); }

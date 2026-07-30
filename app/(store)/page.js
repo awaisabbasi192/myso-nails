@@ -142,7 +142,7 @@ export default async function HomePage() {
       {/* STUDIO */}
       <section style={{ background: "var(--panel)", borderTop: "1px solid var(--card-b)", borderBottom: "1px solid var(--card-b)" }}>
         <div data-r="split" style={{ maxWidth: 1240, margin: "0 auto", padding: "90px 24px", display: "grid", gridTemplateColumns: ".9fr 1.1fr", gap: 70, alignItems: "center" }}>
-          <div style={{ position: "relative" }}>
+          <div className="reveal-left" style={{ position: "relative" }}>
             <img src={studioImage} alt="Studio" style={{ width: "100%", aspectRatio: "4/5", objectFit: "cover", borderRadius: 3 }} />
             <div style={{ position: "absolute", inset: -14, border: "1px solid var(--card-b)", borderRadius: 3, pointerEvents: "none" }} />
           </div>
