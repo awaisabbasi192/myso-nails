@@ -1010,9 +1010,29 @@ function SettingsTab({ content, call, busy }) {
   const [saved, setSaved] = useState(false);
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
+  // Change password (admin is a Customer record, so reuse /api/account/password)
+  const [pw, setPw] = useState({ current: "", newPassword: "", confirm: "" });
+  const [pwStatus, setPwStatus] = useState(""); // "" | "saving" | "done"
+  const [pwError, setPwError] = useState("");
+
   async function save() {
     const ok = await call("/api/admin/content", "PUT", form);
     if (ok) { setSaved(true); setTimeout(() => setSaved(false), 2500); }
+  }
+
+  async function changePassword() {
+    setPwError("");
+    if (!pw.current || !pw.newPassword) { setPwError("Both fields are required"); return; }
+    if (pw.newPassword !== pw.confirm) { setPwError("New passwords do not match"); return; }
+    if (pw.newPassword.length < 8) { setPwError("New password must be at least 8 characters"); return; }
+    setPwStatus("saving");
+    try {
+      const res = await fetch("/api/account/password", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ current: pw.current, newPassword: pw.newPassword }) });
+      const data = await res.json();
+      if (!res.ok) { setPwError(data.error || "Could not change password"); setPwStatus(""); return; }
+      setPwStatus("done"); setPw({ current: "", newPassword: "", confirm: "" });
+      setTimeout(() => setPwStatus(""), 3000);
+    } catch { setPwError("Network error"); setPwStatus(""); }
   }
 
   return (
@@ -1063,6 +1083,28 @@ function SettingsTab({ content, call, busy }) {
       </div>
 
       <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "14px 34px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>{busy ? "Saving…" : saved ? "Saved ✓" : "Save settings"}</div>
+
+      {/* Change password */}
+      <div style={{ border: "1px solid var(--card-b)", background: "var(--panel)", padding: 28, marginTop: 30 }}>
+        <div style={{ fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 20 }}>Change admin password</div>
+        {pwStatus === "done" && <div style={{ padding: "12px 16px", border: "1px solid rgba(143,214,166,.3)", color: "#8FD6A6", fontSize: 13, marginBottom: 16 }}>Password changed ✓</div>}
+        <div style={{ display: "grid", gap: 14, maxWidth: 420 }}>
+          <div>
+            <div style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ink-faint)", marginBottom: 8 }}>Current password</div>
+            <input type="password" value={pw.current} onChange={(e) => { setPw((p) => ({ ...p, current: e.target.value })); setPwError(""); }} style={adminInput} />
+          </div>
+          <div>
+            <div style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ink-faint)", marginBottom: 8 }}>New password</div>
+            <input type="password" value={pw.newPassword} onChange={(e) => { setPw((p) => ({ ...p, newPassword: e.target.value })); setPwError(""); }} placeholder="Min. 8 characters" style={adminInput} />
+          </div>
+          <div>
+            <div style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ink-faint)", marginBottom: 8 }}>Confirm new password</div>
+            <input type="password" value={pw.confirm} onChange={(e) => { setPw((p) => ({ ...p, confirm: e.target.value })); setPwError(""); }} onKeyDown={(e) => e.key === "Enter" && changePassword()} style={adminInput} />
+          </div>
+          {pwError && <div style={{ fontSize: 12, color: "#E39B9B" }}>{pwError}</div>}
+          <div onClick={changePassword} style={{ cursor: "pointer", border: "1px solid var(--card-b)", color: "var(--ink)", padding: "13px 26px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", justifySelf: "start" }}>{pwStatus === "saving" ? "Saving…" : "Change password"}</div>
+        </div>
+      </div>
     </div>
   );
 }

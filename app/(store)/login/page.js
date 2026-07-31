@@ -10,7 +10,22 @@ export default function LoginPage() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [forgot, setForgot] = useState({ status: "", sent: false }); // status: "" | "sending" | "done"
   const set = (k) => (e) => { setForm((f) => ({ ...f, [k]: e.target.value })); setError(""); };
+
+  async function sendReset() {
+    if (forgot.status === "sending") return;
+    setError("");
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) { setError("Please enter a valid email address"); return; }
+    setForgot({ status: "sending", sent: false });
+    try {
+      const res = await fetch("/api/auth/forgot", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: form.email }) });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || "Something went wrong"); setForgot({ status: "", sent: false }); return; }
+      setForgot({ status: "done", sent: !!data.sent });
+    } catch { setError("Network error"); setForgot({ status: "", sent: false }); }
+  }
 
   async function submit() {
     if (loading) return;
@@ -67,20 +82,49 @@ export default function LoginPage() {
         <div style={{ padding: "44px 40px" }}>
           <div style={{ display: "flex", gap: 24, borderBottom: "1px solid var(--card-b)", marginBottom: 30 }}>
             {tabs.map((t) => (
-              <div key={t.k} onClick={() => { setMode(t.k); setError(""); }} style={{ cursor: "pointer", fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", paddingBottom: 13, color: mode === t.k ? "var(--rose)" : "var(--ink-muted)", borderBottom: `2px solid ${mode === t.k ? "var(--rose)" : "transparent"}` }}>{t.l}</div>
+              <div key={t.k} onClick={() => { setMode(t.k); setError(""); setForgot({ status: "", sent: false }); }} style={{ cursor: "pointer", fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", paddingBottom: 13, color: mode === t.k ? "var(--rose)" : "var(--ink-muted)", borderBottom: `2px solid ${mode === t.k ? "var(--rose)" : "transparent"}` }}>{t.l}</div>
             ))}
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            {mode === "signup" && (
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}><span style={lab}>Full name</span><input value={form.name} onChange={set("name")} placeholder="Areeba Khan" style={inputStyle} /></div>
-            )}
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}><span style={lab}>Email</span><input value={form.email} onChange={set("email")} placeholder="you@email.com" style={inputStyle} /></div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}><span style={lab}>Password</span><input type="password" value={form.password} onChange={set("password")} placeholder="••••••••" style={inputStyle} onKeyDown={(e) => e.key === "Enter" && submit()} /></div>
-            {error && <div style={{ fontSize: 12, color: "#E39B9B", borderLeft: "2px solid rgba(200,90,90,.6)", paddingLeft: 12 }}>{error}</div>}
-            <div onClick={submit} className="shimmer" style={{ cursor: "pointer", textAlign: "center", padding: 16, fontSize: 11, letterSpacing: ".26em", textTransform: "uppercase", marginTop: 6 }}>{loading ? "…" : mode === "signup" ? "Create my account" : "Log in"}</div>
-            <div style={{ fontSize: 12, color: "rgba(247,241,237,.4)", textAlign: "center" }}>or</div>
-            <a href={waLink("Hi M&S!")} target="_blank" rel="noreferrer" className="btn-wa" style={{ textAlign: "center", padding: 15, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Continue on WhatsApp</a>
-          </div>
+
+          {mode === "forgot" ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <h2 style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 26, margin: 0 }}>Reset your password</h2>
+              {forgot.status === "done" ? (
+                <>
+                  <div style={{ padding: "16px 18px", border: "1px solid rgba(143,214,166,.3)", color: "#8FD6A6", fontSize: 13, lineHeight: 1.7 }}>
+                    {forgot.sent
+                      ? "✓ Check your email — we've sent a reset link. It works for 1 hour."
+                      : "If that email is registered, a reset link is on its way. Can't find it? WhatsApp us and we'll reset it for you."}
+                  </div>
+                  <a href={waLink("Hi M&S! I need help resetting my password.")} target="_blank" rel="noreferrer" className="btn-wa" style={{ textAlign: "center", padding: 15, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Reset via WhatsApp</a>
+                  <div onClick={() => { setMode("login"); setForgot({ status: "", sent: false }); }} style={{ cursor: "pointer", fontSize: 12, color: "var(--rose)", textAlign: "center" }}>← Back to login</div>
+                </>
+              ) : (
+                <>
+                  <p style={{ fontSize: 13, color: "var(--ink-muted)", lineHeight: 1.7, margin: 0 }}>Enter your email and we'll send you a link to set a new password.</p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}><span style={lab}>Email</span><input value={form.email} onChange={set("email")} placeholder="you@email.com" style={inputStyle} onKeyDown={(e) => e.key === "Enter" && sendReset()} /></div>
+                  {error && <div style={{ fontSize: 12, color: "#E39B9B", borderLeft: "2px solid rgba(200,90,90,.6)", paddingLeft: 12 }}>{error}</div>}
+                  <div onClick={sendReset} className="shimmer" style={{ cursor: "pointer", textAlign: "center", padding: 16, fontSize: 11, letterSpacing: ".26em", textTransform: "uppercase", marginTop: 6 }}>{forgot.status === "sending" ? "Sending…" : "Send reset link"}</div>
+                  <div onClick={() => { setMode("login"); setError(""); }} style={{ cursor: "pointer", fontSize: 12, color: "var(--rose)", textAlign: "center" }}>← Back to login</div>
+                </>
+              )}
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              {mode === "signup" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}><span style={lab}>Full name</span><input value={form.name} onChange={set("name")} placeholder="Areeba Khan" style={inputStyle} /></div>
+              )}
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}><span style={lab}>Email</span><input value={form.email} onChange={set("email")} placeholder="you@email.com" style={inputStyle} /></div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}><span style={lab}>Password</span><input type="password" value={form.password} onChange={set("password")} placeholder="••••••••" style={inputStyle} onKeyDown={(e) => e.key === "Enter" && submit()} /></div>
+              {mode === "login" && (
+                <div onClick={() => { setMode("forgot"); setError(""); setForgot({ status: "", sent: false }); }} style={{ cursor: "pointer", fontSize: 12, color: "var(--rose)", textAlign: "right", marginTop: -6 }}>Forgot password?</div>
+              )}
+              {error && <div style={{ fontSize: 12, color: "#E39B9B", borderLeft: "2px solid rgba(200,90,90,.6)", paddingLeft: 12 }}>{error}</div>}
+              <div onClick={submit} className="shimmer" style={{ cursor: "pointer", textAlign: "center", padding: 16, fontSize: 11, letterSpacing: ".26em", textTransform: "uppercase", marginTop: 6 }}>{loading ? "…" : mode === "signup" ? "Create my account" : "Log in"}</div>
+              <div style={{ fontSize: 12, color: "rgba(247,241,237,.4)", textAlign: "center" }}>or</div>
+              <a href={waLink("Hi M&S!")} target="_blank" rel="noreferrer" className="btn-wa" style={{ textAlign: "center", padding: 15, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Continue on WhatsApp</a>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -72,6 +72,8 @@ model Customer {
   role      String    @default("customer") // "customer" | "admin"
   city      String?
   nailSizes String?   // saved 10-finger size profile, comma-separated
+  resetToken  String?   // sha256 hash of the password-reset token
+  resetExpiry DateTime? // when the reset token stops working
   orders    Order[]
   addresses Address[]
   createdAt DateTime  @default(now())
