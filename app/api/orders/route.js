@@ -113,9 +113,8 @@ export async function POST(request) {
       }
     }
 
-    // Background notifications (don't block the response)
     notifyAdmin(order).catch(() => {});
-    sendConfirmEmail(order, orderItems).catch(() => {});
+    await sendConfirmEmail(order, orderItems);
 
     return Response.json({ ok: true, code: order.code, total });
   } catch (e) {

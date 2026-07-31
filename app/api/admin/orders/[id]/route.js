@@ -27,7 +27,7 @@ export async function PATCH(request, { params }) {
   if (body.status && ["Confirmed", "Shipped", "Delivered"].includes(body.status) && existing) {
     const emailOrder = { ...existing, ...order, trackingNumber: data.trackingNumber ?? existing.trackingNumber };
     const customerEmail = existing.customer?.email || null;
-    sendOrderStatusEmail(emailOrder, existing.items, customerEmail).catch(() => {});
+    await sendOrderStatusEmail(emailOrder, existing.items, customerEmail);
   }
 
   return Response.json({ ok: true, order });
