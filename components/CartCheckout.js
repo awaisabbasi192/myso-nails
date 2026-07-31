@@ -263,8 +263,11 @@ export default function CartCheckout({ prefill }) {
             </div>
 
             {/* Info text */}
-            <p style={{ fontSize: 13.5, lineHeight: 1.85, color: "var(--ink-muted)", maxWidth: 440, margin: "0 auto 32px" }}>
+            <p style={{ fontSize: 13.5, lineHeight: 1.85, color: "var(--ink-muted)", maxWidth: 440, margin: "0 auto 16px" }}>
               Aapka JazzCash payment verify hone ke baad <strong style={{ color: "var(--ink)" }}>30 minutes</strong> mein WhatsApp confirmation aayega — phir <strong style={{ color: "var(--ink)" }}>48 hours</strong> mein dispatch! 🚀
+            </p>
+            <p style={{ fontSize: 12.5, lineHeight: 1.75, color: "var(--ink-faint)", maxWidth: 400, margin: "0 auto 32px", border: "1px solid var(--card-b)", padding: "12px 16px" }}>
+              📧 Agar aapne account se order kiya hai, ek confirmation email bhi bheji gayi hai — inbox check karein, nahi ayi to <strong style={{ color: "var(--ink-muted)" }}>spam/junk folder</strong> zaroor dekhein.
             </p>
 
             {/* Buttons */}
