@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/adminGuard";
+import { sendOrderStatusEmail } from "@/lib/email";
 
 const VALID = ["Pending", "Confirmed", "Shipped", "Delivered", "Rejected", "Cancelled"];
 
@@ -14,7 +15,21 @@ export async function PATCH(request, { params }) {
     data.status = body.status;
   }
   if (body.trackingNumber !== undefined) data.trackingNumber = body.trackingNumber || null;
+
+  // Fetch full order + customer email + items before updating (needed for email)
+  const existing = await prisma.order.findUnique({
+    where: { id },
+    include: { items: true, customer: { select: { email: true } } },
+  });
+
   const order = await prisma.order.update({ where: { id }, data });
+
+  if (body.status && ["Confirmed", "Shipped", "Delivered"].includes(body.status) && existing) {
+    const emailOrder = { ...existing, ...order, trackingNumber: data.trackingNumber ?? existing.trackingNumber };
+    const customerEmail = existing.customer?.email || null;
+    sendOrderStatusEmail(emailOrder, existing.items, customerEmail).catch(() => {});
+  }
+
   return Response.json({ ok: true, order });
 }
 

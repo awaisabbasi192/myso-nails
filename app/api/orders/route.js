@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-import { Resend } from "resend";
+import { sendOrderConfirmEmail } from "@/lib/email";
 
 const FREE_DELIVERY_OVER = 5000;
 const DELIVERY_FEE = 300;
@@ -25,43 +25,11 @@ async function notifyAdmin(order) {
   await fetch(url).catch(() => {});
 }
 
-// Resend customer confirmation email
 async function sendConfirmEmail(order, items) {
-  const apikey = process.env.RESEND_API_KEY;
-  if (!apikey || apikey.startsWith("re_placeholder")) return;
-  // Find customer email
-  let email = null;
-  if (order.customerId) {
-    const customer = await prisma.customer.findUnique({ where: { id: order.customerId }, select: { email: true } });
-    email = customer?.email;
-  }
-  if (!email) return;
-  const resend = new Resend(apikey);
-  const itemRows = items.map((i) => `<tr><td style="padding:8px 0;border-bottom:1px solid #2a2a2a">${i.name} × ${i.qty}</td><td style="padding:8px 0;border-bottom:1px solid #2a2a2a;text-align:right">Rs ${i.unitPrice * i.qty}</td></tr>`).join("");
-  await resend.emails.send({
-    from: process.env.EMAIL_FROM || "orders@mysonails.pk",
-    to: email,
-    subject: `Order confirmed — ${order.code} · Myso Nails Studio`,
-    html: `
-      <div style="background:#0a0a0b;color:#f7f1ed;font-family:Georgia,serif;max-width:560px;margin:0 auto;padding:40px 32px">
-        <img src="https://mysonails.pk/assets/logo.png" width="60" height="60" style="border-radius:50%;margin-bottom:24px" alt="Myso Nails" />
-        <h1 style="font-size:28px;font-weight:300;margin:0 0 8px">Order received ✓</h1>
-        <p style="color:rgba(247,241,237,.6);font-size:14px;line-height:1.8;margin:0 0 28px">Hi ${order.customerName}, thank you for your order! We'll start preparing your set now.</p>
-        <div style="border:1px solid #2a2a2a;padding:24px;margin-bottom:28px">
-          <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#c9a27e;margin-bottom:16px">Order ${order.code}</div>
-          <table style="width:100%;border-collapse:collapse;font-size:14px">
-            ${itemRows}
-            <tr><td style="padding:12px 0 4px;font-size:12px;color:rgba(247,241,237,.5)">Shipping</td><td style="padding:12px 0 4px;text-align:right;font-size:12px;color:rgba(247,241,237,.5)">${order.shipping === 0 ? "Free" : "Rs " + order.shipping}</td></tr>
-            <tr><td style="padding:4px 0 0;font-weight:600;font-size:16px">Total</td><td style="padding:4px 0 0;text-align:right;font-size:16px;color:#d4a89a">Rs ${order.total}</td></tr>
-          </table>
-        </div>
-        <p style="font-size:13px;color:rgba(247,241,237,.55);line-height:1.8">Payment: <strong>JazzCash (paid in advance)</strong><br/>Delivery to: ${order.city}</p>
-        <p style="font-size:13px;color:rgba(247,241,237,.55);line-height:1.8;margin-top:24px">Track your order at <a href="https://mysonails.pk/track" style="color:#d4a89a">mysonails.pk/track</a> using order code <strong>${order.code}</strong> and your phone number.</p>
-        <hr style="border:none;border-top:1px solid #1e1e1e;margin:32px 0"/>
-        <p style="font-size:12px;color:rgba(247,241,237,.3)">Myso Nails Studio · Lahore, Pakistan</p>
-      </div>
-    `,
-  }).catch(() => {});
+  if (!order.customerId) return;
+  const customer = await prisma.customer.findUnique({ where: { id: order.customerId }, select: { email: true } });
+  if (!customer?.email) return;
+  await sendOrderConfirmEmail(order, items, customer.email);
 }
 
 export async function POST(request) {
