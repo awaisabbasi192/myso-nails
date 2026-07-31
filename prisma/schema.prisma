@@ -23,31 +23,32 @@ model Category {
 }
 
 model Product {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  name        String
-  image       String
-  images      String   @default("[]")
-  price       Int
-  wasPrice    Int?
-  shape       String
-  finish      String
-  occasion    String
-  length      String
-  badge       String?
-  colorway    String
-  blurb       String
-  rating      Float    @default(5)
-  reviewsCount Int     @default(0)
-  stock       Int      @default(10)
-  featured    Boolean  @default(false)
-  sortOrder   Int      @default(0)
-  categoryId  String?
-  category    Category? @relation(fields: [categoryId], references: [id])
-  reviews     Review[]
-  orderItems  OrderItem[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String       @id @default(cuid())
+  slug         String       @unique
+  name         String
+  image        String
+  images       String       @default("[]")
+  price        Int
+  wasPrice     Int?
+  shape        String
+  finish       String
+  occasion     String
+  length       String
+  badge        String?
+  colorway     String
+  blurb        String
+  rating       Float        @default(5)
+  reviewsCount Int          @default(0)
+  stock        Int          @default(10)
+  featured     Boolean      @default(false)
+  sortOrder    Int          @default(0)
+  categoryId   String?
+  category     Category?    @relation(fields: [categoryId], references: [id])
+  reviews      Review[]
+  orderItems   OrderItem[]
+  stockAlerts  StockAlert[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 }
 
 model Review {
@@ -64,19 +65,23 @@ model Review {
 }
 
 model Customer {
-  id        String    @id @default(cuid())
-  name      String
-  email     String    @unique
-  phone     String?
-  password  String
-  role      String    @default("customer") // "customer" | "admin"
-  city      String?
-  nailSizes String?   // saved 10-finger size profile, comma-separated
-  resetToken  String?   // sha256 hash of the password-reset token
-  resetExpiry DateTime? // when the reset token stops working
-  orders    Order[]
-  addresses Address[]
-  createdAt DateTime  @default(now())
+  id           String       @id @default(cuid())
+  name         String
+  email        String       @unique
+  phone        String?
+  password     String
+  role         String       @default("customer")
+  city         String?
+  nailSizes    String?
+  points       Int          @default(0)
+  referralCode String?      @unique
+  referredBy   String?
+  resetToken   String?
+  resetExpiry  DateTime?
+  orders       Order[]
+  addresses    Address[]
+  stockAlerts  StockAlert[]
+  createdAt    DateTime     @default(now())
 }
 
 model Address {
@@ -190,4 +195,51 @@ model Message {
   topic     String?
   body      String
   createdAt DateTime @default(now())
+}
+
+model StockAlert {
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  email      String
+  customerId String?
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  createdAt  DateTime @default(now())
+  @@unique([productId, email])
+}
+
+model BundleRule {
+  id              String  @id @default(cuid())
+  name            String
+  minQty          Int
+  discountPercent Int
+  active          Boolean @default(true)
+  createdAt       DateTime @default(now())
+}
+
+model CustomNailRequest {
+  id          String   @id @default(cuid())
+  name        String
+  email       String?
+  phone       String
+  occasion    String?
+  deadline    String?
+  length      String   @default("Medium")
+  shape       String   @default("Square")
+  sizes       String   @default("{}")
+  colorPrefs  String?
+  designNotes String
+  refImages   String   @default("[]")
+  status      String   @default("New")
+  createdAt   DateTime @default(now())
+}
+
+model Drop {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  launchAt    DateTime
+  image       String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
 }

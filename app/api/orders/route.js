@@ -84,6 +84,14 @@ export async function POST(request) {
       }
     }
 
+    // Bundle deal: find best active rule matching total qty
+    const totalQty = orderItems.reduce((s, i) => s + i.qty, 0);
+    if (discount === 0) {
+      const rules = await prisma.bundleRule.findMany({ where: { active: true }, orderBy: { minQty: "desc" } });
+      const match = rules.find((r) => totalQty >= r.minQty);
+      if (match) discount = Math.round((subtotal * match.discountPercent) / 100);
+    }
+
     // Delivery: Rs 300 on every order, free at Rs 5,000+
     const shipping = subtotal >= FREE_DELIVERY_OVER ? 0 : DELIVERY_FEE;
     const total = Math.max(0, subtotal - discount) + shipping;
