@@ -93,8 +93,8 @@ export default function LoginPage() {
                 <>
                   <div style={{ padding: "16px 18px", border: "1px solid rgba(143,214,166,.3)", color: "#8FD6A6", fontSize: 13, lineHeight: 1.7 }}>
                     {forgot.sent
-                      ? "✓ Check your email — we've sent a reset link. It works for 1 hour."
-                      : "If that email is registered, a reset link is on its way. Can't find it? WhatsApp us and we'll reset it for you."}
+                      ? "✓ Reset link sent! Check your inbox — and if you don't see it, check your spam/junk folder too. Link works for 1 hour."
+                      : "If that email is registered, a reset link is on its way. Check your spam/junk folder if you don't see it in inbox."}
                   </div>
                   <a href={waLink("Hi M&S! I need help resetting my password.")} target="_blank" rel="noreferrer" className="btn-wa" style={{ textAlign: "center", padding: 15, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Reset via WhatsApp</a>
                   <div onClick={() => { setMode("login"); setForgot({ status: "", sent: false }); }} style={{ cursor: "pointer", fontSize: 12, color: "var(--rose)", textAlign: "center" }}>← Back to login</div>
