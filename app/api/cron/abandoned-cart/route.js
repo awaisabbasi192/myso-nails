@@ -13,7 +13,9 @@ export async function GET(request) {
 
   const now = Date.now();
   const idleSince = new Date(now - 2 * 60 * 60 * 1000);  // idle at least 2h
-  const notOlderThan = new Date(now - 24 * 60 * 60 * 1000); // and no older than 24h
+  const notOlderThan = new Date(now - 48 * 60 * 60 * 1000); // and no older than 48h
+  // Window is wide (2–48h) because the Hobby plan runs this cron only once a day,
+  // so a single daily pass still reliably catches every abandoned cart.
 
   const carts = await prisma.abandonedCart.findMany({
     where: { reminded: false, recovered: false, updatedAt: { lt: idleSince, gt: notOlderThan } },
