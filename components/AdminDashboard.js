@@ -4,11 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { rs } from "@/lib/format";
 
-const TABS = ["Overview", "Orders", "Products", "Categories", "Customers", "Reviews", "Coupons", "Messages", "Media", "Settings", "Homepage"];
+const TABS = ["Overview", "Orders", "Products", "Categories", "Customers", "Reviews", "Coupons", "Gift Cards", "Messages", "Media", "Analytics", "Bundle Deals", "Custom Orders", "Drops", "Settings", "Homepage"];
 const ORDER_FILTERS = ["All", "Pending", "Confirmed", "Shipped", "Delivered", "Rejected"];
 const ASSET_IMAGES = ["/assets/p1-french.jpeg", "/assets/p2-maroon.jpeg", "/assets/p3-leopard.jpeg", "/assets/p4-nude.jpeg", "/assets/g1.jpeg", "/assets/g2.jpeg", "/assets/g3.jpeg"];
 
-export default function AdminDashboard({ adminEmail, kpis, orders, products, customers, coupons, categories, content, messages, subscribers, reviews }) {
+export default function AdminDashboard({ adminEmail, kpis, orders, products, customers, coupons, categories, content, messages, subscribers, reviews, giftCards }) {
   const router = useRouter();
   const [tab, setTab] = useState("Overview");
   const [busy, setBusy] = useState(false);
@@ -29,6 +29,7 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
     Delivered: content?.waDelivered || "Assalam o Alaikum {name}! ✅ Aapka order *{code}* deliver ho gaya. — Myso Nails Studio",
     Rejected:  content?.waRejected  || "Assalam o Alaikum {name}! Aapka order *{code}* ke baray mein kuch masla hai. — Myso Nails Studio",
   });
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   async function call(url, method, body) {
     setBusy(true);
@@ -93,25 +94,29 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
 
   return (
     <div data-r="admin" style={{ display: "grid", gridTemplateColumns: "214px 1fr", minHeight: "100vh", background: "var(--bg)" }}>
+      {mobileMenuOpen && <div className="admin-drawer-overlay" onClick={() => setMobileMenuOpen(false)} />}
+
       {/* Sidebar */}
-      <aside style={{ borderRight: "1px solid var(--card-b)", background: "var(--panel-2)", padding: "30px 0" }}>
+      <aside className={`admin-sidebar${mobileMenuOpen ? " admin-sidebar-open" : ""}`} style={{ borderRight: "1px solid var(--card-b)", background: "var(--panel-2)", padding: "30px 0" }}>
+        <div className="admin-drawer-close" onClick={() => setMobileMenuOpen(false)}>×</div>
         <div style={{ fontSize: 10, letterSpacing: ".3em", textTransform: "uppercase", color: "var(--ink-muted)", padding: "0 24px 18px" }}>Studio admin</div>
         {TABS.map((t) => (
-          <div key={t} className="admin-tab" onClick={() => setTab(t)} style={{ cursor: "pointer", padding: "13px 24px", fontSize: 12.5, letterSpacing: ".1em", color: tab === t ? "var(--rose)" : "var(--ink-muted)", background: tab === t ? "rgba(155,27,42,.08)" : "transparent", borderLeft: `2px solid ${tab === t ? "var(--rose)" : "transparent"}` }}>{t}</div>
+          <div key={t} className="admin-tab" onClick={() => { setTab(t); setMobileMenuOpen(false); }} style={{ cursor: "pointer", padding: "13px 24px", fontSize: 12.5, letterSpacing: ".1em", color: tab === t ? "var(--rose)" : "var(--ink-muted)", background: tab === t ? "rgba(155,27,42,.08)" : "transparent", borderLeft: `2px solid ${tab === t ? "var(--rose)" : "transparent"}` }}>{t}</div>
         ))}
         <div className="admin-side-foot" style={{ margin: "26px 24px 0", paddingTop: 20, borderTop: "1px solid var(--card-b)", fontSize: 11.5, lineHeight: 1.9, color: "var(--ink-muted)" }}>
           Signed in as<br /><span style={{ color: "var(--rose)" }}>{adminEmail}</span>
           <a href="/" style={{ display: "block", marginTop: 14, fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "10px 12px", textAlign: "center" }}>↗ Visit site</a>
           <div onClick={logout} style={{ cursor: "pointer", marginTop: 10, fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "9px 12px", textAlign: "center", color: "var(--ink-muted)" }}>Sign out</div>
         </div>
-
-        {/* Mobile-only actions — the tab bar scrolls, so these sit at its end */}
-        <a href="/" className="admin-mobile-action" style={{ background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff" }}>↗ Site</a>
-        <div onClick={logout} className="admin-mobile-action" style={{ border: "1px solid var(--card-b)", color: "var(--ink-muted)", cursor: "pointer" }}>Sign out</div>
       </aside>
 
       {/* Content */}
       <div style={{ padding: "34px 34px 80px" }}>
+        {/* Mobile top bar */}
+        <div className="admin-mobile-topbar">
+          <button className="admin-hamburger" onClick={() => setMobileMenuOpen(true)} aria-label="Open menu">☰</button>
+          <div style={{ fontFamily: "var(--serif)", fontSize: 20, fontWeight: 300, color: "var(--ink)" }}>{tab}</div>
+        </div>
         {tab === "Overview" && <Overview kpis={kpis} orders={orders} products={products} />}
 
         {tab === "Orders" && (
@@ -296,10 +301,16 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
         {tab === "Categories" && <Categories categories={categories} call={call} busy={busy} router={router} />}
 
         {tab === "Reviews" && <ReviewsTab reviews={reviews || []} call={call} router={router} />}
+        {tab === "Analytics" && <AnalyticsTab />}
+        {tab === "Bundle Deals" && <BundleDealsTab />}
+        {tab === "Custom Orders" && <CustomOrdersTab />}
+        {tab === "Drops" && <DropsTab />}
 
         {tab === "Messages" && <MessagesTab messages={messages} subscribers={subscribers} call={call} />}
 
         {tab === "Coupons" && <Coupons coupons={coupons} call={call} busy={busy} />}
+
+        {tab === "Gift Cards" && <GiftCardsTab giftCards={giftCards} />}
 
         {tab === "Media" && <MediaTab />}
 
@@ -344,6 +355,7 @@ function Overview({ kpis, orders, products }) {
     { label: "Revenue this month", value: rs(kpis.revenue), delta: "Confirmed + delivered", color: "#8FD6A6" },
     { label: "Total orders", value: String(kpis.orders), delta: "All time", color: "#8FD6A6" },
     { label: "Customers", value: String(kpis.customers), delta: "Registered", color: "#8FD6A6" },
+    { label: "Newsletter subscribers", value: String(kpis.subscribers || 0), delta: "Email list", color: "#8FD6A6" },
     { label: "Pending verification", value: String(kpis.pending), delta: kpis.pending ? "Review now →" : "All clear", color: kpis.pending ? "var(--rose)" : "#8FD6A6" },
     { label: "Low stock", value: `${kpis.lowStock} sets`, delta: kpis.lowStockName ? `${kpis.lowStockName} needs restock` : "Stock healthy", color: kpis.lowStock ? "#E39B9B" : "#8FD6A6" },
   ];
@@ -352,6 +364,7 @@ function Overview({ kpis, orders, products }) {
   const maxVal = Math.max(...chart.map((d) => d.total), 1);
   const alerts = [];
   if (kpis.pending) alerts.push({ title: `${kpis.pending} order${kpis.pending > 1 ? "s" : ""} pending payment verification`, meta: "Open Orders tab → check receipts", dot: "var(--rose)" });
+  if (kpis.messages > 0) alerts.push({ title: `${kpis.messages} contact message${kpis.messages > 1 ? "s" : ""} received`, meta: "Open Messages tab → reply on WhatsApp", dot: "#d4a89a" });
   products.filter((p) => p.stock <= 3).forEach((p) => alerts.push({ title: `${p.name} — only ${p.stock} left`, meta: "Restock or hide from shop", dot: "#E39B9B" }));
   if (alerts.length === 0) alerts.push({ title: "Everything looks good", meta: "No urgent actions needed", dot: "#8FD6A6" });
 
@@ -902,6 +915,15 @@ function Labeled({ label, span2, children }) {
 /* ---------- Messages + Subscribers ---------- */
 function MessagesTab({ messages, subscribers }) {
   const [view, setView] = useState("messages");
+
+  function exportSubscriberCSV() {
+    const rows = ["Email,Joined", ...subscribers.map((s) => `${s.email},${s.date}`)];
+    const blob = new Blob([rows.join("\n")], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url; a.download = "subscribers.csv"; a.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div>
       <div className="admin-flex-row" style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24 }}>
@@ -934,8 +956,9 @@ function MessagesTab({ messages, subscribers }) {
 
       {view === "subscribers" && (
         <div style={{ border: "1px solid var(--card-b)", background: "var(--panel)" }}>
-          <div style={{ padding: "14px 24px", borderBottom: "1px solid var(--card-b)", fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--ink-faint)", display: "grid", gridTemplateColumns: "1fr auto" }}>
+          <div style={{ padding: "14px 24px", borderBottom: "1px solid var(--card-b)", fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--ink-faint)", display: "grid", gridTemplateColumns: "1fr auto auto", gap: 16, alignItems: "center" }}>
             <div>Email</div><div>Joined</div>
+            {subscribers.length > 0 && <div onClick={exportSubscriberCSV} style={{ cursor: "pointer", fontSize: 9.5, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "5px 10px", color: "var(--ink-muted)" }}>Export CSV</div>}
           </div>
           {subscribers.length === 0 && <div style={{ padding: 30, color: "var(--ink-faint)", fontSize: 13 }}>No subscribers yet.</div>}
           {subscribers.map((s) => (
@@ -951,9 +974,16 @@ function MessagesTab({ messages, subscribers }) {
 }
 
 /* ---------- Reviews ---------- */
-function ReviewsTab({ reviews, call, router }) {
+function ReviewsTab({ reviews }) {
   const [localReviews, setLocalReviews] = useState(reviews);
+  const [editing, setEditing] = useState(null); // { id, body, rating, name }
   const stars = (n) => "★".repeat(n) + "☆".repeat(5 - n);
+
+  async function patch(id, data) {
+    const res = await fetch(`/api/admin/reviews/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+    if (res.ok) setLocalReviews((prev) => prev.map((x) => x.id === id ? { ...x, ...data } : x));
+    return res.ok;
+  }
 
   async function del(id) {
     if (!confirm("Delete this review?")) return;
@@ -961,37 +991,456 @@ function ReviewsTab({ reviews, call, router }) {
     if (res.ok) setLocalReviews((r) => r.filter((x) => x.id !== id));
   }
 
-  async function toggleVerified(r) {
-    const res = await fetch(`/api/admin/reviews/${r.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ verified: !r.verified }) });
-    if (res.ok) setLocalReviews((prev) => prev.map((x) => x.id === r.id ? { ...x, verified: !x.verified } : x));
+  async function saveEdit() {
+    if (!editing) return;
+    const ok = await patch(editing.id, { body: editing.body, rating: editing.rating, name: editing.name });
+    if (ok) setEditing(null);
   }
+
+  const shown = localReviews.filter((r) => r.verified).length;
+  const hidden = localReviews.length - shown;
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
         <h1 style={{ ...h1, marginBottom: 0 }}>Reviews <span style={{ fontSize: 14, color: "var(--ink-faint)", fontFamily: "var(--sans)" }}>({localReviews.length})</span></h1>
+      </div>
+      <div style={{ fontSize: 12, color: "var(--ink-faint)", marginBottom: 20 }}>
+        <span style={{ color: "#8FD6A6" }}>● {shown} shown on site</span> &nbsp;·&nbsp; <span style={{ color: "var(--ink-muted)" }}>● {hidden} hidden</span>
       </div>
       <div style={{ border: "1px solid var(--card-b)", background: "var(--panel)" }}>
         {localReviews.length === 0 && <div style={{ padding: 30, color: "var(--ink-faint)", fontSize: 13 }}>No reviews yet.</div>}
         {localReviews.map((r) => (
-          <div key={r.id} style={{ padding: "20px 24px", borderBottom: "1px solid var(--card-b)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 6 }}>
-                  <span style={{ color: "#C9A27E", fontSize: 13 }}>{stars(r.rating)}</span>
-                  <span style={{ fontFamily: "var(--serif)", fontSize: 18 }}>{r.name}</span>
-                  <span style={{ fontSize: 11, color: "var(--ink-faint)" }}>{r.date}</span>
+          <div key={r.id} style={{ padding: "20px 24px", borderBottom: "1px solid var(--card-b)", opacity: r.verified ? 1 : 0.55 }}>
+            {editing?.id === r.id ? (
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                  <input value={editing.name} onChange={(e) => setEditing((x) => ({ ...x, name: e.target.value }))} style={{ ...adminInput, width: 180 }} placeholder="Reviewer name" />
+                  <select value={editing.rating} onChange={(e) => setEditing((x) => ({ ...x, rating: Number(e.target.value) }))} style={{ ...adminInput, width: 100 }}>
+                    {[5, 4, 3, 2, 1].map((n) => <option key={n} value={n}>{stars(n)}</option>)}
+                  </select>
                 </div>
-                <div style={{ fontSize: 11.5, color: "rgba(227,183,166,.7)", marginBottom: 8 }}>on <span style={{ color: "var(--rose-light)" }}>{r.productName}</span></div>
-                <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--ink-muted)", margin: 0 }}>{r.body}</p>
+                <textarea rows={4} value={editing.body} onChange={(e) => setEditing((x) => ({ ...x, body: e.target.value }))} style={{ ...adminInput, resize: "vertical" }} />
+                <div style={{ display: "flex", gap: 8 }}>
+                  <div onClick={saveEdit} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "9px 18px", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase" }}>Save</div>
+                  <div onClick={() => setEditing(null)} style={{ cursor: "pointer", border: "1px solid var(--card-b)", padding: "9px 16px", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--ink-muted)" }}>Cancel</div>
+                </div>
               </div>
-              <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
-                <div onClick={() => toggleVerified(r)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: `1px solid ${r.verified ? "rgba(143,214,166,.5)" : "rgba(227,183,166,.3)"}`, padding: "7px 11px", color: r.verified ? "#8FD6A6" : "var(--ink-muted)" }}>{r.verified ? "Verified ✓" : "Mark verified"}</div>
-                <div onClick={() => del(r.id)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E39B9B", padding: "7px 11px" }}>Delete</div>
+            ) : (
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 6, flexWrap: "wrap" }}>
+                    <span style={{ color: "#C9A27E", fontSize: 13 }}>{stars(r.rating)}</span>
+                    <span style={{ fontFamily: "var(--serif)", fontSize: 18 }}>{r.name}</span>
+                    <span style={{ fontSize: 11, color: "var(--ink-faint)" }}>{r.date}</span>
+                    {!r.verified && <span style={{ fontSize: 9.5, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,130,0,.4)", color: "#C88200", padding: "3px 8px" }}>Hidden</span>}
+                  </div>
+                  <div style={{ fontSize: 11.5, color: "rgba(227,183,166,.7)", marginBottom: 8 }}>on <span style={{ color: "var(--rose-light)" }}>{r.productName}</span></div>
+                  <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--ink-muted)", margin: 0 }}>{r.body}</p>
+                  {(r.image || r.image2) && (
+                    <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+                      {r.image && <img src={r.image} alt="" style={{ width: 60, height: 60, objectFit: "cover", border: "1px solid var(--card-b)" }} />}
+                      {r.image2 && <img src={r.image2} alt="" style={{ width: 60, height: 60, objectFit: "cover", border: "1px solid var(--card-b)" }} />}
+                    </div>
+                  )}
+                </div>
+                <div style={{ display: "flex", gap: 8, flexShrink: 0, flexWrap: "wrap" }}>
+                  <div onClick={() => patch(r.id, { verified: !r.verified })} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: `1px solid ${r.verified ? "rgba(143,214,166,.5)" : "rgba(227,183,166,.3)"}`, padding: "7px 11px", color: r.verified ? "#8FD6A6" : "var(--ink-muted)", whiteSpace: "nowrap" }}>
+                    {r.verified ? "✓ Shown on site" : "Show on site"}
+                  </div>
+                  <div onClick={() => setEditing({ id: r.id, body: r.body, rating: r.rating, name: r.name })} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "7px 11px", color: "var(--ink-muted)" }}>Edit</div>
+                  <div onClick={() => del(r.id)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E39B9B", padding: "7px 11px" }}>Delete</div>
+                </div>
               </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Analytics ---------- */
+function AnalyticsTab() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  async function load() {
+    setLoading(true);
+    const res = await fetch("/api/admin/stats");
+    if (res.ok) setData(await res.json());
+    setLoading(false);
+  }
+
+  function exportReport() {
+    if (!data) return;
+    const L = [];
+    L.push("MYSO NAILS STUDIO — SALES REPORT");
+    L.push(`Generated,${new Date().toLocaleString("en-GB")}`);
+    L.push("");
+    L.push("Summary,Revenue,Orders");
+    L.push(`All time,${data.allTime.revenue},${data.allTime.orders}`);
+    L.push(`This month,${data.thisMonth.revenue},${data.thisMonth.orders}`);
+    L.push(`Last month,${data.lastMonth.revenue},${data.lastMonth.orders}`);
+    L.push("");
+    L.push("Month,Revenue");
+    data.monthlyData.forEach((m) => L.push(`${m.month},${m.revenue}`));
+    L.push("");
+    L.push("Order status,Count");
+    data.statusCounts.forEach((s) => L.push(`${s.status},${s._count}`));
+    L.push("");
+    L.push("Top product,Units sold");
+    data.topProducts.forEach((p) => L.push(`"${String(p.name).replace(/"/g, '""')}",${p._sum?.qty || 0}`));
+
+    const blob = new Blob([L.join("\n")], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `myso-sales-report-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  if (!data) return (
+    <div>
+      <h1 style={{ ...h1, marginBottom: 10 }}>Analytics</h1>
+      <div onClick={load} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "13px 26px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>{loading ? "Loading…" : "Load analytics"}</div>
+    </div>
+  );
+
+  const maxRev = Math.max(...data.monthlyData.map((m) => m.revenue), 1);
+  const statusColors = { Pending: "#C88200", Confirmed: "#1E8C3C", Shipped: "#1E8C3C", Delivered: "#8FD6A6", Rejected: "#C83232", Cancelled: "#9B1B2A" };
+
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+        <h1 style={{ ...h1, marginBottom: 0 }}>Analytics</h1>
+        <div style={{ display: "flex", gap: 10 }}>
+          <div onClick={exportReport} style={{ cursor: "pointer", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "9px 16px", color: "var(--ink-muted)" }}>↓ Sales report CSV</div>
+          <div onClick={load} style={{ cursor: "pointer", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "9px 16px", color: "var(--ink-muted)" }}>Refresh</div>
+        </div>
+      </div>
+
+      {/* KPIs */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14, marginBottom: 24 }}>
+        {[
+          { label: "All-time revenue", val: `Rs ${data.allTime.revenue.toLocaleString()}`, sub: `${data.allTime.orders} orders` },
+          { label: "This month", val: `Rs ${data.thisMonth.revenue.toLocaleString()}`, sub: `${data.thisMonth.orders} orders` },
+          { label: "Last month", val: `Rs ${data.lastMonth.revenue.toLocaleString()}`, sub: `${data.lastMonth.orders} orders` },
+        ].map((k) => (
+          <div key={k.label} style={{ border: "1px solid var(--card-b)", background: "var(--panel)", padding: "22px 24px" }}>
+            <div style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ink-faint)", marginBottom: 8 }}>{k.label}</div>
+            <div style={{ fontFamily: "var(--serif)", fontSize: 28, color: "var(--rose)", marginBottom: 4 }}>{k.val}</div>
+            <div style={{ fontSize: 11.5, color: "var(--ink-muted)" }}>{k.sub}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Revenue chart */}
+      <div style={{ border: "1px solid var(--card-b)", background: "var(--panel)", padding: 24, marginBottom: 24 }}>
+        <div style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 20 }}>Revenue — last 6 months</div>
+        <div style={{ display: "flex", alignItems: "flex-end", gap: 8, height: 120 }}>
+          {data.monthlyData.map((m) => (
+            <div key={m.month} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 6, height: "100%" }}>
+              <div style={{ width: "100%", background: "linear-gradient(to top,#9B1B2A,#C4233D)", height: `${Math.max(4, (m.revenue / maxRev) * 100)}%`, minHeight: 4, transition: "height .4s" }} />
+              <div style={{ fontSize: 9.5, color: "var(--ink-faint)", textAlign: "center", whiteSpace: "nowrap" }}>{m.month}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Orders by status + Top products */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+        <div style={{ border: "1px solid var(--card-b)", background: "var(--panel)", padding: 24 }}>
+          <div style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 16 }}>Orders by status</div>
+          {data.statusCounts.map((s) => (
+            <div key={s.status} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid var(--card-b)", fontSize: 13 }}>
+              <span style={{ color: statusColors[s.status] || "var(--ink-muted)" }}>{s.status}</span>
+              <span style={{ color: "var(--ink)" }}>{s._count}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ border: "1px solid var(--card-b)", background: "var(--panel)", padding: 24 }}>
+          <div style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 16 }}>Top products</div>
+          {data.topProducts.map((p, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "8px 0", borderBottom: "1px solid var(--card-b)" }}>
+              <img src={p.image} alt="" style={{ width: 36, height: 36, objectFit: "cover", border: "1px solid var(--card-b)" }} />
+              <div style={{ flex: 1, fontSize: 12.5, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</div>
+              <div style={{ fontSize: 12, color: "var(--rose)", whiteSpace: "nowrap" }}>{p._sum?.qty || 0} sold</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Bundle Deals ---------- */
+function BundleDealsTab() {
+  const [rules, setRules] = useState(null);
+  const [form, setForm] = useState({ name: "", minQty: "", discountPercent: "" });
+  const [busy, setBusy] = useState(false);
+
+  async function load() {
+    const res = await fetch("/api/admin/bundle-rules");
+    if (res.ok) setRules(await res.json());
+  }
+
+  async function add() {
+    if (!form.name || !form.minQty || !form.discountPercent) return alert("Fill all fields");
+    setBusy(true);
+    const res = await fetch("/api/admin/bundle-rules", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
+    if (res.ok) { setForm({ name: "", minQty: "", discountPercent: "" }); load(); }
+    setBusy(false);
+  }
+
+  async function toggle(rule) {
+    await fetch(`/api/admin/bundle-rules/${rule.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ active: !rule.active }) });
+    load();
+  }
+
+  async function del(id) {
+    if (!confirm("Delete this rule?")) return;
+    await fetch(`/api/admin/bundle-rules/${id}`, { method: "DELETE" });
+    load();
+  }
+
+  if (!rules) return (
+    <div>
+      <h1 style={{ ...h1, marginBottom: 10 }}>Bundle Deals</h1>
+      <div onClick={load} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "13px 26px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>Load rules</div>
+    </div>
+  );
+
+  return (
+    <div>
+      <h1 style={{ ...h1, marginBottom: 6 }}>Bundle Deals</h1>
+      <p style={{ fontSize: 13, color: "var(--ink-muted)", marginBottom: 24, lineHeight: 1.7 }}>Agar customer X ya zyada items order kare to automatically Y% discount milega. Sabse bada matching rule apply hoga.</p>
+
+      {/* Add rule */}
+      <div style={{ border: "1px solid var(--card-b)", background: "var(--panel)", padding: 24, marginBottom: 20 }}>
+        <div style={{ fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 16 }}>Add new rule</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 130px 130px auto", gap: 12, alignItems: "end" }}>
+          <div>
+            <div style={{ fontSize: 10, color: "var(--ink-faint)", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 7 }}>Rule name</div>
+            <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder="e.g. Buy 2 Get Discount" style={adminInput} />
+          </div>
+          <div>
+            <div style={{ fontSize: 10, color: "var(--ink-faint)", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 7 }}>Min items</div>
+            <input type="number" min="2" value={form.minQty} onChange={(e) => setForm((f) => ({ ...f, minQty: e.target.value }))} placeholder="2" style={adminInput} />
+          </div>
+          <div>
+            <div style={{ fontSize: 10, color: "var(--ink-faint)", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 7 }}>Discount %</div>
+            <input type="number" min="1" max="90" value={form.discountPercent} onChange={(e) => setForm((f) => ({ ...f, discountPercent: e.target.value }))} placeholder="10" style={adminInput} />
+          </div>
+          <div onClick={add} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "13px 18px", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", whiteSpace: "nowrap" }}>{busy ? "…" : "Add"}</div>
+        </div>
+      </div>
+
+      {/* Rules list */}
+      <div style={{ border: "1px solid var(--card-b)", background: "var(--panel)" }}>
+        {rules.length === 0 && <div style={{ padding: 28, color: "var(--ink-faint)", fontSize: 13 }}>No bundle rules yet.</div>}
+        {rules.map((r) => (
+          <div key={r.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 22px", borderBottom: "1px solid var(--card-b)", gap: 16, opacity: r.active ? 1 : 0.5 }}>
+            <div>
+              <div style={{ fontSize: 14, marginBottom: 4 }}>{r.name}</div>
+              <div style={{ fontSize: 12, color: "var(--ink-muted)" }}>Buy {r.minQty}+ items → <strong style={{ color: "var(--rose)" }}>{r.discountPercent}% off</strong></div>
+            </div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <div onClick={() => toggle(r)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: `1px solid ${r.active ? "rgba(143,214,166,.5)" : "rgba(227,183,166,.3)"}`, padding: "7px 12px", color: r.active ? "#8FD6A6" : "var(--ink-muted)", whiteSpace: "nowrap" }}>{r.active ? "✓ Active" : "Inactive"}</div>
+              <div onClick={() => del(r.id)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E39B9B", padding: "7px 12px" }}>Delete</div>
             </div>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Custom Orders ---------- */
+function CustomOrdersTab() {
+  const [reqs, setReqs] = useState(null);
+  const [detail, setDetail] = useState(null);
+  const STATUS_OPTS = ["New", "Quoted", "InProgress", "Done", "Cancelled"];
+  const statusColor = { New: "var(--rose)", Quoted: "#C9A27E", InProgress: "#1E8C3C", Done: "#8FD6A6", Cancelled: "rgba(200,90,90,.7)" };
+
+  async function load() {
+    const res = await fetch("/api/admin/custom-requests");
+    if (res.ok) setReqs(await res.json());
+  }
+
+  async function updateStatus(id, status) {
+    await fetch(`/api/admin/custom-requests/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status }) });
+    setReqs((prev) => prev.map((r) => r.id === id ? { ...r, status } : r));
+    if (detail?.id === id) setDetail((d) => ({ ...d, status }));
+  }
+
+  async function del(id) {
+    if (!confirm("Delete this request?")) return;
+    await fetch(`/api/admin/custom-requests/${id}`, { method: "DELETE" });
+    setReqs((prev) => prev.filter((r) => r.id !== id));
+    if (detail?.id === id) setDetail(null);
+  }
+
+  if (!reqs) return (
+    <div>
+      <h1 style={{ ...h1, marginBottom: 10 }}>Custom Orders</h1>
+      <div onClick={load} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "13px 26px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>Load requests</div>
+    </div>
+  );
+
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+        <h1 style={{ ...h1, marginBottom: 0 }}>Custom Orders <span style={{ fontSize: 14, color: "var(--ink-faint)", fontFamily: "var(--sans)" }}>({reqs.length})</span></h1>
+        <div onClick={load} style={{ cursor: "pointer", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "9px 16px", color: "var(--ink-muted)" }}>Refresh</div>
+      </div>
+
+      {detail && (
+        <div style={{ ...modalWrap }}>
+          <div style={{ background: "var(--panel)", border: "1px solid var(--card-b)", padding: 32, maxWidth: 620, width: "100%", maxHeight: "90vh", overflowY: "auto" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <h2 style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 26, margin: 0 }}>{detail.name}</h2>
+              <div onClick={() => setDetail(null)} style={{ cursor: "pointer", fontSize: 20, color: "var(--ink-muted)", padding: "4px 8px" }}>×</div>
+            </div>
+            <div style={{ display: "grid", gap: 12, fontSize: 13 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                <div><span style={{ color: "var(--ink-faint)", fontSize: 10, textTransform: "uppercase", letterSpacing: ".18em" }}>Phone</span><br />{detail.phone}</div>
+                {detail.email && <div><span style={{ color: "var(--ink-faint)", fontSize: 10, textTransform: "uppercase", letterSpacing: ".18em" }}>Email</span><br />{detail.email}</div>}
+                {detail.occasion && <div><span style={{ color: "var(--ink-faint)", fontSize: 10, textTransform: "uppercase", letterSpacing: ".18em" }}>Occasion</span><br />{detail.occasion}</div>}
+                {detail.deadline && <div><span style={{ color: "var(--ink-faint)", fontSize: 10, textTransform: "uppercase", letterSpacing: ".18em" }}>Deadline</span><br />{detail.deadline}</div>}
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                <div><span style={{ color: "var(--ink-faint)", fontSize: 10, textTransform: "uppercase", letterSpacing: ".18em" }}>Shape</span><br />{detail.shape}</div>
+                <div><span style={{ color: "var(--ink-faint)", fontSize: 10, textTransform: "uppercase", letterSpacing: ".18em" }}>Length</span><br />{detail.length}</div>
+              </div>
+              {detail.sizes && (() => {
+                try { const s = JSON.parse(detail.sizes); const entries = Object.entries(s).filter(([, v]) => v); if (!entries.length) return null; return <div><span style={{ color: "var(--ink-faint)", fontSize: 10, textTransform: "uppercase", letterSpacing: ".18em" }}>Sizes</span><br /><div style={{ marginTop: 4, display: "flex", gap: 8, flexWrap: "wrap" }}>{entries.map(([f, v]) => <span key={f} style={{ fontSize: 12, border: "1px solid var(--card-b)", padding: "3px 8px" }}>{f}: {v}</span>)}</div></div>; } catch { return null; }
+              })()}
+              {detail.colorPrefs && <div><span style={{ color: "var(--ink-faint)", fontSize: 10, textTransform: "uppercase", letterSpacing: ".18em" }}>Color preferences</span><br />{detail.colorPrefs}</div>}
+              <div><span style={{ color: "var(--ink-faint)", fontSize: 10, textTransform: "uppercase", letterSpacing: ".18em" }}>Design notes</span><br /><p style={{ margin: "6px 0 0", lineHeight: 1.7, color: "var(--ink-muted)" }}>{detail.designNotes}</p></div>
+              {detail.refImages && (() => {
+                try { const imgs = JSON.parse(detail.refImages); if (!imgs.length) return null; return <div><span style={{ color: "var(--ink-faint)", fontSize: 10, textTransform: "uppercase", letterSpacing: ".18em" }}>Reference images</span><div style={{ display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap" }}>{imgs.map((img, i) => <img key={i} src={img} alt="" style={{ width: 80, height: 80, objectFit: "cover", border: "1px solid var(--card-b)" }} />)}</div></div>; } catch { return null; }
+              })()}
+            </div>
+            <div style={{ marginTop: 24, display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+              <span style={{ fontSize: 11, color: "var(--ink-faint)", marginRight: 4 }}>Status:</span>
+              {STATUS_OPTS.map((s) => (
+                <div key={s} onClick={() => updateStatus(detail.id, s)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: `1px solid ${detail.status === s ? statusColor[s] : "var(--card-b)"}`, padding: "7px 10px", color: detail.status === s ? statusColor[s] : "var(--ink-muted)" }}>{s}</div>
+              ))}
+              <a href={`https://wa.me/92${detail.phone.replace(/^\+?0*/, "").replace(/\D/g, "")}?text=${encodeURIComponent(`Hi ${detail.name}! Aapki custom nail request ke baray mein baat karni thi 🌸`)}`} target="_blank" rel="noreferrer" style={{ marginLeft: "auto", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid #25D366", color: "#25D366", padding: "7px 10px", whiteSpace: "nowrap" }}>WhatsApp</a>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div style={{ border: "1px solid var(--card-b)", background: "var(--panel)" }}>
+        {reqs.length === 0 && <div style={{ padding: 28, color: "var(--ink-faint)", fontSize: 13 }}>No custom nail requests yet.</div>}
+        {reqs.map((r) => (
+          <div key={r.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 22px", borderBottom: "1px solid var(--card-b)", gap: 12, flexWrap: "wrap" }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 4, flexWrap: "wrap" }}>
+                <span style={{ fontSize: 14 }}>{r.name}</span>
+                <span style={{ fontSize: 9.5, letterSpacing: ".14em", textTransform: "uppercase", border: `1px solid ${statusColor[r.status] || "var(--card-b)"}`, padding: "3px 8px", color: statusColor[r.status] || "var(--ink-muted)" }}>{r.status}</span>
+              </div>
+              <div style={{ fontSize: 11.5, color: "var(--ink-muted)" }}>{r.phone} · {r.shape} · {r.length} · {new Date(r.createdAt).toLocaleDateString("en-GB")}</div>
+            </div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <div onClick={() => setDetail(r)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "7px 12px", color: "var(--ink-muted)" }}>View</div>
+              <div onClick={() => del(r.id)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E39B9B", padding: "7px 12px" }}>Delete</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Drops ---------- */
+function DropsTab() {
+  const [drops, setDrops] = useState(null);
+  const [form, setForm] = useState({ name: "", description: "", launchAt: "", image: "" });
+  const [busy, setBusy] = useState(false);
+
+  async function load() {
+    const res = await fetch("/api/admin/drops");
+    if (res.ok) setDrops(await res.json());
+  }
+
+  async function add() {
+    if (!form.name || !form.launchAt) return alert("Name and launch date required");
+    setBusy(true);
+    const res = await fetch("/api/admin/drops", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
+    if (res.ok) { setForm({ name: "", description: "", launchAt: "", image: "" }); load(); }
+    setBusy(false);
+  }
+
+  async function toggle(drop) {
+    await fetch(`/api/admin/drops/${drop.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ active: !drop.active }) });
+    load();
+  }
+
+  async function del(id) {
+    if (!confirm("Delete this drop?")) return;
+    await fetch(`/api/admin/drops/${id}`, { method: "DELETE" });
+    load();
+  }
+
+  if (!drops) return (
+    <div>
+      <h1 style={{ ...h1, marginBottom: 10 }}>Drops</h1>
+      <div onClick={load} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "13px 26px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>Load drops</div>
+    </div>
+  );
+
+  return (
+    <div>
+      <h1 style={{ ...h1, marginBottom: 6 }}>Drops</h1>
+      <p style={{ fontSize: 13, color: "var(--ink-muted)", marginBottom: 24, lineHeight: 1.7 }}>Upcoming collection drops <a href="/drops" target="_blank" style={{ color: "var(--rose)" }}>/drops</a> pe countdown ke saath dikh'te hain.</p>
+
+      {/* Add drop */}
+      <div style={{ border: "1px solid var(--card-b)", background: "var(--panel)", padding: 24, marginBottom: 20 }}>
+        <div style={{ fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 16 }}>Schedule new drop</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+          <div>
+            <div style={{ fontSize: 10, color: "var(--ink-faint)", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 7 }}>Collection name *</div>
+            <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder="e.g. Eid 2025 Collection" style={adminInput} />
+          </div>
+          <div>
+            <div style={{ fontSize: 10, color: "var(--ink-faint)", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 7 }}>Launch date & time *</div>
+            <input type="datetime-local" value={form.launchAt} onChange={(e) => setForm((f) => ({ ...f, launchAt: e.target.value }))} style={{ ...adminInput, background: "var(--bg)" }} />
+          </div>
+          <div>
+            <div style={{ fontSize: 10, color: "var(--ink-faint)", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 7 }}>Description</div>
+            <input value={form.description} onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))} placeholder="Brief description..." style={adminInput} />
+          </div>
+          <div>
+            <div style={{ fontSize: 10, color: "var(--ink-faint)", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 7 }}>Cover image path (optional)</div>
+            <input value={form.image} onChange={(e) => setForm((f) => ({ ...f, image: e.target.value }))} placeholder="/assets/p1-french.jpeg" style={adminInput} />
+          </div>
+        </div>
+        <div onClick={add} style={{ cursor: "pointer", marginTop: 14, background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "12px 24px", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", display: "inline-block" }}>{busy ? "Saving…" : "Schedule drop"}</div>
+      </div>
+
+      {/* Drops list */}
+      <div style={{ border: "1px solid var(--card-b)", background: "var(--panel)" }}>
+        {drops.length === 0 && <div style={{ padding: 28, color: "var(--ink-faint)", fontSize: 13 }}>No drops scheduled yet.</div>}
+        {drops.map((d) => {
+          const launched = new Date(d.launchAt) <= new Date();
+          return (
+            <div key={d.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 22px", borderBottom: "1px solid var(--card-b)", gap: 12, flexWrap: "wrap", opacity: d.active ? 1 : 0.5 }}>
+              <div>
+                <div style={{ fontSize: 14, marginBottom: 4 }}>{d.name}</div>
+                <div style={{ fontSize: 11.5, color: launched ? "#8FD6A6" : "var(--rose)", marginBottom: 4 }}>{launched ? "✓ Live" : "⏳ Scheduled"} — {new Date(d.launchAt).toLocaleString("en-PK")}</div>
+                {d.description && <div style={{ fontSize: 12, color: "var(--ink-muted)" }}>{d.description}</div>}
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <div onClick={() => toggle(d)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: `1px solid ${d.active ? "rgba(143,214,166,.5)" : "rgba(227,183,166,.3)"}`, padding: "7px 12px", color: d.active ? "#8FD6A6" : "var(--ink-muted)" }}>{d.active ? "✓ Active" : "Hidden"}</div>
+                <div onClick={() => del(d.id)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E39B9B", padding: "7px 12px" }}>Delete</div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -1110,6 +1559,51 @@ function SettingsTab({ content, call, busy }) {
 }
 
 /* ---------- Media ---------- */
+function GiftCardsTab({ giftCards = [] }) {
+  const active = giftCards.filter((g) => g.active && g.balance > 0);
+  const outstanding = active.reduce((s, g) => s + g.balance, 0);
+  const issued = giftCards.reduce((s, g) => s + g.initialAmount, 0);
+
+  function copyCode(code) { navigator.clipboard?.writeText(code); }
+
+  return (
+    <div>
+      <h1 style={{ ...h1, marginBottom: 6 }}>Gift Cards</h1>
+      <div style={{ fontSize: 12, color: "var(--ink-faint)", marginBottom: 22 }}>Cards are issued when a gift-card order is <strong>Confirmed</strong>. Redeemed at checkout like a coupon.</div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(170px,1fr))", gap: 14, marginBottom: 24 }}>
+        {[
+          { label: "Total issued", value: rs(issued) },
+          { label: "Active cards", value: String(active.length) },
+          { label: "Outstanding balance", value: rs(outstanding) },
+        ].map((k) => (
+          <div key={k.label} style={{ border: "1px solid var(--card-b)", background: "var(--panel)", padding: 20 }}>
+            <div style={{ fontSize: 9.5, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--ink-faint)" }}>{k.label}</div>
+            <div style={{ fontFamily: "var(--serif)", fontSize: 28, color: "var(--ink)", marginTop: 8 }}>{k.value}</div>
+          </div>
+        ))}
+      </div>
+
+      <div data-scroll-x="1" style={{ border: "1px solid var(--card-b)", background: "var(--panel)" }}>
+        <div style={{ minWidth: 820, display: "grid", gridTemplateColumns: "150px 1fr 110px 110px 1fr 100px", gap: 14, padding: "14px 20px", borderBottom: "1px solid var(--card-b)", fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ink-faint)" }}>
+          <div>Code</div><div>Recipient / buyer</div><div>Value</div><div>Balance</div><div>Order</div><div>Status</div>
+        </div>
+        {giftCards.length === 0 && <div style={{ padding: 30, color: "var(--ink-faint)", fontSize: 13 }}>No gift cards issued yet.</div>}
+        {giftCards.map((g) => (
+          <div key={g.id} style={{ minWidth: 820, display: "grid", gridTemplateColumns: "150px 1fr 110px 110px 1fr 100px", gap: 14, padding: "14px 20px", borderBottom: "1px solid var(--card-b)", alignItems: "center", fontSize: 12.5 }}>
+            <div onClick={() => copyCode(g.code)} title="Click to copy" style={{ cursor: "pointer", color: "var(--rose-light)", fontFamily: "var(--serif)", letterSpacing: ".04em" }}>{g.code}</div>
+            <div style={{ color: "var(--ink-muted)", fontSize: 11.5 }}>{g.recipient || "—"}<div style={{ fontSize: 10.5, color: "var(--ink-faint)" }}>{g.buyerEmail || "guest"}</div></div>
+            <div>{rs(g.initialAmount)}</div>
+            <div style={{ color: g.balance > 0 ? "#8FD6A6" : "var(--ink-faint)" }}>{rs(g.balance)}</div>
+            <div style={{ fontSize: 11, color: "var(--ink-faint)" }}>{g.orderCode || "—"} · {g.date}</div>
+            <div><span style={{ fontSize: 9.5, letterSpacing: ".14em", textTransform: "uppercase", border: `1px solid ${g.active ? "rgba(143,214,166,.4)" : "var(--card-b)"}`, color: g.active ? "#8FD6A6" : "var(--ink-faint)", padding: "5px 9px" }}>{g.active ? (g.balance > 0 ? "Active" : "Used") : "Pending"}</span></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function MediaTab() {
   const [files, setFiles] = useState(null);
   const [loading, setLoading] = useState(false);

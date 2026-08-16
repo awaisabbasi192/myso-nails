@@ -50,10 +50,23 @@ export default function AccountClient({ user: initUser, orders: initOrders, addr
   const tabs = ["Overview", "Orders", "Wishlist", "Addresses", "Settings"];
   const wishProducts = products.filter((p) => wishlist.includes(p.slug));
 
+  const [referralCopied, setReferralCopied] = useState(false);
+  const [referralCode, setReferralCode] = useState(initUser.referralCode || null);
+
+  async function generateReferral() {
+    const res = await fetch("/api/account/referral", { method: "POST" });
+    if (res.ok) { const d = await res.json(); setReferralCode(d.referralCode); }
+  }
+
+  function copyReferral() {
+    const link = `${window.location.origin}/login?ref=${referralCode}`;
+    navigator.clipboard.writeText(link).then(() => { setReferralCopied(true); setTimeout(() => setReferralCopied(false), 2000); });
+  }
+
   // Derived dashboard stats
   const activeOrders = orders.filter((o) => o.status !== "Cancelled" && o.status !== "Rejected");
   const totalSpent = activeOrders.reduce((s, o) => s + (o.total || 0), 0);
-  const points = Math.floor(totalSpent / 100);
+  const points = user.points ?? Math.floor(totalSpent / 100);
   const TIERS = [
     { name: "Bronze", min: 0, perk: "Welcome to Myso" },
     { name: "Silver", min: 5000, perk: "Early access to new sets" },
@@ -435,6 +448,26 @@ export default function AccountClient({ user: initUser, orders: initOrders, addr
             ))}
             {nailStatus === "error" && <div style={{ fontSize: 12, color: "#E39B9B", marginBottom: 10 }}>Could not save — try again.</div>}
             <div onClick={saveNailSizes} style={{ cursor: "pointer", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: "13px 26px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block", marginTop: 4 }}>{nailStatus === "saving" ? "Saving…" : "Save sizes"}</div>
+          </div>
+
+          {/* Referral code */}
+          <div style={{ border: "1px solid rgba(227,183,166,.16)", background: "var(--panel)", padding: 28 }}>
+            <h3 style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 24, margin: "0 0 8px" }}>Refer a friend</h3>
+            <p style={{ fontSize: 12.5, color: "rgba(247,241,237,.45)", lineHeight: 1.7, marginBottom: 20 }}>Apna referral link share karo — jab koi signup kare is link se, tumhe <strong style={{ color: "var(--rose-light)" }}>50 bonus points</strong> milenge aur naya member ko <strong style={{ color: "var(--rose-light)" }}>20 welcome points</strong>.</p>
+            {referralCode ? (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{ border: "1px solid rgba(227,183,166,.25)", padding: "12px 16px", fontSize: 13, letterSpacing: ".12em", color: "var(--rose-light)", background: "rgba(227,183,166,.05)", wordBreak: "break-all" }}>
+                  {typeof window !== "undefined" ? `${window.location.origin}/login?ref=${referralCode}` : `/login?ref=${referralCode}`}
+                </div>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  <div onClick={copyReferral} style={{ cursor: "pointer", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: "11px 22px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", display: "inline-block" }}>{referralCopied ? "✓ Copied!" : "Copy link"}</div>
+                  <a href={`https://wa.me/?text=${encodeURIComponent(`Myso Nails se nails order karo! Mera referral link use karo signup pe: ${typeof window !== "undefined" ? window.location.origin : ""}/login?ref=${referralCode} 🌸`)}`} target="_blank" rel="noreferrer" style={{ border: "1px solid #25D366", color: "#25D366", padding: "11px 18px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase" }}>Share on WhatsApp</a>
+                </div>
+                <div style={{ fontSize: 11, color: "rgba(247,241,237,.35)" }}>Your code: <span style={{ fontFamily: "var(--serif)", fontSize: 14, letterSpacing: ".1em" }}>{referralCode}</span></div>
+              </div>
+            ) : (
+              <div onClick={generateReferral} style={{ cursor: "pointer", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: "13px 26px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>Generate referral link</div>
+            )}
           </div>
 
           {/* Password */}

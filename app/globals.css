@@ -228,16 +228,12 @@ html { overflow-x: hidden; }
 @media (max-width: 860px) {
   [data-r="split"], [data-r="sidebar"], [data-r="footer"], [data-r="admin"] { grid-template-columns: 1fr !important; }
   [data-r="sidebar"] > aside { position: static !important; }
-  [data-r="admin"] > aside { position: sticky; top: 0; z-index: 30; border-right: none !important; border-bottom: 1px solid var(--card-b) !important; display: flex; flex-wrap: nowrap; align-items: center; gap: 2px; padding: 8px 6px !important; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-  [data-r="admin"] > aside::-webkit-scrollbar { display: none; }
-  [data-r="admin"] > aside > div:first-child { display: none !important; } /* hide "Studio admin" label */
-  [data-r="admin"] > aside > div.admin-tab { padding: 9px 14px !important; border-left: none !important; white-space: nowrap; flex: 0 0 auto; font-size: 12px !important; border-radius: 4px; }
-  [data-r="admin"] > aside > .admin-side-foot { display: none !important; }
-  [data-r="admin"] > aside > .admin-mobile-action {
-    display: flex !important; align-items: center; flex: 0 0 auto; white-space: nowrap;
-    padding: 9px 14px !important; font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
-    border-radius: 4px; margin-left: 4px;
-  }
+  /* Admin sidebar becomes a slide-in drawer on mobile */
+  [data-r="admin"] > aside { position: fixed !important; top: 0 !important; left: -280px !important; width: 260px !important; height: 100vh !important; z-index: 510 !important; overflow-y: auto !important; overflow-x: hidden !important; transition: left .28s cubic-bezier(.22,1,.36,1) !important; padding: 12px 0 30px !important; border-right: 1px solid var(--card-b) !important; border-bottom: none !important; display: block !important; background: var(--panel-2) !important; box-shadow: none; }
+  [data-r="admin"] > aside.admin-sidebar-open { left: 0 !important; box-shadow: 8px 0 40px rgba(0,0,0,.4) !important; }
+  .admin-drawer-overlay { display: block !important; position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 505; backdrop-filter: blur(2px); }
+  .admin-drawer-close { display: flex !important; justify-content: flex-end; padding: 8px 16px 4px; font-size: 26px; cursor: pointer; color: var(--ink-muted); line-height: 1; }
+  .admin-mobile-topbar { display: flex !important; align-items: center; gap: 14px; padding: 12px 16px; margin: -20px -14px 16px; border-bottom: 1px solid var(--card-b); background: var(--panel-2); position: sticky; top: 0; z-index: 40; }
   [data-r="admin"] > div { padding: 20px 14px 90px !important; } /* content padding */
   [data-r="hero"] { min-height: 0 !important; padding-top: 44px !important; }
   [data-r="modal"] { grid-template-columns: 1fr !important; }
@@ -345,8 +341,17 @@ html { overflow-x: hidden; }
   /* Account dashboard — stat & quick-link grids to 2 columns */
   .acct-stats, .acct-quick { grid-template-columns: repeat(2, 1fr) !important; }
 
-  /* Checkout — delivery-details form to single column so fields fit */
-  .checkout-fields { grid-template-columns: 1fr !important; gap: 14px !important; }
+  /* Checkout & custom-order forms — two-column field rows to single column */
+  .checkout-fields,
+  .form-2col { grid-template-columns: 1fr !important; gap: 14px !important; }
+
+  /* Custom-order step indicator — shrink so all 3 steps fit one row */
+  .custom-steps { gap: 4px !important; }
+  .custom-steps span { font-size: 9.5px !important; letter-spacing: .05em !important; }
+  .custom-steps .step-connector { width: 10px !important; }
+
+  /* Coin-method size guide — 6 tiny cells is too cramped, use 3 per row */
+  .coin-grid { grid-template-columns: repeat(3, 1fr) !important; }
 
   /* Checkout — bag line item: smaller image so name + price fit the row */
   .bag-item { gap: 12px !important; }
@@ -382,16 +387,28 @@ html { overflow-x: hidden; }
   .contact-size-chart .csc-cell > div:first-child { font-size: 8.5px !important; letter-spacing: .08em !important; }
   .contact-mini-cards { grid-template-columns: 1fr !important; }
 
-  /* Cap oversized headings so they never dominate the small screen */
-  [style*="font-size:58px"],
-  [style*="font-size:52px"],
-  [style*="font-size:48px"],
-  [style*="font-size:46px"] { font-size: 34px !important; }
-  [style*="font-size:44px"],
-  [style*="font-size:42px"],
-  [style*="font-size:40px"] { font-size: 30px !important; }
-  [style*="font-size:36px"],
-  [style*="font-size:38px"] { font-size: 27px !important; }
+  /* Cap oversized headings so they never dominate the small screen.
+     Match BOTH serialization formats — React/SSR emits no space
+     ("font-size:58px") while Chrome re-serializes hydrated client
+     components with a space ("font-size: 58px"). */
+  [style*="font-size:90px"], [style*="font-size: 90px"],
+  [style*="font-size:84px"], [style*="font-size: 84px"],
+  [style*="font-size:82px"], [style*="font-size: 82px"],
+  [style*="font-size:80px"], [style*="font-size: 80px"],
+  [style*="font-size:72px"], [style*="font-size: 72px"],
+  [style*="font-size:68px"], [style*="font-size: 68px"],
+  [style*="font-size:66px"], [style*="font-size: 66px"],
+  [style*="font-size:64px"], [style*="font-size: 64px"],
+  [style*="font-size:60px"], [style*="font-size: 60px"] { font-size: 40px !important; }
+  [style*="font-size:58px"], [style*="font-size: 58px"],
+  [style*="font-size:52px"], [style*="font-size: 52px"],
+  [style*="font-size:48px"], [style*="font-size: 48px"],
+  [style*="font-size:46px"], [style*="font-size: 46px"] { font-size: 34px !important; }
+  [style*="font-size:44px"], [style*="font-size: 44px"],
+  [style*="font-size:42px"], [style*="font-size: 42px"],
+  [style*="font-size:40px"], [style*="font-size: 40px"] { font-size: 30px !important; }
+  [style*="font-size:36px"], [style*="font-size: 36px"],
+  [style*="font-size:38px"], [style*="font-size: 38px"] { font-size: 27px !important; }
 
   /* Generic page wrappers: trim side padding so content uses full width */
   [style*="padding:44px 24px"],
@@ -557,9 +574,11 @@ button:active, [style*="cursor: pointer"]:active { opacity: .8; }
 }
 .admin-action-btn:hover { border-color: var(--rose); color: var(--rose); background: rgba(155,27,42,.06); }
 
-/* Mobile-only admin actions (Site / Sign out) — hidden on desktop where the
-   sidebar footer already shows them; revealed inside the mobile tab bar. */
-.admin-mobile-action { display: none; }
+/* Admin mobile drawer — hidden on desktop, shown via media query */
+.admin-drawer-overlay { display: none; }
+.admin-drawer-close { display: none; }
+.admin-mobile-topbar { display: none; }
+.admin-hamburger { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--ink); padding: 6px 10px; line-height: 1; flex-shrink: 0; }
 
 /* ── SMOOTH SITE-WIDE MICRO-INTERACTIONS ────────────────────────── */
 .card-soft {

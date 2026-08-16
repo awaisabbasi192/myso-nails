@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "./CartContext";
 import { rs, waLink } from "@/lib/format";
@@ -28,16 +28,35 @@ export default function CartCheckout({ prefill }) {
   const [proof, setProof] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [coupon, setCoupon] = useState({ code: "", applied: null, error: "" });
+  const [pointsRedeem, setPointsRedeem] = useState(false);
   const [placing, setPlacing] = useState(false);
   const [order, setOrder] = useState(null);
   const [err, setErr] = useState("");
   const [agreed, setAgreed] = useState(false);
 
+  const availablePoints = prefill?.points || 0;
   const set = (k) => (e) => setDetails((d) => ({ ...d, [k]: e.target.value }));
 
+  // Snapshot the cart for logged-in shoppers so we can send a recovery email
+  // if they leave without ordering (cleared automatically once they check out).
+  useEffect(() => {
+    if (!prefill?.userId || !ready || cart.length === 0 || step >= 4) return;
+    const t = setTimeout(() => {
+      fetch("/api/abandoned-cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: cart, subtotal }),
+      }).catch(() => {});
+    }, 4000);
+    return () => clearTimeout(t);
+  }, [cart, subtotal, ready, step, prefill?.userId]);
+
   const shipping = subtotal >= FREE_DELIVERY_OVER || subtotal === 0 ? 0 : DELIVERY_FEE;
-  const discount = coupon.applied?.discount || 0;
-  const total = Math.max(0, subtotal - discount) + shipping;
+  const couponDiscount = coupon.applied?.discount || 0;
+  const afterCoupon = Math.max(0, subtotal - couponDiscount) + shipping;
+  const pointsDiscount = pointsRedeem ? Math.min(availablePoints, Math.floor(afterCoupon * 0.2)) : 0;
+  const discount = couponDiscount;
+  const total = Math.max(0, afterCoupon - pointsDiscount);
 
   async function applyCoupon() {
     setCoupon((c) => ({ ...c, error: "" }));
@@ -77,8 +96,10 @@ export default function CartCheckout({ prefill }) {
           ...details,
           items: cart,
           paymentMethod: payMethod,
-          couponCode: coupon.applied?.code || null,
+          couponCode: coupon.applied?.type === "giftcard" ? null : (coupon.applied?.code || null),
+          giftCardCode: coupon.applied?.type === "giftcard" ? coupon.applied?.code : null,
           paymentProof: proof?.path || null,
+          pointsRedeemed: pointsDiscount,
         }),
       });
       const data = await res.json();
@@ -92,6 +113,20 @@ export default function CartCheckout({ prefill }) {
 
   function next() { setStep((s) => Math.min(4, s + 1)); window.scrollTo(0, 0); }
   function prev() { setStep((s) => Math.max(1, s - 1)); }
+
+  // Compose the current bag into a ready-to-send WhatsApp order message
+  function waOrderText() {
+    const lines = cart.map((c) => `• ${c.name} (${c.size}) × ${c.qty} — ${rs(c.price * c.qty)}`);
+    return (
+      `Assalam o Alaikum Myso Nails! 🌸 I'd like to place this order:\n\n` +
+      `${lines.join("\n")}\n\n` +
+      `Subtotal: ${rs(subtotal)}\n` +
+      (couponDiscount ? `Discount: − ${rs(couponDiscount)}\n` : "") +
+      `Delivery: ${shipping === 0 ? "Free" : rs(shipping)}\n` +
+      `*Total: ${rs(total)}*\n\n` +
+      `My details —\nName: ${details.customerName || ""}\nPhone: ${details.phone || ""}\nAddress: ${details.address || ""}\nCity: ${details.city || ""}`
+    );
+  }
 
   const inputStyle = { background: "transparent", border: "1px solid rgba(227,183,166,.25)", color: "var(--ink)", padding: 14, fontSize: 13, outline: "none", width: "100%", minWidth: 0 };
   const lab = { fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.45)" };
@@ -139,9 +174,9 @@ export default function CartCheckout({ prefill }) {
               </div>
             ))}
           </div>
-          <Summary {...{ subtotal, shipping, discount, total, coupon, setCoupon, applyCoupon }}>
+          <Summary {...{ subtotal, shipping, discount, total, coupon, setCoupon, applyCoupon, availablePoints, pointsRedeem, setPointsRedeem, pointsDiscount }}>
             <div onClick={() => cart.length && next()} className="shimmer" style={{ cursor: cart.length ? "pointer" : "not-allowed", opacity: cart.length ? 1 : 0.5, textAlign: "center", marginTop: 22, padding: 17, fontSize: 11.5, letterSpacing: ".26em", textTransform: "uppercase" }}>Checkout</div>
-            <a href={waLink("Hi! I want to order")} target="_blank" rel="noreferrer" className="btn-wa" style={{ display: "block", textAlign: "center", marginTop: 10, padding: 15, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Order on WhatsApp instead</a>
+            <a href={cart.length ? waLink(waOrderText()) : waLink("Hi Myso Nails! I'd like to place an order.")} target="_blank" rel="noreferrer" className="btn-wa" style={{ display: "block", textAlign: "center", marginTop: 10, padding: 15, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Order on WhatsApp instead</a>
           </Summary>
         </div>
       )}
@@ -300,24 +335,31 @@ function Field({ label, style, inputStyle, ...props }) {
   );
 }
 
-function Summary({ subtotal, shipping, discount, total, coupon, setCoupon, applyCoupon, children }) {
+function Summary({ subtotal, shipping, discount, total, coupon, setCoupon, applyCoupon, availablePoints, pointsRedeem, setPointsRedeem, pointsDiscount, children }) {
   return (
     <div style={{ border: "1px solid rgba(227,183,166,.18)", background: "var(--panel)", padding: 30 }}>
       <div style={{ fontSize: 10.5, letterSpacing: ".3em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 22 }}>Order summary</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 13, fontSize: 13.5, color: "rgba(247,241,237,.6)" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}><span>Subtotal</span><span style={{ color: "var(--ink)" }}>{rs(subtotal)}</span></div>
         <div style={{ display: "flex", justifyContent: "space-between" }}><span>Delivery charges</span><span style={{ color: "var(--ink)" }}>{shipping === 0 ? (subtotal === 0 ? "—" : "Free") : rs(shipping)}</span></div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}><span>Coupon</span><span style={{ color: discount ? "var(--rose-light)" : "rgba(247,241,237,.4)" }}>{discount ? "− " + rs(discount) : "—"}</span></div>
+        <div style={{ display: "flex", justifyContent: "space-between" }}><span>{coupon.applied?.type === "giftcard" ? "Gift card" : "Coupon"}</span><span style={{ color: discount ? "var(--rose-light)" : "rgba(247,241,237,.4)" }}>{discount ? "− " + rs(discount) : "—"}</span></div>
+        {pointsDiscount > 0 && <div style={{ display: "flex", justifyContent: "space-between" }}><span>Points redeemed</span><span style={{ color: "#8FD6A6" }}>− {rs(pointsDiscount)}</span></div>}
       </div>
+      {availablePoints > 0 && (
+        <label style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 16, cursor: "pointer", padding: "12px 14px", border: `1px solid ${pointsRedeem ? "rgba(143,214,166,.4)" : "rgba(227,183,166,.2)"}`, background: pointsRedeem ? "rgba(143,214,166,.06)" : "transparent" }}>
+          <input type="checkbox" checked={pointsRedeem} onChange={(e) => setPointsRedeem(e.target.checked)} style={{ accentColor: "#8FD6A6", width: 15, height: 15, flexShrink: 0 }} />
+          <span style={{ fontSize: 12.5, color: "rgba(247,241,237,.7)", lineHeight: 1.5 }}>Redeem <strong style={{ color: "#8FD6A6" }}>{availablePoints} points</strong> → save up to {rs(Math.min(availablePoints, Math.floor(total * 0.2) + (pointsRedeem ? pointsDiscount : 0)))}</span>
+        </label>
+      )}
       {subtotal > 0 && subtotal < 5000 && (
         <div style={{ fontSize: 11, color: "rgba(247,241,237,.42)", marginTop: 10, lineHeight: 1.6 }}>Add {rs(5000 - subtotal)} more for <span style={{ color: "var(--rose)" }}>free delivery</span> (orders Rs 5,000+).</div>
       )}
       <div style={{ display: "flex", gap: 8, margin: "20px 0" }}>
-        <input value={coupon.code} onChange={(e) => setCoupon((c) => ({ ...c, code: e.target.value }))} placeholder="Coupon code" style={{ flex: 1, background: "transparent", border: "1px solid rgba(227,183,166,.25)", color: "var(--ink)", padding: 12, fontSize: 12.5, outline: "none" }} />
+        <input value={coupon.code} onChange={(e) => setCoupon((c) => ({ ...c, code: e.target.value }))} placeholder="Coupon or gift card code" style={{ flex: 1, background: "transparent", border: "1px solid rgba(227,183,166,.25)", color: "var(--ink)", padding: 12, fontSize: 12.5, outline: "none" }} />
         <div onClick={applyCoupon} style={{ cursor: "pointer", border: "1px solid rgba(227,183,166,.3)", padding: "12px 16px", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(247,241,237,.7)" }}>Apply</div>
       </div>
       {coupon.error && <div style={{ fontSize: 11.5, color: "#E39B9B", marginBottom: 12 }}>{coupon.error}</div>}
-      {coupon.applied && <div style={{ fontSize: 11.5, color: "var(--good)", marginBottom: 12 }}>{coupon.applied.code} applied ✓</div>}
+      {coupon.applied && <div style={{ fontSize: 11.5, color: "var(--good)", marginBottom: 12 }}>{coupon.applied.code} applied ✓{coupon.applied.type === "giftcard" && coupon.applied.balance ? ` · Rs ${coupon.applied.balance.toLocaleString("en-PK")} balance` : ""}</div>}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderTop: "1px solid rgba(227,183,166,.16)", paddingTop: 18 }}>
         <span style={{ fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", color: "rgba(247,241,237,.55)" }}>Total</span>
         <span style={{ fontFamily: "var(--serif)", fontSize: 30, color: "var(--rose-light)" }}>{rs(total)}</span>

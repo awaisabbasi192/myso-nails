@@ -25,7 +25,7 @@ export default async function ProductPage({ params }) {
 
   const product = await prisma.product.findUnique({
     where: { slug },
-    include: { reviews: { orderBy: { createdAt: "desc" } } },
+    include: { reviews: { where: { verified: true }, orderBy: { createdAt: "desc" } } },
   });
   if (!product) notFound();
 

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "./CartContext";
 import { rs, stars, waLink } from "@/lib/format";
+import RecentlyViewed from "./RecentlyViewed";
 
 const SHAPES = ["Almond", "Coffin", "Square", "Stiletto"];
 const SIZES = ["Short set", "Medium set", "Long set", "Custom sizes"];
@@ -25,8 +26,11 @@ export default function ProductDetail({ product, reviews, related }) {
   const extraImages = (() => { try { return JSON.parse(product.images || "[]"); } catch { return []; } })();
   const allImages = [product.image, ...extraImages.filter((x) => x && x !== product.image)];
   const wished = isWished(product.slug);
+  const [alertEmail, setAlertEmail] = useState("");
+  const [alertStatus, setAlertStatus] = useState(""); // "" | "sending" | "done" | "error"
   const [reviewForm, setReviewForm] = useState({ name: "", rating: 5, body: "", image: "", image2: "" });
   const [reviewStatus, setReviewStatus] = useState(""); // "" | "submitting" | "done" | "error"
+  const [reviewVerified, setReviewVerified] = useState(false);
   const [photoUploading, setPhotoUploading] = useState(false);
   const setRF = (k) => (e) => setReviewForm((f) => ({ ...f, [k]: e.target.value }));
 
@@ -53,9 +57,18 @@ export default function ProductDetail({ product, reviews, related }) {
     setReviewStatus("submitting");
     try {
       const res = await fetch("/api/reviews", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...reviewForm, productId: product.id }) });
-      if (res.ok) { setReviewStatus("done"); setReviewForm({ name: "", rating: 5, body: "", image: "", image2: "" }); }
+      if (res.ok) { const d = await res.json().catch(() => ({})); setReviewVerified(!!d.verified); setReviewStatus("done"); setReviewForm({ name: "", rating: 5, body: "", image: "", image2: "" }); }
       else setReviewStatus("error");
     } catch { setReviewStatus("error"); }
+  }
+
+  async function subscribeAlert() {
+    if (!alertEmail.trim() || alertStatus === "sending") return;
+    setAlertStatus("sending");
+    try {
+      const res = await fetch("/api/stock-alert", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ productId: product.id, email: alertEmail.trim() }) });
+      setAlertStatus(res.ok ? "done" : "error");
+    } catch { setAlertStatus("error"); }
   }
 
   function add() {
@@ -99,7 +112,15 @@ export default function ProductDetail({ product, reviews, related }) {
             {savePct > 0 && <span style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", border: "1px solid rgba(227,183,166,.35)", padding: "5px 9px", color: "var(--rose)", whiteSpace: "nowrap" }}>Save {savePct}%</span>}
           </div>
           <p style={{ fontSize: 14.5, lineHeight: 1.9, color: "rgba(247,241,237,.6)", fontWeight: 300, maxWidth: 480 }}>{product.blurb}</p>
-          <div style={{ fontSize: 12, letterSpacing: ".16em", color: "rgba(247,241,237,.45)", marginBottom: 26 }}>{product.colorway}</div>
+          <div style={{ fontSize: 12, letterSpacing: ".16em", color: "rgba(247,241,237,.45)", marginBottom: product.stock > 0 && product.stock <= 5 ? 16 : 26 }}>{product.colorway}</div>
+          {product.stock > 0 && product.stock <= 5 && (
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 9, marginBottom: 24, padding: "10px 16px", border: "1px solid rgba(196,35,61,.4)", background: "rgba(196,35,61,.08)", borderRadius: 2 }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#C4233D", display: "inline-block", animation: "msPulse 1.6s ease-out infinite" }} />
+              <span style={{ fontSize: 11.5, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--rose-light)" }}>
+                {product.stock === 1 ? "Last one left" : `Only ${product.stock} left`} — selling fast
+              </span>
+            </div>
+          )}
 
           {/* Shape */}
           <div style={{ borderTop: "1px solid rgba(227,183,166,.14)", paddingTop: 22 }}>
@@ -138,8 +159,18 @@ export default function ProductDetail({ product, reviews, related }) {
             <a href={waLink("Hi M&S! I want to order this set: " + product.name)} target="_blank" rel="noreferrer" style={{ border: "1px solid #25D366", color: "var(--ink)", padding: "18px 24px", fontSize: 11.5, letterSpacing: ".18em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 9 }} className="btn-wa">✆ Order via WhatsApp</a>
           </div>
           {product.stock === 0 && (
-            <div style={{ marginTop: 14, padding: "12px 18px", background: "rgba(200,90,90,.1)", border: "1px solid rgba(200,90,90,.3)", fontSize: 12.5, color: "#E39B9B", letterSpacing: ".08em" }}>
-              This set is currently sold out — <a href={waLink("Hi M&S! I want to be notified when " + product.name + " is back in stock")} target="_blank" rel="noreferrer" style={{ color: "var(--rose-light)", textDecoration: "underline" }}>join the waitlist on WhatsApp</a>.
+            <div style={{ marginTop: 14, padding: "18px 20px", background: "rgba(200,90,90,.06)", border: "1px solid rgba(200,90,90,.25)" }}>
+              <div style={{ fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: "#E39B9B", marginBottom: 12 }}>Sold out — notify me when back</div>
+              {alertStatus === "done" ? (
+                <div style={{ fontSize: 13, color: "#8FD6A6" }}>✓ Done! We'll email you as soon as it's back in stock.</div>
+              ) : (
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  <input value={alertEmail} onChange={(e) => setAlertEmail(e.target.value)} onKeyDown={(e) => e.key === "Enter" && subscribeAlert()} type="email" placeholder="Your email address" style={{ flex: 1, minWidth: 200, background: "transparent", border: "1px solid rgba(227,183,166,.3)", color: "var(--ink)", padding: "11px 14px", fontSize: 13, outline: "none" }} />
+                  <div onClick={subscribeAlert} style={{ cursor: "pointer", background: "rgba(200,90,90,.2)", border: "1px solid rgba(200,90,90,.4)", color: "#E39B9B", padding: "11px 18px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", whiteSpace: "nowrap" }}>{alertStatus === "sending" ? "…" : "Notify me"}</div>
+                </div>
+              )}
+              {alertStatus === "error" && <div style={{ fontSize: 11.5, color: "#E39B9B", marginTop: 8 }}>Could not save — try again.</div>}
+              <div style={{ fontSize: 11, color: "rgba(247,241,237,.35)", marginTop: 10 }}>No spam. One email, when it's back.</div>
             </div>
           )}
           <div style={{ display: "flex", gap: 22, marginTop: 20, fontSize: 11.5, color: "rgba(247,241,237,.45)", flexWrap: "wrap" }}>
@@ -192,7 +223,7 @@ export default function ProductDetail({ product, reviews, related }) {
       <div style={{ marginTop: 44, border: "1px solid rgba(227,183,166,.16)", background: "var(--panel)", padding: 28 }}>
         <h4 style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 26, margin: "0 0 20px" }}>Write a review</h4>
         {reviewStatus === "done" ? (
-          <div style={{ fontSize: 13.5, color: "#8FD6A6", padding: "16px 20px", border: "1px solid rgba(143,214,166,.3)" }}>Thank you! Your review has been submitted.</div>
+          <div style={{ fontSize: 13.5, color: "#8FD6A6", padding: "16px 20px", border: "1px solid rgba(143,214,166,.3)" }}>{reviewVerified ? "Thank you! Your verified review is now live." : "Thank you! Your review has been submitted and will appear once approved."}</div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 12, alignItems: "end" }}>
@@ -255,6 +286,9 @@ export default function ProductDetail({ product, reviews, related }) {
           </div>
         </div>
       )}
+
+      {/* Recently viewed (client-side, from localStorage) */}
+      <RecentlyViewed current={{ slug: product.slug, name: product.name, image: product.image, price: product.price }} />
     </div>
   );
 }

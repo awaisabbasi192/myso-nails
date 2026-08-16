@@ -14,7 +14,7 @@ export default async function AdminPage() {
   if (!user) redirect("/login");
   if (user.role !== "admin") redirect("/account");
 
-  const [orders, products, customers, coupons, content, categories, messages, subscribers, reviews] = await Promise.all([
+  const [orders, products, customers, coupons, content, categories, messages, subscribers, reviews, giftCards] = await Promise.all([
     prisma.order.findMany({ include: { items: true }, orderBy: { createdAt: "desc" } }),
     prisma.product.findMany({ include: { category: true }, orderBy: { sortOrder: "asc" } }),
     prisma.customer.findMany({ where: { role: "customer" }, include: { orders: { select: { total: true, code: true, status: true, createdAt: true }, orderBy: { createdAt: "desc" } } }, orderBy: { createdAt: "desc" } }),
@@ -24,6 +24,7 @@ export default async function AdminPage() {
     prisma.message.findMany({ orderBy: { createdAt: "desc" } }),
     prisma.subscriber.findMany({ orderBy: { createdAt: "desc" } }),
     prisma.review.findMany({ include: { product: { select: { name: true, slug: true } } }, orderBy: { createdAt: "desc" } }),
+    prisma.giftCard.findMany({ orderBy: { createdAt: "desc" } }),
   ]);
 
   const now = new Date();
@@ -51,6 +52,8 @@ export default async function AdminPage() {
     pending: pendingVerification,
     lowStock: lowStock.length,
     lowStockName: lowStock[0]?.name || null,
+    subscribers: subscribers.length,
+    messages: messages.length,
     revenueChart: Object.entries(revenueByDay).map(([date, total]) => ({ date, total })),
   };
 
@@ -88,7 +91,12 @@ export default async function AdminPage() {
   const plainSubscribers = subscribers.map((s) => ({ id: s.id, email: s.email, date: fmtDate(s.createdAt) }));
   const plainReviews = reviews.map((r) => ({
     id: r.id, productId: r.productId, productName: r.product?.name || "Unknown", productSlug: r.product?.slug || "",
-    name: r.name, rating: r.rating, body: r.body, image: r.image, verified: r.verified, date: fmtDate(r.createdAt),
+    name: r.name, rating: r.rating, body: r.body, image: r.image, image2: r.image2, verified: r.verified, date: fmtDate(r.createdAt),
+  }));
+  const plainGiftCards = giftCards.map((g) => ({
+    id: g.id, code: g.code, initialAmount: g.initialAmount, balance: g.balance,
+    recipient: g.recipient, sender: g.sender, buyerEmail: g.buyerEmail, orderCode: g.orderCode,
+    active: g.active, date: fmtDate(g.createdAt),
   }));
 
   const plainContent = content ? {
@@ -121,6 +129,7 @@ export default async function AdminPage() {
       messages={plainMessages}
       subscribers={plainSubscribers}
       reviews={plainReviews}
+      giftCards={plainGiftCards}
       content={plainContent}
     />
   );

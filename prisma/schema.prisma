@@ -117,6 +117,10 @@ model Order {
   trackingNumber String?
   cancelledAt    DateTime?
   couponCode     String?
+  pointsRedeemed Int         @default(0) // loyalty points spent on this order
+  pointsEarned   Int         @default(0) // loyalty points awarded for this order (on delivery)
+  giftCardCode   String?     // gift card applied to this order
+  giftCardUsed   Int         @default(0) // amount deducted from the gift card
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 }
@@ -242,4 +246,31 @@ model Drop {
   image       String?
   active      Boolean  @default(true)
   createdAt   DateTime @default(now())
+}
+
+model GiftCard {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  initialAmount Int
+  balance       Int
+  recipient     String?
+  sender        String?
+  message       String?
+  buyerEmail    String?  // email of the person who purchased it (for delivery)
+  orderCode     String?  // order the card was purchased in
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model AbandonedCart {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  items     String   @default("[]") // JSON snapshot of cart
+  subtotal  Int      @default(0)
+  reminded  Boolean  @default(false) // reminder email sent
+  recovered Boolean  @default(false) // customer placed an order after
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

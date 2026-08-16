@@ -10,7 +10,7 @@ export default async function CartPage() {
   if (user) {
     const [addr, customer] = await Promise.all([
       prisma.address.findFirst({ where: { customerId: user.id, isDefault: true } }),
-      prisma.customer.findUnique({ where: { id: user.id }, select: { nailSizes: true } }),
+      prisma.customer.findUnique({ where: { id: user.id }, select: { nailSizes: true, points: true } }),
     ]);
     prefill = {
       name: user.name,
@@ -18,6 +18,8 @@ export default async function CartPage() {
       address: addr?.line1 || "",
       city: user.city || addr?.city || "",
       nailSizes: customer?.nailSizes || "",
+      points: customer?.points || 0,
+      userId: user.id,
     };
   }
   return <CartCheckout prefill={prefill} />;

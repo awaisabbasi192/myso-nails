@@ -1,4 +1,5 @@
 import { Cormorant_Garamond, Jost, Parisienne } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { CartProvider } from "@/components/CartContext";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -36,14 +37,15 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-theme="dark" className={`${cormorant.variable} ${jost.variable} ${parisienne.variable}`}>
+    <html lang="en" data-theme="light" className={`${cormorant.variable} ${jost.variable} ${parisienne.variable}`}>
       <head>
-        {/* Apply saved theme before first paint — prevents flash */}
-        <script dangerouslySetInnerHTML={{ __html: `(function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();` }} />
+        {/* Apply saved dark theme before first paint — no fallback so default stays light */}
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();` }} />
       </head>
       <body>
         <ScrollReveal />
         <CartProvider>{children}</CartProvider>
+        <Analytics />
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-import { sendOrderConfirmEmail } from "@/lib/email";
+import { sendOrderConfirmEmail, sendAdminOrderEmail } from "@/lib/email";
 
 const FREE_DELIVERY_OVER = 5000;
 const DELIVERY_FEE = 300;
@@ -13,6 +13,26 @@ async function uniqueCode() {
     if (!exists) return code;
   }
   return "MS-" + Date.now().toString().slice(-6);
+}
+
+function genGiftCode() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no ambiguous chars
+  let s = "";
+  for (let i = 0; i < 8; i++) s += chars[Math.floor(Math.random() * chars.length)];
+  return "MG-" + s;
+}
+
+async function uniqueGiftCode() {
+  for (let i = 0; i < 12; i++) {
+    const code = genGiftCode();
+    const exists = await prisma.giftCard.findUnique({ where: { code } });
+    if (!exists) return code;
+  }
+  return "MG-" + Date.now().toString().slice(-8);
+}
+
+function isGiftItem(i) {
+  return !!(i.giftMeta || i.size === "Gift Card" || String(i.name || "").startsWith("Gift Card"));
 }
 
 // CallMeBot admin WA notification
@@ -92,11 +112,35 @@ export async function POST(request) {
       if (match) discount = Math.round((subtotal * match.discountPercent) / 100);
     }
 
+    // Gift card redemption — applied against the discounted subtotal (like a coupon).
+    // Client & server both compute min(balance, subtotal - discount) so the paid total matches.
+    let giftCardUsed = 0;
+    let appliedGiftCode = null;
+    let giftRecord = null;
+    if (body.giftCardCode) {
+      const gc = await prisma.giftCard.findUnique({ where: { code: String(body.giftCardCode).trim().toUpperCase() } });
+      if (gc && gc.active && gc.balance > 0) {
+        giftCardUsed = Math.min(gc.balance, Math.max(0, subtotal - discount));
+        appliedGiftCode = gc.code;
+        giftRecord = gc;
+      }
+    }
+
     // Delivery: Rs 300 on every order, free at Rs 5,000+
     const shipping = subtotal >= FREE_DELIVERY_OVER ? 0 : DELIVERY_FEE;
-    const total = Math.max(0, subtotal - discount) + shipping;
+    const afterCouponAndBundle = Math.max(0, subtotal - discount - giftCardUsed) + shipping;
 
     const user = await getCurrentUser();
+    // Loyalty points redemption (server-validates against DB balance, max 20% of order)
+    let pointsRedeemed = 0;
+    if (body.pointsRedeemed > 0 && user) {
+      const cu = await prisma.customer.findUnique({ where: { id: user.id }, select: { points: true } });
+      pointsRedeemed = Math.min(Number(body.pointsRedeemed) || 0, cu?.points || 0, Math.floor(afterCouponAndBundle * 0.2));
+      if (pointsRedeemed > 0) {
+        await prisma.customer.update({ where: { id: user.id }, data: { points: { decrement: pointsRedeemed } } });
+      }
+    }
+    const total = Math.max(0, afterCouponAndBundle - pointsRedeemed);
     const code = await uniqueCode();
 
     const order = await prisma.order.create({
@@ -110,10 +154,22 @@ export async function POST(request) {
         paymentMethod: "jazzcash",
         paymentProof: paymentProof || null,
         couponCode: appliedCoupon,
+        pointsRedeemed,
+        giftCardCode: appliedGiftCode,
+        giftCardUsed,
         status: "Pending",
         items: { create: orderItems },
       },
     });
+
+    // Deduct the redeemed amount from the gift card balance
+    if (giftRecord && giftCardUsed > 0) {
+      const newBalance = giftRecord.balance - giftCardUsed;
+      await prisma.giftCard.update({
+        where: { id: giftRecord.id },
+        data: { balance: newBalance, active: newBalance > 0 },
+      }).catch(() => {});
+    }
 
     for (const it of orderItems) {
       if (it.productId) {
@@ -121,7 +177,35 @@ export async function POST(request) {
       }
     }
 
+    // Create gift cards purchased in this order (inactive until payment is confirmed by admin)
+    const buyerEmail = user ? (await prisma.customer.findUnique({ where: { id: user.id }, select: { email: true } }))?.email || null : null;
+    const giftItems = items.filter(isGiftItem);
+    for (const gi of giftItems) {
+      const amount = Number(gi.price) || 0;
+      if (amount <= 0) continue;
+      const gcCode = await uniqueGiftCode();
+      await prisma.giftCard.create({
+        data: {
+          code: gcCode,
+          initialAmount: amount,
+          balance: amount,
+          recipient: gi.giftMeta?.recipient || null,
+          sender: gi.giftMeta?.sender || null,
+          message: gi.giftMeta?.message || null,
+          buyerEmail,
+          orderCode: order.code,
+          active: false,
+        },
+      }).catch(() => {});
+    }
+
+    // Mark this customer's abandoned cart as recovered
+    if (buyerEmail) {
+      await prisma.abandonedCart.updateMany({ where: { email: buyerEmail, recovered: false }, data: { recovered: true } }).catch(() => {});
+    }
+
     notifyAdmin(order).catch(() => {});
+    sendAdminOrderEmail(order, orderItems).catch(() => {});
     await sendConfirmEmail(order, orderItems);
 
     return Response.json({ ok: true, code: order.code, total });

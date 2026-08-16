@@ -1,17 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { waLink } from "@/lib/format";
 
 export default function LoginPage() {
   const router = useRouter();
   const [mode, setMode] = useState("login");
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", referralCode: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [forgot, setForgot] = useState({ status: "", sent: false }); // status: "" | "sending" | "done"
   const set = (k) => (e) => { setForm((f) => ({ ...f, [k]: e.target.value })); setError(""); };
+
+  useEffect(() => {
+    const ref = new URLSearchParams(window.location.search).get("ref");
+    if (ref) { setForm((f) => ({ ...f, referralCode: ref.toUpperCase() })); setMode("signup"); }
+  }, []);
 
   async function sendReset() {
     if (forgot.status === "sending") return;
@@ -116,6 +121,13 @@ export default function LoginPage() {
               )}
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}><span style={lab}>Email</span><input value={form.email} onChange={set("email")} placeholder="you@email.com" style={inputStyle} /></div>
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}><span style={lab}>Password</span><input type="password" value={form.password} onChange={set("password")} placeholder="••••••••" style={inputStyle} onKeyDown={(e) => e.key === "Enter" && submit()} /></div>
+              {mode === "signup" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <span style={lab}>Referral code <span style={{ textTransform: "none", letterSpacing: 0, color: "var(--ink-faint)" }}>(optional)</span></span>
+                  <input value={form.referralCode} onChange={set("referralCode")} placeholder="e.g. AREE1234" style={{ ...inputStyle, letterSpacing: ".12em" }} />
+                  {form.referralCode.trim() && <div style={{ fontSize: 11.5, color: "#8FD6A6" }}>✓ You'll receive 20 welcome points on signup.</div>}
+                </div>
+              )}
               {mode === "login" && (
                 <div onClick={() => { setMode("forgot"); setError(""); setForgot({ status: "", sent: false }); }} style={{ cursor: "pointer", fontSize: 12, color: "var(--rose)", textAlign: "right", marginTop: -6 }}>Forgot password?</div>
               )}

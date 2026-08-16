@@ -78,12 +78,12 @@ export default function CustomOrderPage() {
       </p>
 
       {/* Step indicators */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 36 }}>
+      <div className="custom-steps" style={{ display: "flex", gap: 8, marginBottom: 36 }}>
         {["Measurement", "Design", "Contact"].map((s, i) => (
           <div key={s} style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <div style={{ width: 28, height: 28, borderRadius: "50%", background: step > i + 1 ? "var(--rose)" : step === i + 1 ? "var(--rose)" : "var(--card-b)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 600, flexShrink: 0 }}>{step > i + 1 ? "✓" : i + 1}</div>
             <span style={{ fontSize: 11, letterSpacing: ".15em", textTransform: "uppercase", color: step === i + 1 ? "var(--ink)" : "var(--ink-faint)" }}>{s}</span>
-            {i < 2 && <div style={{ width: 32, height: 1, background: "var(--card-b)" }} />}
+            {i < 2 && <div className="step-connector" style={{ width: 32, height: 1, background: "var(--card-b)" }} />}
           </div>
         ))}
       </div>
@@ -99,7 +99,7 @@ export default function CustomOrderPage() {
               <div><strong style={{ color: "var(--ink)", display: "block", marginBottom: 6 }}>Step 2</strong>Put your finger on top of the coin, nail side down.</div>
               <div><strong style={{ color: "var(--ink)", display: "block", marginBottom: 6 }}>Step 3</strong>Note how much of the coin your nail covers using the guide below.</div>
             </div>
-            <div style={{ marginTop: 20, display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 8, textAlign: "center" }}>
+            <div className="coin-grid" style={{ marginTop: 20, display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 8, textAlign: "center" }}>
               {[["XS", "< ¼ coin"], ["S", "¼ coin"], ["M", "⅓ coin"], ["L", "½ coin"], ["XL", "⅔ coin"], ["XXL", "> ⅔ coin"]].map(([sz, desc]) => (
                 <div key={sz} style={{ border: "1px solid var(--card-b)", padding: "10px 6px" }}>
                   <div style={{ fontFamily: "var(--serif)", fontSize: 20, color: "var(--rose)", marginBottom: 4 }}>{sz}</div>
@@ -126,7 +126,7 @@ export default function CustomOrderPage() {
           </div>
 
           {/* Length & Shape */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div className="form-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div>
               <span style={lab}>Preferred length</span>
               <select value={form.length} onChange={set("length")} style={{ ...inp, background: "var(--bg)" }}>
@@ -150,7 +150,7 @@ export default function CustomOrderPage() {
       {/* Step 2: Design */}
       {step === 2 && (
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div className="form-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div>
               <span style={lab}>Occasion</span>
               <select value={form.occasion} onChange={set("occasion")} style={{ ...inp, background: "var(--bg)" }}>
@@ -203,7 +203,7 @@ export default function CustomOrderPage() {
       {/* Step 3: Contact */}
       {step === 3 && (
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div className="form-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div>
               <span style={lab}>Your name *</span>
               <input value={form.name} onChange={set("name")} placeholder="Areeba Khan" style={inp} />

@@ -1,9 +1,8 @@
 User-agent: *
 Allow: /
 
-# Disallow crawling of internal paths
 Disallow: /api/
-Disallow: /admin/
+Disallow: /admin
+Disallow: /account
 
-# Sitemap
-Sitemap: https://mysonails.com/sitemap.xml
+Sitemap: https://mysonails.store/sitemap.xml
