@@ -26,7 +26,7 @@ export default async function ShopPage({ searchParams }) {
     shape: p.shape, finish: p.finish, occasion: p.occasion, length: p.length,
     colorway: p.colorway, blurb: p.blurb, rating: p.rating, reviewsCount: p.reviewsCount,
     stock: p.stock, sortOrder: p.sortOrder, categorySlug: p.category?.slug || null,
-  }, deal.percent));
+  }, deal.percent, deal.mode));
 
   return <ShopClient products={plain} initialCat={cat} initialSearch={q} />;
 }

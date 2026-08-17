@@ -1467,6 +1467,7 @@ function SettingsTab({ content, call, busy }) {
     dealPercent: content?.dealPercent ?? 0,
     dealMaxOrders: content?.dealMaxOrders ?? 0,
     dealTheme: content?.dealTheme ?? "red",
+    dealMode: content?.dealMode ?? "real",
   });
   const [saved, setSaved] = useState(false);
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -1576,6 +1577,30 @@ function SettingsTab({ content, call, busy }) {
               </div>
               <div style={{ fontSize: 10.5, color: "var(--ink-faint)", marginTop: 6 }}>{DEAL_THEME_UI.find((t) => t.key === form.dealTheme)?.label}</div>
             </div>
+          </div>
+        </div>
+
+        {/* Discount mode */}
+        <div style={{ marginTop: 18 }}>
+          <div style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ink-faint)", marginBottom: 10 }}>Discount mode</div>
+          <div style={{ display: "grid", gap: 10 }}>
+            {[
+              { key: "real", title: "Real discount", desc: "Actually lower the price by the %.", ex: (p) => `Rs 1,500 set → sells for Rs ${Math.round(1500 * (1 - p / 100)).toLocaleString("en-PK")} (Rs 1,500 struck through)` },
+              { key: "inflate", title: "Marketing price (keep price, show bigger original)", desc: "Price stays the same — a higher “was” price is shown so it reads as % OFF.", ex: (p) => `Rs 1,500 set → still sells for Rs 1,500, shows ~Rs ${(Math.round((1500 / (1 - p / 100)) / 10) * 10).toLocaleString("en-PK")} struck through` },
+            ].map((m) => {
+              const on = form.dealMode === m.key;
+              const pct = Number(form.dealPercent) > 0 ? Number(form.dealPercent) : 50;
+              return (
+                <div key={m.key} onClick={() => setForm((f) => ({ ...f, dealMode: m.key }))} style={{ cursor: "pointer", border: `1px solid ${on ? "var(--rose)" : "var(--card-b)"}`, background: on ? "rgba(155,27,42,.06)" : "transparent", padding: "12px 14px", borderRadius: 4 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <div style={{ width: 15, height: 15, borderRadius: "50%", border: `2px solid ${on ? "var(--rose)" : "var(--ink-faint)"}`, background: on ? "var(--rose)" : "transparent", flexShrink: 0 }} />
+                    <div style={{ fontSize: 13, color: "var(--ink)" }}>{m.title}</div>
+                  </div>
+                  <div style={{ fontSize: 11.5, color: "var(--ink-muted)", margin: "6px 0 0 25px", lineHeight: 1.5 }}>{m.desc}</div>
+                  <div style={{ fontSize: 11, color: on ? "var(--rose-light)" : "var(--ink-faint)", margin: "5px 0 0 25px" }}>Example: {m.ex(pct)}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
 

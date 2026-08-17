@@ -24,7 +24,8 @@ export default async function WishlistPage() {
           shape: p.shape, finish: p.finish, rating: p.rating, reviewsCount: p.reviewsCount,
           badge: p.badge, stock: p.stock,
         },
-        deal.percent
+        deal.percent,
+        deal.mode
       )
     );
   } catch (e) {

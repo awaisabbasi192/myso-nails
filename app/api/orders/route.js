@@ -75,7 +75,9 @@ export async function POST(request) {
     ]);
     const bySlug = Object.fromEntries(dbProducts.map((p) => [p.slug, p]));
     // Server recomputes prices from DB (trusted) and applies the active promotion.
-    const flashPct = deal.percent || 0;
+    // In "inflate" mode the deal is display-only (bigger struck-through price) —
+    // the customer still pays the real DB price, so no reduction is applied here.
+    const flashPct = deal.mode === "inflate" ? 0 : (deal.percent || 0);
     const withFlash = (price) => (flashPct > 0 ? Math.round(price * (1 - flashPct / 100)) : price);
 
     let subtotal = 0;

@@ -117,6 +117,7 @@ export default async function AdminPage() {
     instagramHandle: content.instagramHandle, instagramPosts: content.instagramPosts,
     dealActive: content.dealActive, dealTitle: content.dealTitle, dealSubtitle: content.dealSubtitle,
     dealPercent: content.dealPercent, dealMaxOrders: content.dealMaxOrders, dealTheme: content.dealTheme,
+    dealMode: content.dealMode,
   } : null;
 
   return (

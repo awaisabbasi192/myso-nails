@@ -7,7 +7,7 @@ export async function PUT(request) {
   try {
     const b = await request.json();
     const data = {};
-    const ALLOWED = ["heroHeadline", "heroScript", "heroImage", "announcement", "studioImage", "studioHeadline", "studioBody1", "studioBody2", "studioFounder", "studioRole", "aboutImage1", "aboutHeadline", "aboutBody1", "aboutBody2", "aboutArtistImg", "aboutArtistName", "aboutArtistBio", "aboutArtistSign", "waConfirmed", "waShipped", "waDelivered", "waRejected", "deliveryFee", "freeDeliveryOver", "codHandling", "storeClosed", "storeClosedMsg", "flashSalePercent", "instagramHandle", "instagramPosts", "dealActive", "dealTitle", "dealSubtitle", "dealPercent", "dealMaxOrders", "dealTheme"];
+    const ALLOWED = ["heroHeadline", "heroScript", "heroImage", "announcement", "studioImage", "studioHeadline", "studioBody1", "studioBody2", "studioFounder", "studioRole", "aboutImage1", "aboutHeadline", "aboutBody1", "aboutBody2", "aboutArtistImg", "aboutArtistName", "aboutArtistBio", "aboutArtistSign", "waConfirmed", "waShipped", "waDelivered", "waRejected", "deliveryFee", "freeDeliveryOver", "codHandling", "storeClosed", "storeClosedMsg", "flashSalePercent", "instagramHandle", "instagramPosts", "dealActive", "dealTitle", "dealSubtitle", "dealPercent", "dealMaxOrders", "dealTheme", "dealMode"];
     // These DB columns are Int/Boolean — coerce so string form values don't crash Prisma.
     const INT_FIELDS = ["deliveryFee", "freeDeliveryOver", "codHandling", "flashSalePercent", "dealPercent", "dealMaxOrders"];
     const BOOL_FIELDS = ["storeClosed", "dealActive"];

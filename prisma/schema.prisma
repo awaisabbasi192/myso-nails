@@ -189,6 +189,7 @@ model SiteContent {
   dealMaxOrders    Int       @default(0) // 0 = unlimited; otherwise first N orders only
   dealStartAt      DateTime?            // when the deal was switched on (order-count baseline)
   dealTheme        String    @default("red") // red | green | gold | purple
+  dealMode         String    @default("real") // real = reduce price; inflate = keep price, show bigger original
   instagramHandle  String  @default("_myso.nails")
   instagramPosts   String  @default("[]")
   updatedAt      DateTime @updatedAt

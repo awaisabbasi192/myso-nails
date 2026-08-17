@@ -40,11 +40,11 @@ export default async function ProductPage({ params }) {
     price: product.price, wasPrice: product.wasPrice, shape: product.shape, finish: product.finish,
     occasion: product.occasion, length: product.length, badge: product.badge, colorway: product.colorway,
     blurb: product.blurb, rating: product.rating, reviewsCount: product.reviewsCount, stock: product.stock,
-  }, deal.percent);
+  }, deal.percent, deal.mode);
   const reviews = product.reviews.map((r) => ({
     id: r.id, name: r.name, rating: r.rating, body: r.body, image: r.image, image2: r.image2, date: fmtDate(r.createdAt),
   }));
-  const related = relatedRaw.map((p) => applyFlashSale({ slug: p.slug, name: p.name, image: p.image, price: p.price, wasPrice: p.wasPrice }, deal.percent));
+  const related = relatedRaw.map((p) => applyFlashSale({ slug: p.slug, name: p.name, image: p.image, price: p.price, wasPrice: p.wasPrice }, deal.percent, deal.mode));
 
   return <ProductDetail product={plain} reviews={reviews} related={related} />;
 }
