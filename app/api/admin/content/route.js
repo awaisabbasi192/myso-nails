@@ -7,15 +7,24 @@ export async function PUT(request) {
   try {
     const b = await request.json();
     const data = {};
-    const ALLOWED = ["heroHeadline", "heroScript", "heroImage", "announcement", "studioImage", "studioHeadline", "studioBody1", "studioBody2", "studioFounder", "studioRole", "aboutImage1", "aboutHeadline", "aboutBody1", "aboutBody2", "aboutArtistImg", "aboutArtistName", "aboutArtistBio", "aboutArtistSign", "waConfirmed", "waShipped", "waDelivered", "waRejected", "deliveryFee", "freeDeliveryOver", "codHandling", "storeClosed", "storeClosedMsg", "flashSalePercent", "instagramHandle", "instagramPosts"];
+    const ALLOWED = ["heroHeadline", "heroScript", "heroImage", "announcement", "studioImage", "studioHeadline", "studioBody1", "studioBody2", "studioFounder", "studioRole", "aboutImage1", "aboutHeadline", "aboutBody1", "aboutBody2", "aboutArtistImg", "aboutArtistName", "aboutArtistBio", "aboutArtistSign", "waConfirmed", "waShipped", "waDelivered", "waRejected", "deliveryFee", "freeDeliveryOver", "codHandling", "storeClosed", "storeClosedMsg", "flashSalePercent", "instagramHandle", "instagramPosts", "dealActive", "dealTitle", "dealSubtitle", "dealPercent", "dealMaxOrders", "dealTheme"];
     // These DB columns are Int/Boolean — coerce so string form values don't crash Prisma.
-    const INT_FIELDS = ["deliveryFee", "freeDeliveryOver", "codHandling", "flashSalePercent"];
-    const BOOL_FIELDS = ["storeClosed"];
+    const INT_FIELDS = ["deliveryFee", "freeDeliveryOver", "codHandling", "flashSalePercent", "dealPercent", "dealMaxOrders"];
+    const BOOL_FIELDS = ["storeClosed", "dealActive"];
     for (const k of ALLOWED) {
       if (b[k] === undefined) continue;
       if (INT_FIELDS.includes(k)) data[k] = parseInt(b[k], 10) || 0;
       else if (BOOL_FIELDS.includes(k)) data[k] = Boolean(b[k]);
       else data[k] = b[k];
+    }
+
+    // Reset the order-count baseline whenever the deal is (re)activated, so a
+    // "first N orders" limit always counts from the moment it's switched on.
+    if (b.dealActive !== undefined) {
+      const prev = await prisma.siteContent.findUnique({ where: { id: 1 }, select: { dealActive: true, dealStartAt: true } });
+      if (data.dealActive && (!prev?.dealActive || !prev?.dealStartAt)) {
+        data.dealStartAt = new Date();
+      }
     }
     const content = await prisma.siteContent.upsert({
       where: { id: 1 },

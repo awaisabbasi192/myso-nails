@@ -7,6 +7,13 @@ import { rs } from "@/lib/format";
 const TABS = ["Overview", "Orders", "Products", "Categories", "Customers", "Reviews", "Coupons", "Gift Cards", "Messages", "Media", "Analytics", "Bundle Deals", "Custom Orders", "Drops", "Settings", "Homepage"];
 const ORDER_FILTERS = ["All", "Pending", "Confirmed", "Shipped", "Delivered", "Rejected"];
 const ASSET_IMAGES = ["/assets/p1-french.jpeg", "/assets/p2-maroon.jpeg", "/assets/p3-leopard.jpeg", "/assets/p4-nude.jpeg", "/assets/g1.jpeg", "/assets/g2.jpeg", "/assets/g3.jpeg"];
+// Mirrors lib/deal.js DEAL_THEMES (kept here so this client file doesn't import server code)
+const DEAL_THEME_UI = [
+  { key: "red",    label: "Cherry (default)", emoji: "⚡",  text: "#ffffff", swatch: "#C4233D", grad: "linear-gradient(100deg,#9B1B2A,#C4233D 60%,#9B1B2A)" },
+  { key: "green",  label: "Azadi green",      emoji: "🇵🇰", text: "#ffffff", swatch: "#14833F", grad: "linear-gradient(100deg,#0A5C2E,#14833F 60%,#0A5C2E)" },
+  { key: "gold",   label: "Eid gold",         emoji: "🌙", text: "#1A0F0A", swatch: "#C79A2E", grad: "linear-gradient(100deg,#8A6410,#C79A2E 55%,#8A6410)" },
+  { key: "purple", label: "Royal purple",     emoji: "✨", text: "#ffffff", swatch: "#6B21A8", grad: "linear-gradient(100deg,#3D1163,#6B21A8 60%,#3D1163)" },
+];
 
 export default function AdminDashboard({ adminEmail, kpis, orders, products, customers, coupons, categories, content, messages, subscribers, reviews, giftCards }) {
   const router = useRouter();
@@ -1454,7 +1461,12 @@ function SettingsTab({ content, call, busy }) {
     codHandling: content?.codHandling ?? 100,
     storeClosed: content?.storeClosed ?? false,
     storeClosedMsg: content?.storeClosedMsg ?? "We're temporarily closed. Check back soon!",
-    flashSalePercent: content?.flashSalePercent ?? 0,
+    dealActive: content?.dealActive ?? false,
+    dealTitle: content?.dealTitle ?? "",
+    dealSubtitle: content?.dealSubtitle ?? "",
+    dealPercent: content?.dealPercent ?? 0,
+    dealMaxOrders: content?.dealMaxOrders ?? 0,
+    dealTheme: content?.dealTheme ?? "red",
   });
   const [saved, setSaved] = useState(false);
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -1521,14 +1533,63 @@ function SettingsTab({ content, call, busy }) {
         </div>
       </div>
 
-      <div style={{ border: "1px solid var(--card-b)", background: "var(--panel)", padding: 28, marginBottom: 24 }}>
-        <div style={{ fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 10 }}>Flash sale</div>
-        <div style={{ fontSize: 12, color: "rgba(247,241,237,.45)", marginBottom: 16 }}>Set a site-wide sale percentage. Products that already have a wasPrice will show both discounts.</div>
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <input type="number" min="0" max="90" value={form.flashSalePercent} onChange={set("flashSalePercent")} style={{ ...adminInput, width: 120 }} placeholder="0" />
-          <span style={{ fontSize: 13, color: "var(--ink-muted)" }}>% off (0 = no flash sale active)</span>
+      {/* Deals & Promotions */}
+      <div style={{ border: `1px solid ${form.dealActive ? "rgba(143,214,166,.4)" : "var(--card-b)"}`, background: "var(--panel)", padding: 28, marginBottom: 24 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14, marginBottom: 6, flexWrap: "wrap" }}>
+          <div style={{ fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--rose)" }}>Deals &amp; Promotions</div>
+          <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}>
+            <div onClick={() => setForm((f) => ({ ...f, dealActive: !f.dealActive }))} style={{ width: 44, height: 24, borderRadius: 12, background: form.dealActive ? "#14833F" : "var(--panel)", position: "relative", transition: "background .2s", border: "1px solid var(--card-b)" }}>
+              <div style={{ width: 18, height: 18, borderRadius: "50%", background: form.dealActive ? "#fff" : "var(--ink-muted)", position: "absolute", top: 2, left: form.dealActive ? 22 : 2, transition: "left .2s" }} />
+            </div>
+            <span style={{ fontSize: 12.5, color: form.dealActive ? "#8FD6A6" : "var(--ink-muted)" }}>{form.dealActive ? "LIVE" : "Off"}</span>
+          </label>
         </div>
-        {Number(form.flashSalePercent) > 0 && <div style={{ marginTop: 12, fontSize: 12, color: "var(--rose)", padding: "10px 14px", border: "1px solid rgba(242,205,187,.3)" }}>Flash sale active — {form.flashSalePercent}% off displayed on all product pages</div>}
+        <div style={{ fontSize: 12, color: "var(--ink-muted)", marginBottom: 20, lineHeight: 1.6 }}>Run a seasonal offer (Azadi, Eid, launch sale…). The discount applies site-wide automatically and a banner shows across the store.</div>
+
+        <div style={{ display: "grid", gap: 14 }}>
+          <div className="form-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+            <div>
+              <div style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ink-faint)", marginBottom: 8 }}>Deal title</div>
+              <input value={form.dealTitle} onChange={set("dealTitle")} placeholder="Azadi Sale" style={adminInput} />
+            </div>
+            <div>
+              <div style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ink-faint)", marginBottom: 8 }}>Discount %</div>
+              <input type="number" min="0" max="90" value={form.dealPercent} onChange={set("dealPercent")} placeholder="50" style={adminInput} />
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ink-faint)", marginBottom: 8 }}>Banner message</div>
+            <input value={form.dealSubtitle} onChange={set("dealSubtitle")} placeholder="First 5 orders get 50% OFF!" style={adminInput} />
+          </div>
+          <div className="form-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+            <div>
+              <div style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ink-faint)", marginBottom: 8 }}>Limit to first N orders</div>
+              <input type="number" min="0" value={form.dealMaxOrders} onChange={set("dealMaxOrders")} placeholder="0 = unlimited" style={adminInput} />
+              <div style={{ fontSize: 10.5, color: "var(--ink-faint)", marginTop: 6 }}>0 = no limit. e.g. 5 → deal auto-ends after 5 orders.</div>
+            </div>
+            <div>
+              <div style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ink-faint)", marginBottom: 8 }}>Banner theme</div>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {DEAL_THEME_UI.map((t) => (
+                  <div key={t.key} onClick={() => setForm((f) => ({ ...f, dealTheme: t.key }))} title={t.label} style={{ cursor: "pointer", width: 40, height: 34, borderRadius: 4, background: t.swatch, border: `2px solid ${form.dealTheme === t.key ? "var(--ink)" : "transparent"}`, boxShadow: form.dealTheme === t.key ? "0 0 0 2px var(--rose)" : "none" }} />
+                ))}
+              </div>
+              <div style={{ fontSize: 10.5, color: "var(--ink-faint)", marginTop: 6 }}>{DEAL_THEME_UI.find((t) => t.key === form.dealTheme)?.label}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Live banner preview */}
+        <div style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ink-faint)", margin: "20px 0 8px" }}>Live preview</div>
+        <div style={{ background: (DEAL_THEME_UI.find((t) => t.key === form.dealTheme) || DEAL_THEME_UI[0]).grad, color: (DEAL_THEME_UI.find((t) => t.key === form.dealTheme) || DEAL_THEME_UI[0]).text, textAlign: "center", padding: "11px 16px", fontSize: 12.5, borderRadius: 3, display: "flex", alignItems: "center", justifyContent: "center", gap: 9, flexWrap: "wrap", lineHeight: 1.5 }}>
+          <span style={{ fontSize: 15 }}>{(DEAL_THEME_UI.find((t) => t.key === form.dealTheme) || DEAL_THEME_UI[0]).emoji}</span>
+          <span>
+            <strong style={{ letterSpacing: ".1em", textTransform: "uppercase" }}>{form.dealTitle || "Special Offer"}</strong>
+            {" — "}{form.dealSubtitle || `${form.dealPercent || 0}% OFF everything`}
+            {Number(form.dealMaxOrders) > 0 && <strong style={{ marginLeft: 8, padding: "2px 9px", borderRadius: 20, background: "rgba(255,255,255,.22)", fontSize: 11 }}>Only {form.dealMaxOrders} left!</strong>}
+          </span>
+        </div>
+        {form.dealActive && !(Number(form.dealPercent) > 0) && <div style={{ marginTop: 12, fontSize: 12, color: "#E39B9B" }}>⚠ Set a discount % above 0 for the deal to actually apply.</div>}
       </div>
 
       <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "14px 34px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>{busy ? "Saving…" : saved ? "Saved ✓" : "Save settings"}</div>

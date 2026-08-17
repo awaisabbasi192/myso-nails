@@ -181,6 +181,14 @@ model SiteContent {
   storeClosed      Boolean @default(false)
   storeClosedMsg   String  @default("We're temporarily closed. Check back soon!")
   flashSalePercent Int     @default(0)
+  // Deals & promotions (Azadi, Eid, launch offers, first-N-orders, etc.)
+  dealActive       Boolean   @default(false)
+  dealTitle        String    @default("")
+  dealSubtitle     String    @default("")
+  dealPercent      Int       @default(0)
+  dealMaxOrders    Int       @default(0) // 0 = unlimited; otherwise first N orders only
+  dealStartAt      DateTime?            // when the deal was switched on (order-count baseline)
+  dealTheme        String    @default("red") // red | green | gold | purple
   instagramHandle  String  @default("_myso.nails")
   instagramPosts   String  @default("[]")
   updatedAt      DateTime @updatedAt

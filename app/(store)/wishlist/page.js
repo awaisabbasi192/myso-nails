@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { applyFlashSale } from "@/lib/format";
+import { getActiveDeal } from "@/lib/deal";
 import WishlistClient from "@/components/WishlistClient";
 
 export const dynamic = "force-dynamic";
@@ -12,11 +13,10 @@ export const metadata = {
 export default async function WishlistPage() {
   let products = [];
   try {
-    const [prods, content] = await Promise.all([
+    const [prods, deal] = await Promise.all([
       prisma.product.findMany({ orderBy: { sortOrder: "asc" } }),
-      prisma.siteContent.findUnique({ where: { id: 1 }, select: { flashSalePercent: true } }),
+      getActiveDeal(),
     ]);
-    const flashSalePercent = content?.flashSalePercent ?? 0;
     products = prods.map((p) =>
       applyFlashSale(
         {
@@ -24,7 +24,7 @@ export default async function WishlistPage() {
           shape: p.shape, finish: p.finish, rating: p.rating, reviewsCount: p.reviewsCount,
           badge: p.badge, stock: p.stock,
         },
-        flashSalePercent
+        deal.percent
       )
     );
   } catch (e) {

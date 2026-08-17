@@ -353,6 +353,11 @@ html { overflow-x: hidden; }
   /* Coin-method size guide — 6 tiny cells is too cramped, use 3 per row */
   .coin-grid { grid-template-columns: repeat(3, 1fr) !important; }
 
+  /* Deal banner — tighten so title + offer + counter fit small screens */
+  .deal-banner { padding: 9px 12px !important; font-size: 11.5px !important; gap: 7px !important; }
+  .deal-banner span[style*="font-size:16px"], .deal-banner > span:first-child { font-size: 14px !important; }
+  .deal-banner-text strong[style*="border-radius"] { display: inline-block; margin-top: 2px; }
+
   /* Checkout — bag line item: smaller image so name + price fit the row */
   .bag-item { gap: 12px !important; }
   .bag-item > img { width: 74px !important; height: 88px !important; }

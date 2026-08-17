@@ -115,6 +115,8 @@ export default async function AdminPage() {
     codHandling: content.codHandling, storeClosed: content.storeClosed,
     storeClosedMsg: content.storeClosedMsg, flashSalePercent: content.flashSalePercent,
     instagramHandle: content.instagramHandle, instagramPosts: content.instagramPosts,
+    dealActive: content.dealActive, dealTitle: content.dealTitle, dealSubtitle: content.dealSubtitle,
+    dealPercent: content.dealPercent, dealMaxOrders: content.dealMaxOrders, dealTheme: content.dealTheme,
   } : null;
 
   return (

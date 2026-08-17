@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { sendOrderConfirmEmail, sendAdminOrderEmail } from "@/lib/email";
+import { getActiveDeal } from "@/lib/deal";
 
 const FREE_DELIVERY_OVER = 5000;
 const DELIVERY_FEE = 300;
@@ -68,13 +69,13 @@ export async function POST(request) {
     }
 
     const slugs = items.filter((i) => i.slug).map((i) => i.slug);
-    const [dbProducts, siteContent] = await Promise.all([
+    const [dbProducts, deal] = await Promise.all([
       prisma.product.findMany({ where: { slug: { in: slugs } } }),
-      prisma.siteContent.findUnique({ where: { id: 1 }, select: { flashSalePercent: true } }),
+      getActiveDeal(),
     ]);
     const bySlug = Object.fromEntries(dbProducts.map((p) => [p.slug, p]));
-    // Server recomputes prices from DB (trusted) and applies the active flash sale.
-    const flashPct = siteContent?.flashSalePercent ?? 0;
+    // Server recomputes prices from DB (trusted) and applies the active promotion.
+    const flashPct = deal.percent || 0;
     const withFlash = (price) => (flashPct > 0 ? Math.round(price * (1 - flashPct / 100)) : price);
 
     let subtotal = 0;
