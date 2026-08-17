@@ -696,6 +696,60 @@ input:focus, textarea:focus, select:focus {
 /* Section headings underline flourish is handled per-page; keep links lively */
 .card-soft:hover { box-shadow: 0 18px 48px rgba(0,0,0,.22), 0 0 0 1px var(--card-b-h) !important; }
 
+/* ═══════════════════════════════════════════════════════════════
+   EXTRA DELIGHT — tasteful motion (CSS-only, respects reduced-motion)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Category cards: cinematic hover — zoom, shine sweep, label lift ── */
+.home-cat-card { position: relative; }
+.home-cat-card .zoom { transition: transform .8s cubic-bezier(.22,1,.36,1), opacity .5s ease, filter .5s ease; }
+.home-cat-card:hover .zoom { transform: scale(1.09); opacity: .82; filter: saturate(1.12); }
+.home-cat-name { transition: transform .45s cubic-bezier(.22,1,.36,1); }
+.home-cat-card:hover .home-cat-name { transform: translateY(-5px); }
+.cat-explore {
+  margin-top: 5px;
+  font-size: 10px; letter-spacing: .24em; text-transform: uppercase;
+  color: rgba(255,255,255,.92);
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .45s ease, transform .45s cubic-bezier(.22,1,.36,1);
+}
+.home-cat-card:hover .cat-explore { opacity: 1; transform: translateY(0); }
+.home-cat-card::after {
+  content: ""; position: absolute; top: 0; left: -130%; width: 65%; height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255,255,255,.22), transparent);
+  transform: skewX(-20deg); transition: left .85s ease; pointer-events: none; z-index: 3;
+}
+.home-cat-card:hover::after { left: 135%; }
+
+/* ── Product images: gentle brighten + richer colour on hover ── */
+.card.zoom-wrap:hover .zoom { filter: brightness(1.04) saturate(1.06); }
+
+/* ── Hero price card: soft continuous float ── */
+@keyframes softFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+.hero-card { animation: softFloat 6s ease-in-out infinite; }
+
+/* ── Wishlist heart: satisfying pop when tapped ── */
+@keyframes heartPop { 0% { transform: scale(1); } 35% { transform: scale(1.35); } 60% { transform: scale(.9); } 100% { transform: scale(1); } }
+.wish-btn:active { animation: heartPop .4s ease; }
+.wish-btn { transition: color .2s ease, background .2s ease, transform .15s ease; }
+.wish-btn:hover { color: var(--rose-light) !important; }
+
+/* ── Section labels: soft breathing glow on the rose eyebrow labels ── */
+@keyframes labelBreathe { 0%,100% { opacity: .8; } 50% { opacity: 1; } }
+
+/* ── Announcement / deal banner emoji: gentle wiggle ── */
+@keyframes wiggle { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(-8deg); } 75% { transform: rotate(8deg); } }
+.deal-banner > span:first-child { display: inline-block; animation: wiggle 2.6s ease-in-out infinite; }
+
+/* ── Add-to-bag button: subtle arrow nudge already lifts; add press squash ── */
+.add-btn:active { transform: scale(.94) !important; }
+
+/* ── Gradient text: keep the slow shimmer drift lively ── */
+.text-gradient { background-size: 220% auto; }
+
+/* ── Nav link active dot pulse (mobile drawer current page) ── */
+@keyframes dotPulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: .6; } }
+
 /* Respect users who prefer less motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

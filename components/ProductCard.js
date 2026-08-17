@@ -29,7 +29,7 @@ export default function ProductCard({ p }) {
         {p.badge && (
           <div style={{ position: "absolute", top: 14, left: 14, background: "var(--rose)", border: "none", fontSize: 9.5, letterSpacing: ".2em", textTransform: "uppercase", padding: "6px 11px", color: "#fff" }}>{p.badge}</div>
         )}
-        <div onClick={wish} style={{ position: "absolute", top: 12, right: 12, width: 34, height: 34, display: "grid", placeItems: "center", borderRadius: "50%", background: "var(--panel)", border: "1px solid var(--card-b)", color: "var(--rose)", fontSize: 15 }}>{wished ? "♥" : "♡"}</div>
+        <div onClick={wish} className="wish-btn" style={{ position: "absolute", top: 12, right: 12, width: 34, height: 34, display: "grid", placeItems: "center", borderRadius: "50%", background: "var(--panel)", border: "1px solid var(--card-b)", color: "var(--rose)", fontSize: 15, cursor: "pointer" }}>{wished ? "♥" : "♡"}</div>
       </Link>
       <div style={{ padding: 20 }}>
         <div style={{ fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--ink-muted)" }}>{p.shape} · {p.finish}</div>

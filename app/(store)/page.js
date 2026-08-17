@@ -128,9 +128,10 @@ export default async function HomePage() {
         <div className="home-cat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 16 }}>
           {categories.map((cat) => (
             <Link key={cat.id} href={`/shop?cat=${cat.slug}`} className="card-soft zoom-wrap home-cat-card" style={{ position: "relative", aspectRatio: "3/4", borderRadius: 2, overflow: "hidden", background: "#121214", display: "block" }}>
-              <img src={cat.image} alt={cat.name} className="zoom" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.62 }} />
+              <img src={cat.image} alt={cat.name} className="zoom" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.7 }} />
               <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top,rgba(10,10,11,.9) 5%,transparent 65%)", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: 16 }}>
-                <div className="home-cat-name" style={{ fontFamily: "var(--serif)", fontSize: 22, lineHeight: 1.15, color: "var(--ink)" }}>{cat.name}</div>
+                <div className="home-cat-name" style={{ fontFamily: "var(--serif)", fontSize: 22, lineHeight: 1.15, color: "#fff", textShadow: "0 2px 14px rgba(0,0,0,.6)" }}>{cat.name}</div>
+                <div className="cat-explore">Explore →</div>
               </div>
             </Link>
           ))}

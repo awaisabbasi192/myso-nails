@@ -80,8 +80,8 @@ export default function LoginPage() {
         <div style={{ position: "relative", minHeight: 520 }}>
           <img src="/assets/p4-nude.jpeg" alt="Pearl Bloom Nude set" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.72 }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top,rgba(10,10,11,.92),rgba(10,10,11,.25))", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: 36 }}>
-            <div className="text-gradient" style={{ fontFamily: "var(--script)", fontSize: 38 }}>welcome back</div>
-            <p style={{ fontSize: 13.5, lineHeight: 1.85, color: "rgba(247,241,237,.6)", fontWeight: 300, maxWidth: 290, margin: "10px 0 0" }}>Save your nail sizes once, then reorder in two taps. Your wishlist and order tracking live here.</p>
+            <div style={{ fontFamily: "var(--script)", fontSize: 40, color: "#fff", textShadow: "0 2px 18px rgba(0,0,0,.5)" }}>welcome back</div>
+            <p style={{ fontSize: 13.5, lineHeight: 1.85, color: "rgba(255,255,255,.78)", fontWeight: 300, maxWidth: 290, margin: "10px 0 0" }}>Save your nail sizes once, then reorder in two taps. Your wishlist and order tracking live here.</p>
           </div>
         </div>
         <div style={{ padding: "44px 40px" }}>
