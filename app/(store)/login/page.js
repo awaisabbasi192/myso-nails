@@ -101,14 +101,14 @@ export default function LoginPage() {
                       ? "✓ Reset link sent! Check your inbox — and if you don't see it, check your spam/junk folder too. Link works for 1 hour."
                       : "If that email is registered, a reset link is on its way. Check your spam/junk folder if you don't see it in inbox."}
                   </div>
-                  <a href={waLink("Hi M&S! I need help resetting my password.")} target="_blank" rel="noreferrer" className="btn-wa" style={{ textAlign: "center", padding: 15, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Reset via WhatsApp</a>
+                  <a href={waLink("Hi Myra! I need help resetting my password.")} target="_blank" rel="noreferrer" className="btn-wa" style={{ textAlign: "center", padding: 15, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Reset via WhatsApp</a>
                   <div onClick={() => { setMode("login"); setForgot({ status: "", sent: false }); }} style={{ cursor: "pointer", fontSize: 12, color: "var(--rose)", textAlign: "center" }}>← Back to login</div>
                 </>
               ) : (
                 <>
                   <p style={{ fontSize: 13, color: "var(--ink-muted)", lineHeight: 1.7, margin: 0 }}>Enter your email and we'll send you a link to set a new password.</p>
                   <div style={{ display: "flex", flexDirection: "column", gap: 8 }}><span style={lab}>Email</span><input value={form.email} onChange={set("email")} placeholder="you@email.com" style={inputStyle} onKeyDown={(e) => e.key === "Enter" && sendReset()} /></div>
-                  {error && <div style={{ fontSize: 12, color: "#E39B9B", borderLeft: "2px solid rgba(200,90,90,.6)", paddingLeft: 12 }}>{error}</div>}
+                  {error && <div style={{ fontSize: 12, color: "#E0A099", borderLeft: "2px solid rgba(200,90,90,.6)", paddingLeft: 12 }}>{error}</div>}
                   <div onClick={sendReset} className="shimmer" style={{ cursor: "pointer", textAlign: "center", padding: 16, fontSize: 11, letterSpacing: ".26em", textTransform: "uppercase", marginTop: 6 }}>{forgot.status === "sending" ? "Sending…" : "Send reset link"}</div>
                   <div onClick={() => { setMode("login"); setError(""); }} style={{ cursor: "pointer", fontSize: 12, color: "var(--rose)", textAlign: "center" }}>← Back to login</div>
                 </>
@@ -131,10 +131,10 @@ export default function LoginPage() {
               {mode === "login" && (
                 <div onClick={() => { setMode("forgot"); setError(""); setForgot({ status: "", sent: false }); }} style={{ cursor: "pointer", fontSize: 12, color: "var(--rose)", textAlign: "right", marginTop: -6 }}>Forgot password?</div>
               )}
-              {error && <div style={{ fontSize: 12, color: "#E39B9B", borderLeft: "2px solid rgba(200,90,90,.6)", paddingLeft: 12 }}>{error}</div>}
+              {error && <div style={{ fontSize: 12, color: "#E0A099", borderLeft: "2px solid rgba(200,90,90,.6)", paddingLeft: 12 }}>{error}</div>}
               <div onClick={submit} className="shimmer" style={{ cursor: "pointer", textAlign: "center", padding: 16, fontSize: 11, letterSpacing: ".26em", textTransform: "uppercase", marginTop: 6 }}>{loading ? "…" : mode === "signup" ? "Create my account" : "Log in"}</div>
               <div style={{ fontSize: 12, color: "rgba(247,241,237,.4)", textAlign: "center" }}>or</div>
-              <a href={waLink("Hi M&S!")} target="_blank" rel="noreferrer" className="btn-wa" style={{ textAlign: "center", padding: 15, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Continue on WhatsApp</a>
+              <a href={waLink("Hi Myra!")} target="_blank" rel="noreferrer" className="btn-wa" style={{ textAlign: "center", padding: 15, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Continue on WhatsApp</a>
             </div>
           )}
         </div>

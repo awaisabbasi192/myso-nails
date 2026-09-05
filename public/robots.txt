@@ -5,4 +5,4 @@ Disallow: /api/
 Disallow: /admin
 Disallow: /account
 
-Sitemap: https://mysonails.store/sitemap.xml
+Sitemap: https://pressonsbymyra.pk/sitemap.xml

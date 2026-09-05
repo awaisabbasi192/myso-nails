@@ -6,7 +6,7 @@ import WishlistClient from "@/components/WishlistClient";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "My Wishlist — Myso Nails Studio",
+  title: "My Wishlist — Press-Ons by Myra",
   description: "Your saved press-on nail sets.",
 };
 

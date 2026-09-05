@@ -15,7 +15,7 @@ async function uniqueReferralCode(name) {
     const exists = await prisma.customer.findUnique({ where: { referralCode: code } });
     if (!exists) return code;
   }
-  return "MYSO" + Date.now().toString().slice(-6);
+  return "MYRA" + Date.now().toString().slice(-6);
 }
 
 export async function POST(request) {

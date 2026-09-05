@@ -12,7 +12,7 @@ export async function POST(request, { params }) {
     if (order.status !== "Pending") return Response.json({ error: "Only Pending orders can be cancelled" }, { status: 400 });
     await prisma.order.update({ where: { id }, data: { status: "Cancelled", cancelledAt: new Date() } });
     const adminPhone = process.env.ADMIN_WHATSAPP || process.env.NEXT_PUBLIC_WHATSAPP || "923020909786";
-    const waText = `Hi Myso Nails! Order *${order.code}* has been cancelled by the customer (${order.customerName}).`;
+    const waText = `Hi Press-Ons by Myra! Order *${order.code}* has been cancelled by the customer (${order.customerName}).`;
     const waUrl = `https://wa.me/${adminPhone}?text=${encodeURIComponent(waText)}`;
     return Response.json({ ok: true, waUrl });
   } catch (e) {

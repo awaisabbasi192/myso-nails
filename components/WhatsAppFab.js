@@ -11,7 +11,7 @@ export default function WhatsAppFab() {
 
   return (
     <a
-      href={waLink("Hi M&S!")}
+      href={waLink("Hi Myra!")}
       target="_blank"
       rel="noreferrer"
       className="whatsapp-fab"

@@ -84,16 +84,16 @@ export default function ProductDetail({ product, reviews, related }) {
       <div data-r="split" style={{ display: "grid", gridTemplateColumns: "1.05fr .95fr", gap: 56, alignItems: "start" }}>
         {/* Gallery */}
         <div>
-          <div className="zoom-wrap" style={{ position: "relative", overflow: "hidden", border: "1px solid rgba(227,183,166,.16)" }}>
+          <div className="zoom-wrap" style={{ position: "relative", overflow: "hidden", border: "1px solid rgba(168,121,104,.16)" }}>
             <img src={allImages[gallery] || product.image} alt={product.name} style={{ width: "100%", aspectRatio: "1/1", objectFit: "cover", transition: "opacity .4s ease" }} />
             {allImages.length > 1 && (
-              <div style={{ position: "absolute", bottom: 14, right: 14, background: "rgba(10,10,11,.8)", border: "1px solid rgba(227,183,166,.28)", fontSize: 9.5, letterSpacing: ".2em", textTransform: "uppercase", padding: "8px 12px", color: "rgba(247,241,237,.7)" }}>{gallery + 1} / {allImages.length}</div>
+              <div style={{ position: "absolute", bottom: 14, right: 14, background: "rgba(10,10,11,.8)", border: "1px solid rgba(168,121,104,.28)", fontSize: 9.5, letterSpacing: ".2em", textTransform: "uppercase", padding: "8px 12px", color: "rgba(247,241,237,.7)" }}>{gallery + 1} / {allImages.length}</div>
             )}
           </div>
           {allImages.length > 1 && (
             <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(allImages.length, 5)},1fr)`, gap: 10, marginTop: 12 }}>
               {allImages.map((img, i) => (
-                <div key={i} onClick={() => setGallery(i)} style={{ cursor: "pointer", border: `1px solid ${i === gallery ? "var(--bronze)" : "rgba(227,183,166,.24)"}`, overflow: "hidden", aspectRatio: "1/1" }}>
+                <div key={i} onClick={() => setGallery(i)} style={{ cursor: "pointer", border: `1px solid ${i === gallery ? "var(--bronze)" : "rgba(168,121,104,.24)"}`, overflow: "hidden", aspectRatio: "1/1" }}>
                   <img src={img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
               ))}
@@ -103,19 +103,19 @@ export default function ProductDetail({ product, reviews, related }) {
 
         {/* Info */}
         <div>
-          <div style={{ fontSize: 10.5, letterSpacing: ".3em", textTransform: "uppercase", color: "rgba(227,183,166,.8)" }}>{product.badge} · {product.occasion}</div>
+          <div style={{ fontSize: 10.5, letterSpacing: ".3em", textTransform: "uppercase", color: "rgba(168,121,104,.8)" }}>{product.badge} · {product.occasion}</div>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 52, lineHeight: 1.05, margin: "14px 0 12px" }}>{product.name}</h1>
           <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 12.5, color: "rgba(247,241,237,.5)" }}><span style={{ color: "var(--bronze)" }}>{stars(product.rating)}</span> <span>{product.rating} · {product.reviewsCount} reviews</span></div>
           <div style={{ display: "flex", alignItems: "baseline", gap: 12, margin: "24px 0 18px" }}>
             <span style={{ fontFamily: "var(--serif)", fontSize: 36, color: "var(--rose-light)" }}>{rs(product.price)}</span>
             {product.wasPrice ? <span style={{ fontSize: 14, color: "rgba(247,241,237,.35)", textDecoration: "line-through" }}>{rs(product.wasPrice)}</span> : null}
-            {savePct > 0 && <span style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", border: "1px solid rgba(227,183,166,.35)", padding: "5px 9px", color: "var(--rose)", whiteSpace: "nowrap" }}>Save {savePct}%</span>}
+            {savePct > 0 && <span style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", border: "1px solid rgba(168,121,104,.35)", padding: "5px 9px", color: "var(--rose)", whiteSpace: "nowrap" }}>Save {savePct}%</span>}
           </div>
           <p style={{ fontSize: 14.5, lineHeight: 1.9, color: "rgba(247,241,237,.6)", fontWeight: 300, maxWidth: 480 }}>{product.blurb}</p>
           <div style={{ fontSize: 12, letterSpacing: ".16em", color: "rgba(247,241,237,.45)", marginBottom: product.stock > 0 && product.stock <= 5 ? 16 : 26 }}>{product.colorway}</div>
           {product.stock > 0 && product.stock <= 5 && (
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 9, marginBottom: 24, padding: "10px 16px", border: "1px solid rgba(196,35,61,.4)", background: "rgba(196,35,61,.08)", borderRadius: 2 }}>
-              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#C4233D", display: "inline-block", animation: "msPulse 1.6s ease-out infinite" }} />
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 9, marginBottom: 24, padding: "10px 16px", border: "1px solid rgba(214,168,150,.4)", background: "rgba(214,168,150,.08)", borderRadius: 2 }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#C0907C", display: "inline-block", animation: "msPulse 1.6s ease-out infinite" }} />
               <span style={{ fontSize: 11.5, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--rose-light)" }}>
                 {product.stock === 1 ? "Last one left" : `Only ${product.stock} left`} — selling fast
               </span>
@@ -123,11 +123,11 @@ export default function ProductDetail({ product, reviews, related }) {
           )}
 
           {/* Shape */}
-          <div style={{ borderTop: "1px solid rgba(227,183,166,.14)", paddingTop: 22 }}>
+          <div style={{ borderTop: "1px solid rgba(168,121,104,.14)", paddingTop: 22 }}>
             <div style={{ fontSize: 10.5, letterSpacing: ".24em", textTransform: "uppercase", color: "rgba(247,241,237,.55)", marginBottom: 12 }}>Shape</div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               {SHAPES.map((o) => (
-                <div key={o} onClick={() => setShape(o)} style={{ cursor: "pointer", fontSize: 12, letterSpacing: ".14em", padding: "11px 18px", border: `1px solid ${o === shape ? "var(--bronze)" : "rgba(227,183,166,.25)"}`, color: o === shape ? "var(--rose-light)" : "rgba(247,241,237,.6)" }}>{o}</div>
+                <div key={o} onClick={() => setShape(o)} style={{ cursor: "pointer", fontSize: 12, letterSpacing: ".14em", padding: "11px 18px", border: `1px solid ${o === shape ? "var(--bronze)" : "rgba(168,121,104,.25)"}`, color: o === shape ? "var(--rose-light)" : "rgba(247,241,237,.6)" }}>{o}</div>
               ))}
             </div>
           </div>
@@ -135,18 +135,18 @@ export default function ProductDetail({ product, reviews, related }) {
           <div style={{ paddingTop: 24 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
               <div style={{ fontSize: 10.5, letterSpacing: ".24em", textTransform: "uppercase", color: "rgba(247,241,237,.55)" }}>Size set</div>
-              <Link href="/size-guide" style={{ fontSize: 11.5, color: "var(--rose)", borderBottom: "1px solid rgba(227,183,166,.4)" }}>Size guide →</Link>
+              <Link href="/size-guide" style={{ fontSize: 11.5, color: "var(--rose)", borderBottom: "1px solid rgba(168,121,104,.4)" }}>Size guide →</Link>
             </div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               {SIZES.map((o) => (
-                <div key={o} onClick={() => setSize(o)} style={{ cursor: "pointer", fontSize: 12, letterSpacing: ".14em", padding: "11px 18px", border: `1px solid ${o === size ? "var(--bronze)" : "rgba(227,183,166,.25)"}`, color: o === size ? "var(--rose-light)" : "rgba(247,241,237,.6)" }}>{o}</div>
+                <div key={o} onClick={() => setSize(o)} style={{ cursor: "pointer", fontSize: 12, letterSpacing: ".14em", padding: "11px 18px", border: `1px solid ${o === size ? "var(--bronze)" : "rgba(168,121,104,.25)"}`, color: o === size ? "var(--rose-light)" : "rgba(247,241,237,.6)" }}>{o}</div>
               ))}
             </div>
           </div>
 
           {/* Qty + add */}
           <div style={{ display: "flex", gap: 12, alignItems: "stretch", marginTop: 30, flexWrap: "wrap" }}>
-            <div style={{ display: "flex", alignItems: "center", border: "1px solid rgba(227,183,166,.3)" }}>
+            <div style={{ display: "flex", alignItems: "center", border: "1px solid rgba(168,121,104,.3)" }}>
               <div onClick={() => setQty((q) => Math.max(1, q - 1))} style={{ cursor: "pointer", padding: "0 16px", fontSize: 17, color: "rgba(247,241,237,.6)" }}>−</div>
               <div style={{ minWidth: 34, textAlign: "center", fontSize: 14 }}>{qty}</div>
               <div onClick={() => setQty((q) => q + 1)} style={{ cursor: "pointer", padding: "0 16px", fontSize: 17, color: "rgba(247,241,237,.6)" }}>+</div>
@@ -156,20 +156,20 @@ export default function ProductDetail({ product, reviews, related }) {
             ) : (
               <div style={{ flex: 1, minWidth: 190, textAlign: "center", padding: "18px 26px", fontSize: 11.5, letterSpacing: ".26em", textTransform: "uppercase", background: "rgba(247,241,237,.06)", color: "rgba(247,241,237,.3)", border: "1px solid rgba(247,241,237,.1)" }}>Sold out</div>
             )}
-            <a href={waLink("Hi M&S! I want to order this set: " + product.name)} target="_blank" rel="noreferrer" style={{ border: "1px solid #25D366", color: "var(--ink)", padding: "18px 24px", fontSize: 11.5, letterSpacing: ".18em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 9 }} className="btn-wa">✆ Order via WhatsApp</a>
+            <a href={waLink("Hi Myra! I want to order this set: " + product.name)} target="_blank" rel="noreferrer" style={{ border: "1px solid #25D366", color: "var(--ink)", padding: "18px 24px", fontSize: 11.5, letterSpacing: ".18em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 9 }} className="btn-wa">✆ Order via WhatsApp</a>
           </div>
           {product.stock === 0 && (
             <div style={{ marginTop: 14, padding: "18px 20px", background: "rgba(200,90,90,.06)", border: "1px solid rgba(200,90,90,.25)" }}>
-              <div style={{ fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: "#E39B9B", marginBottom: 12 }}>Sold out — notify me when back</div>
+              <div style={{ fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: "#E0A099", marginBottom: 12 }}>Sold out — notify me when back</div>
               {alertStatus === "done" ? (
                 <div style={{ fontSize: 13, color: "#8FD6A6" }}>✓ Done! We'll email you as soon as it's back in stock.</div>
               ) : (
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  <input value={alertEmail} onChange={(e) => setAlertEmail(e.target.value)} onKeyDown={(e) => e.key === "Enter" && subscribeAlert()} type="email" placeholder="Your email address" style={{ flex: 1, minWidth: 200, background: "transparent", border: "1px solid rgba(227,183,166,.3)", color: "var(--ink)", padding: "11px 14px", fontSize: 13, outline: "none" }} />
-                  <div onClick={subscribeAlert} style={{ cursor: "pointer", background: "rgba(200,90,90,.2)", border: "1px solid rgba(200,90,90,.4)", color: "#E39B9B", padding: "11px 18px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", whiteSpace: "nowrap" }}>{alertStatus === "sending" ? "…" : "Notify me"}</div>
+                  <input value={alertEmail} onChange={(e) => setAlertEmail(e.target.value)} onKeyDown={(e) => e.key === "Enter" && subscribeAlert()} type="email" placeholder="Your email address" style={{ flex: 1, minWidth: 200, background: "transparent", border: "1px solid rgba(168,121,104,.3)", color: "var(--ink)", padding: "11px 14px", fontSize: 13, outline: "none" }} />
+                  <div onClick={subscribeAlert} style={{ cursor: "pointer", background: "rgba(200,90,90,.2)", border: "1px solid rgba(200,90,90,.4)", color: "#E0A099", padding: "11px 18px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", whiteSpace: "nowrap" }}>{alertStatus === "sending" ? "…" : "Notify me"}</div>
                 </div>
               )}
-              {alertStatus === "error" && <div style={{ fontSize: 11.5, color: "#E39B9B", marginTop: 8 }}>Could not save — try again.</div>}
+              {alertStatus === "error" && <div style={{ fontSize: 11.5, color: "#E0A099", marginTop: 8 }}>Could not save — try again.</div>}
               <div style={{ fontSize: 11, color: "rgba(247,241,237,.35)", marginTop: 10 }}>No spam. One email, when it's back.</div>
             </div>
           )}
@@ -178,11 +178,11 @@ export default function ProductDetail({ product, reviews, related }) {
           </div>
 
           {/* Accordions */}
-          <div style={{ marginTop: 34, borderTop: "1px solid rgba(227,183,166,.14)" }}>
+          <div style={{ marginTop: 34, borderTop: "1px solid rgba(168,121,104,.14)" }}>
             {ACCORDIONS.map((a) => {
               const open = openAcc === a.key;
               return (
-                <div key={a.key} style={{ borderBottom: "1px solid rgba(227,183,166,.14)" }}>
+                <div key={a.key} style={{ borderBottom: "1px solid rgba(168,121,104,.14)" }}>
                   <div onClick={() => setOpenAcc(open ? "" : a.key)} style={{ cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "19px 0", fontSize: 12.5, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(247,241,237,.8)" }}>{a.title} <span style={{ color: "var(--bronze)", fontSize: 16 }}>{open ? "−" : "+"}</span></div>
                   {open && <div style={{ fontSize: 13.5, lineHeight: 1.9, color: "rgba(247,241,237,.55)", fontWeight: 300, paddingBottom: 20, maxWidth: 520 }}>{a.body}</div>}
                 </div>
@@ -193,14 +193,14 @@ export default function ProductDetail({ product, reviews, related }) {
       </div>
 
       {/* Reviews */}
-      <div style={{ marginTop: 80, borderTop: "1px solid rgba(227,183,166,.14)", paddingTop: 44 }}>
+      <div style={{ marginTop: 80, borderTop: "1px solid rgba(168,121,104,.14)", paddingTop: 44 }}>
         <h3 style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 34, margin: "0 0 26px" }}>Reviews ({product.reviewsCount})</h3>
         {reviews.length === 0 ? (
           <div style={{ color: "rgba(247,241,237,.5)", fontSize: 13.5 }}>No written reviews yet.</div>
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 20 }}>
             {reviews.map((r) => (
-              <div key={r.id} style={{ border: "1px solid rgba(227,183,166,.14)", padding: 24, background: "var(--panel)" }}>
+              <div key={r.id} style={{ border: "1px solid rgba(168,121,104,.14)", padding: 24, background: "var(--panel)" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <div style={{ color: "var(--bronze)", letterSpacing: ".24em", fontSize: 12 }}>{stars(r.rating)}</div>
                   <div style={{ fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(247,241,237,.35)" }}>{r.date}</div>
@@ -208,8 +208,8 @@ export default function ProductDetail({ product, reviews, related }) {
                 <p style={{ fontSize: 13.5, lineHeight: 1.85, color: "rgba(247,241,237,.68)", fontWeight: 300, margin: "14px 0 16px" }}>{r.body}</p>
                 {(r.image || r.image2) && (
                   <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
-                    {r.image && <img src={r.image} alt="" style={{ width: 56, height: 56, objectFit: "cover", border: "1px solid rgba(227,183,166,.2)" }} />}
-                    {r.image2 && <img src={r.image2} alt="" style={{ width: 56, height: 56, objectFit: "cover", border: "1px solid rgba(227,183,166,.2)" }} />}
+                    {r.image && <img src={r.image} alt="" style={{ width: 56, height: 56, objectFit: "cover", border: "1px solid rgba(168,121,104,.2)" }} />}
+                    {r.image2 && <img src={r.image2} alt="" style={{ width: 56, height: 56, objectFit: "cover", border: "1px solid rgba(168,121,104,.2)" }} />}
                   </div>
                 )}
                 <div style={{ fontSize: 12, color: "rgba(247,241,237,.5)" }}>{r.name} · verified buyer</div>
@@ -220,7 +220,7 @@ export default function ProductDetail({ product, reviews, related }) {
       </div>
 
       {/* Write a review */}
-      <div style={{ marginTop: 44, border: "1px solid rgba(227,183,166,.16)", background: "var(--panel)", padding: 28 }}>
+      <div style={{ marginTop: 44, border: "1px solid rgba(168,121,104,.16)", background: "var(--panel)", padding: 28 }}>
         <h4 style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 26, margin: "0 0 20px" }}>Write a review</h4>
         {reviewStatus === "done" ? (
           <div style={{ fontSize: 13.5, color: "#8FD6A6", padding: "16px 20px", border: "1px solid rgba(143,214,166,.3)" }}>{reviewVerified ? "Thank you! Your verified review is now live." : "Thank you! Your review has been submitted and will appear once approved."}</div>
@@ -229,18 +229,18 @@ export default function ProductDetail({ product, reviews, related }) {
             <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 12, alignItems: "end" }}>
               <div>
                 <div style={{ fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(247,241,237,.45)", marginBottom: 8 }}>Your name</div>
-                <input value={reviewForm.name} onChange={setRF("name")} placeholder="Areeba K." style={{ background: "transparent", border: "1px solid rgba(227,183,166,.25)", color: "var(--ink)", padding: 13, fontSize: 13, outline: "none", width: "100%" }} />
+                <input value={reviewForm.name} onChange={setRF("name")} placeholder="Areeba K." style={{ background: "transparent", border: "1px solid rgba(168,121,104,.25)", color: "var(--ink)", padding: 13, fontSize: 13, outline: "none", width: "100%" }} />
               </div>
               <div>
                 <div style={{ fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(247,241,237,.45)", marginBottom: 8 }}>Rating</div>
-                <select value={reviewForm.rating} onChange={setRF("rating")} style={{ background: "var(--bg)", border: "1px solid rgba(227,183,166,.25)", color: "var(--ink)", padding: 13, fontSize: 13, outline: "none" }}>
+                <select value={reviewForm.rating} onChange={setRF("rating")} style={{ background: "var(--bg)", border: "1px solid rgba(168,121,104,.25)", color: "var(--ink)", padding: 13, fontSize: 13, outline: "none" }}>
                   {[5,4,3,2,1].map((n) => <option key={n} value={n}>{n} star{n !== 1 ? "s" : ""}</option>)}
                 </select>
               </div>
             </div>
             <div>
               <div style={{ fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(247,241,237,.45)", marginBottom: 8 }}>Your review</div>
-              <textarea value={reviewForm.body} onChange={setRF("body")} rows={3} placeholder="How did the set look? How long did it last?" style={{ background: "transparent", border: "1px solid rgba(227,183,166,.25)", color: "var(--ink)", padding: 13, fontSize: 13, outline: "none", width: "100%", resize: "vertical" }} />
+              <textarea value={reviewForm.body} onChange={setRF("body")} rows={3} placeholder="How did the set look? How long did it last?" style={{ background: "transparent", border: "1px solid rgba(168,121,104,.25)", color: "var(--ink)", padding: 13, fontSize: 13, outline: "none", width: "100%", resize: "vertical" }} />
             </div>
             {/* Photo upload */}
             <div>
@@ -248,7 +248,7 @@ export default function ProductDetail({ product, reviews, related }) {
               <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
                 {[reviewForm.image, reviewForm.image2].filter(Boolean).map((src, i) => (
                   <div key={i} style={{ position: "relative", width: 64, height: 64 }}>
-                    <img src={src} alt="" style={{ width: 64, height: 64, objectFit: "cover", border: "1px solid rgba(227,183,166,.3)", borderRadius: 2 }} />
+                    <img src={src} alt="" style={{ width: 64, height: 64, objectFit: "cover", border: "1px solid rgba(168,121,104,.3)", borderRadius: 2 }} />
                     <div
                       onClick={() => setReviewForm((f) => (i === 0 ? { ...f, image: f.image2, image2: "" } : { ...f, image2: "" }))}
                       style={{ position: "absolute", top: -7, right: -7, width: 20, height: 20, borderRadius: "50%", background: "var(--rose)", color: "#fff", display: "grid", placeItems: "center", fontSize: 13, cursor: "pointer", lineHeight: 1 }}
@@ -256,14 +256,14 @@ export default function ProductDetail({ product, reviews, related }) {
                   </div>
                 ))}
                 {!(reviewForm.image && reviewForm.image2) && (
-                  <label style={{ width: 64, height: 64, border: "1px dashed rgba(227,183,166,.4)", borderRadius: 2, display: "grid", placeItems: "center", cursor: "pointer", color: "var(--rose)", fontSize: 22, background: "var(--bg)" }}>
+                  <label style={{ width: 64, height: 64, border: "1px dashed rgba(168,121,104,.4)", borderRadius: 2, display: "grid", placeItems: "center", cursor: "pointer", color: "var(--rose)", fontSize: 22, background: "var(--bg)" }}>
                     {photoUploading ? "…" : "＋"}
                     <input type="file" accept="image/*" onChange={uploadReviewPhoto} style={{ display: "none" }} disabled={photoUploading} />
                   </label>
                 )}
               </div>
             </div>
-            {reviewStatus === "error" && <div style={{ fontSize: 12, color: "#E39B9B" }}>Could not submit — please try again.</div>}
+            {reviewStatus === "error" && <div style={{ fontSize: 12, color: "#E0A099" }}>Could not submit — please try again.</div>}
             <div onClick={submitReview} className="shimmer" style={{ cursor: "pointer", textAlign: "center", padding: 14, fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", alignSelf: "flex-start", minWidth: 180 }}>{reviewStatus === "submitting" ? "Submitting…" : "Submit review"}</div>
           </div>
         )}

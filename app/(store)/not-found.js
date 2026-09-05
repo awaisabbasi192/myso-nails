@@ -10,7 +10,7 @@ export default function NotFound() {
           The page you're looking for doesn't exist or has been moved. Don't worry, you can find everything you need below.
         </p>
         <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/" style={{ padding: "12px 24px", background: "linear-gradient(100deg, #9B1B2A, #C4233D)", color: "#fff", textDecoration: "none", borderRadius: 2, fontSize: 13, letterSpacing: ".15em", textTransform: "uppercase", fontWeight: 500 }}>
+          <Link href="/" style={{ padding: "12px 24px", background: "linear-gradient(100deg, #A87968, #C0907C)", color: "#fff", textDecoration: "none", borderRadius: 2, fontSize: 13, letterSpacing: ".15em", textTransform: "uppercase", fontWeight: 500 }}>
             Go Home
           </Link>
           <Link href="/shop" style={{ padding: "12px 24px", border: "1px solid var(--card-b)", color: "var(--ink)", textDecoration: "none", borderRadius: 2, fontSize: 13, letterSpacing: ".15em", textTransform: "uppercase", fontWeight: 500 }}>

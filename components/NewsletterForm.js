@@ -30,7 +30,7 @@ export default function NewsletterForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="your@email.com"
-        style={{ flex: 1, minWidth: 220, background: "transparent", border: "1px solid rgba(227,183,166,.3)", color: "var(--ink)", padding: "16px 18px", fontSize: 13, outline: "none" }}
+        style={{ flex: 1, minWidth: 220, background: "transparent", border: "1px solid rgba(168,121,104,.3)", color: "var(--ink)", padding: "16px 18px", fontSize: 13, outline: "none" }}
       />
       <div onClick={subscribe} className="shimmer" style={{ cursor: "pointer", padding: "16px 34px", fontSize: 11.5, letterSpacing: ".24em", textTransform: "uppercase" }}>
         {done ? "Code sent ✓" : loading ? "…" : "Get my code"}

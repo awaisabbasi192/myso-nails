@@ -1,4 +1,4 @@
-// Myso Nails Studio — database schema
+// Press-Ons by Myra — database schema
 // PostgreSQL (works on Vercel/Railway/Neon/Supabase). Set DATABASE_URL in .env.
 
 generator client {
@@ -159,22 +159,22 @@ model SiteContent {
   announcement   String
   studioImage    String @default("/assets/p4-nude.jpeg")
   studioHeadline String @default("Every set is painted by hand — mine.")
-  studioBody1    String @default("I started M&S in my bedroom with one brush and a lamp, because brides kept asking for nails that would last past the mehndi. Four years later every set still leaves my table finished, filed and fitted to a real nail chart — never mass-moulded.")
+  studioBody1    String @default("I started Press-Ons by Myra in my bedroom with one brush and a lamp, because brides kept asking for nails that would last past the mehndi. Four years later every set still leaves my table finished, filed and fitted to a real nail chart — never mass-moulded.")
   studioBody2    String @default("If you can send me a photo of it, I can paint it.")
-  studioFounder  String @default("Maya")
+  studioFounder  String @default("Myra")
   studioRole     String @default("Founder & nail artist")
   aboutImage1    String @default("/assets/p1-french.jpeg")
   aboutHeadline  String @default("One brush, one lamp, a lot of brides.")
-  aboutBody1     String @default("Myso Nails Studio started in 2022 as a side table in Maya's bedroom in Lahore. Salons were charging for hours in a chair and brides were still leaving with nails that chipped before the mehndi. So she started painting reusable sets by hand, one order at a time, sized to real nails instead of standard moulds.")
+  aboutBody1     String @default("Press-Ons by Myra started in 2022 as a side table in Myra's bedroom in Lahore. Salons were charging for hours in a chair and brides were still leaving with nails that chipped before the mehndi. So she started painting reusable sets by hand, one order at a time, sized to real nails instead of standard moulds.")
   aboutBody2     String @default("Four years and thousands of sets later nothing about the process has changed: every nail is still painted, cured, filed and inspected by hand before it goes in the box.")
   aboutArtistImg String @default("/assets/p4-nude.jpeg")
-  aboutArtistName String @default("Maya, founder")
+  aboutArtistName String @default("Myra, founder")
   aboutArtistBio String @default("I answer the WhatsApp myself, so when you send a reference photo at 1am you're talking to the person who will paint it. Bridal sets take me four to six days; everything else ships in 48 hours.")
-  aboutArtistSign String @default("Maya")
-  waConfirmed    String @default("Assalam o Alaikum {name}! 🎉 Aapka order *{code}* confirm ho gaya hai. Hum aapke nails tayaar kar rahe hain — jald dispatch ho ga. Shukriya! — Myso Nails Studio")
-  waShipped      String @default("Assalam o Alaikum {name}! 📦 Aapka order *{code}* ship ho gaya! Aapke nails raaste mein hain, 1-2 din mein mil jaenge inshAllah. — Myso Nails Studio")
-  waDelivered    String @default("Assalam o Alaikum {name}! ✅ Aapka order *{code}* deliver ho gaya. Umeed hai nails pasand aayi hongi! Koi masla ho to reply karein. — Myso Nails Studio")
-  waRejected     String @default("Assalam o Alaikum {name}! Aapka order *{code}* ke baray mein kuch masla hai — kripya hamen reply karein. — Myso Nails Studio")
+  aboutArtistSign String @default("Myra")
+  waConfirmed    String @default("Assalam o Alaikum {name}! 🎉 Aapka order *{code}* confirm ho gaya hai. Hum aapke nails tayaar kar rahe hain — jald dispatch ho ga. Shukriya! — Press-Ons by Myra")
+  waShipped      String @default("Assalam o Alaikum {name}! 📦 Aapka order *{code}* ship ho gaya! Aapke nails raaste mein hain, 1-2 din mein mil jaenge inshAllah. — Press-Ons by Myra")
+  waDelivered    String @default("Assalam o Alaikum {name}! ✅ Aapka order *{code}* deliver ho gaya. Umeed hai nails pasand aayi hongi! Koi masla ho to reply karein. — Press-Ons by Myra")
+  waRejected     String @default("Assalam o Alaikum {name}! Aapka order *{code}* ke baray mein kuch masla hai — kripya hamen reply karein. — Press-Ons by Myra")
   deliveryFee      Int     @default(250)
   freeDeliveryOver Int     @default(5000)
   codHandling      Int     @default(100)
@@ -190,7 +190,7 @@ model SiteContent {
   dealStartAt      DateTime?            // when the deal was switched on (order-count baseline)
   dealTheme        String    @default("red") // red | green | gold | purple
   dealMode         String    @default("real") // real = reduce price; inflate = keep price, show bigger original
-  instagramHandle  String  @default("_myso.nails")
+  instagramHandle  String  @default("pressonsby_myra")
   instagramPosts   String  @default("[]")
   updatedAt      DateTime @updatedAt
 }

@@ -16,7 +16,7 @@ const STEPS = [
 const GALLERY = ["/assets/p1-french.jpeg", "/assets/g1.jpeg", "/assets/p3-leopard.jpeg", "/assets/g2.jpeg", "/assets/p2-maroon.jpeg", "/assets/g3.jpeg"];
 const TESTIMONIALS = [
   { quote: "Wore the maroon chrome set for my sister’s mayoun and three people asked which salon. Not one nail lifted in five days.", name: "Areeba K.", city: "Lahore", img: "/assets/p2-maroon.jpeg" },
-  { quote: "Maya matched my custom bridal set to my dupatta from a photo. The gold rims are hand painted, I still cannot believe it.", name: "Hafsa N.", city: "Karachi", img: "/assets/p4-nude.jpeg" },
+  { quote: "Myra matched my custom bridal set to my dupatta from a photo. The gold rims are hand painted, I still cannot believe it.", name: "Hafsa N.", city: "Karachi", img: "/assets/p4-nude.jpeg" },
   { quote: "Ordered on WhatsApp at midnight, delivered in two days, and the sizing was exact. Third set already.", name: "Zoya R.", city: "Islamabad", img: "/assets/p3-leopard.jpeg" },
 ];
 
@@ -44,15 +44,15 @@ export default async function HomePage() {
   const heroScript = content?.heroScript || "effortlessly luxe";
   const studioImage = content?.studioImage || "/assets/p4-nude.jpeg";
   const studioHeadline = content?.studioHeadline || "Every set is painted by hand — mine.";
-  const studioBody1 = content?.studioBody1 || "I started M&S in my bedroom with one brush and a lamp, because brides kept asking for nails that would last past the mehndi. Four years later every set still leaves my table finished, filed and fitted to a real nail chart — never mass-moulded.";
+  const studioBody1 = content?.studioBody1 || "I started Press-Ons by Myra in my bedroom with one brush and a lamp, because brides kept asking for nails that would last past the mehndi. Four years later every set still leaves my table finished, filed and fitted to a real nail chart — never mass-moulded.";
   const studioBody2 = content?.studioBody2 || "If you can send me a photo of it, I can paint it.";
-  const studioFounder = content?.studioFounder || "Maya";
+  const studioFounder = content?.studioFounder || "Myra";
   const studioRole = content?.studioRole || "Founder & nail artist";
   const heroProduct = products.find((p) => p.image === heroImage) || products[0];
   const bestSellers = products.slice(0, 4);
 
   // Instagram — real post embeds from admin-managed URLs
-  const igHandle = content?.instagramHandle || "_myso.nails";
+  const igHandle = content?.instagramHandle || "pressonsby_myra";
   let igPosts = [];
   try { igPosts = JSON.parse(content?.instagramPosts || "[]"); } catch { igPosts = []; }
   const igEmbeds = igPosts
@@ -88,7 +88,7 @@ export default async function HomePage() {
           <div className="rise-slow hero-media hero-media-mobile">{heroMediaInner}</div>
           <div className="rise hero-btns">
             <Link href="/shop" className="shimmer" style={{ padding: "17px 40px", fontSize: 12, letterSpacing: ".26em", textTransform: "uppercase", borderRadius: 2 }}>Shop the sets</Link>
-            <a href={waLink("Hi M&S! I want to order a custom set")} target="_blank" rel="noreferrer" className="btn-outline" style={{ padding: "17px 34px", fontSize: 12, letterSpacing: ".26em", textTransform: "uppercase", borderRadius: 2 }}>Order on WhatsApp</a>
+            <a href={waLink("Hi Myra! I want to order a custom set")} target="_blank" rel="noreferrer" className="btn-outline" style={{ padding: "17px 34px", fontSize: 12, letterSpacing: ".26em", textTransform: "uppercase", borderRadius: 2 }}>Order on WhatsApp</a>
           </div>
           <div className="rise hero-stats">
             {[["4.9", "1,200+ reviews"], ["10 min", "Application"], ["3 weeks", "Wear time"]].map(([v, l]) => (
@@ -194,7 +194,7 @@ export default async function HomePage() {
         {igEmbeds.length > 0 ? (
           <div className="ig-embed-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(320px,1fr))", gap: 16 }}>
             {igEmbeds.map((src, i) => (
-              <div key={i} style={{ background: "#000", borderRadius: 2, overflow: "hidden", border: "1px solid rgba(227,183,166,.14)" }}>
+              <div key={i} style={{ background: "#000", borderRadius: 2, overflow: "hidden", border: "1px solid rgba(168,121,104,.14)" }}>
                 <iframe src={src} title={`Instagram post ${i + 1}`} loading="lazy" scrolling="no" allowtransparency="true" style={{ width: "100%", height: 540, border: 0, display: "block" }} />
               </div>
             ))}

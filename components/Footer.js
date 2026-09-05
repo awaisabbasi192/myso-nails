@@ -7,11 +7,11 @@ export default function Footer() {
     <footer style={{ borderTop: "1px solid var(--card-b)", background: "var(--panel-2)", padding: "60px 24px 30px" }}>
       <div data-r="footer" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1fr", gap: 40 }}>
         <div>
-          <div style={{ position: "relative", height: 70, width: 150 }}>
-            <Image src="/assets/logo.png" alt="Myso Nails Studio" fill style={{ objectFit: "contain" }} />
+          <div className="brand-logo" style={{ position: "relative", height: 104, width: 104 }}>
+            <Image src="/assets/logo-myra.jpeg" alt="Press-Ons by Myra" fill sizes="104px" style={{ objectFit: "contain" }} />
           </div>
           <p style={{ fontSize: 13, lineHeight: 1.85, color: "var(--ink-muted)", fontWeight: 300, maxWidth: 290, margin: "18px 0 0" }}>
-            Hand-painted press-on nail sets, custom bridal work and size-fitted reusable sets. Shipped nationwide from Lahore.
+            Hand-painted press-on nail sets, custom bridal work and size-fitted reusable sets. Handmade with love, shipped nationwide from Lahore.
           </p>
         </div>
         <div>
@@ -40,13 +40,13 @@ export default function Footer() {
           <div style={{ fontSize: 10.5, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 18 }}>Talk to us</div>
           <div style={{ display: "flex", flexDirection: "column", gap: 11, fontSize: 13, color: "var(--ink-muted)" }}>
             <a href={waLink()} target="_blank" rel="noreferrer" style={{ color: "inherit" }}>WhatsApp 0302 090 9786</a>
-            <a href="https://instagram.com/_myso.nails" target="_blank" rel="noreferrer" style={{ color: "inherit" }}>@_myso.nails</a>
+            <a href="https://instagram.com/pressonsby_myra" target="_blank" rel="noreferrer" style={{ color: "inherit" }}>@pressonsby_myra</a>
             <div>Mon–Sat · 11am–9pm</div>
           </div>
         </div>
       </div>
       <div style={{ maxWidth: 1240, margin: "44px auto 0", paddingTop: 22, borderTop: "1px solid var(--card-b)", display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap", fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--ink-faint)" }}>
-        <div>© 2026 Myso Nails Studio</div>
+        <div>© 2026 Press-Ons by Myra</div>
         <div>JazzCash · 100% Advance Payment</div>
       </div>
     </footer>

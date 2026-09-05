@@ -2,7 +2,7 @@ import Link from "next/link";
 import { waLink } from "@/lib/format";
 
 export const metadata = {
-  title: "Bridal press-on nails — Myso Nails Studio",
+  title: "Bridal press-on nails — Press-Ons by Myra",
   description: "Custom hand-painted bridal nail sets fitted to your nails. Mehndi, nikkah and walima looks. Book 2 weeks in advance.",
 };
 
@@ -45,14 +45,14 @@ export default function BridalPage() {
       {/* Hero */}
       <div className="bridal-hero" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, minHeight: 580, marginBottom: 80 }}>
         <div className="bridal-hero-text" style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "80px 56px 80px 0" }}>
-          <div style={{ fontSize: 10.5, letterSpacing: ".3em", textTransform: "uppercase", color: "rgba(227,183,166,.75)", marginBottom: 18 }}>Bridal nails</div>
+          <div style={{ fontSize: 10.5, letterSpacing: ".3em", textTransform: "uppercase", color: "rgba(168,121,104,.75)", marginBottom: 18 }}>Bridal nails</div>
           <h1 className="bridal-h1" style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 58, lineHeight: 1.02, margin: "0 0 22px" }}>Your nails should be<br /><em>as perfect as the day</em></h1>
           <p style={{ fontSize: 15, lineHeight: 1.9, color: "rgba(247,241,237,.55)", fontWeight: 300, maxWidth: 440, marginBottom: 36 }}>
             Every bridal set is hand-painted on press-ons fitted to your exact nail chart — so they look flawless in every photo, stay on through the mehndi and come off gently at the end of the week.
           </p>
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
-            <a href={waLink("Hi Myso Nails! I'm interested in a bridal set")} target="_blank" rel="noreferrer" className="btn-wa" style={{ padding: "16px 30px", fontSize: 11.5, letterSpacing: ".22em", textTransform: "uppercase" }}>Book on WhatsApp</a>
-            <Link href="/custom" style={{ padding: "16px 30px", fontSize: 11.5, letterSpacing: ".22em", textTransform: "uppercase", border: "1px solid rgba(227,183,166,.35)", color: "rgba(247,241,237,.75)" }}>Fill custom form</Link>
+            <a href={waLink("Hi Press-Ons by Myra! I'm interested in a bridal set")} target="_blank" rel="noreferrer" className="btn-wa" style={{ padding: "16px 30px", fontSize: 11.5, letterSpacing: ".22em", textTransform: "uppercase" }}>Book on WhatsApp</a>
+            <Link href="/custom" style={{ padding: "16px 30px", fontSize: 11.5, letterSpacing: ".22em", textTransform: "uppercase", border: "1px solid rgba(168,121,104,.35)", color: "rgba(247,241,237,.75)" }}>Fill custom form</Link>
           </div>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, padding: "40px 0" }}>
@@ -65,7 +65,7 @@ export default function BridalPage() {
       </div>
 
       {/* Why press-ons for brides */}
-      <div style={{ borderTop: "1px solid rgba(227,183,166,.14)", paddingTop: 70, marginBottom: 80 }}>
+      <div style={{ borderTop: "1px solid rgba(168,121,104,.14)", paddingTop: 70, marginBottom: 80 }}>
         <h2 style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 42, margin: "0 0 40px", textAlign: "center" }}>Why brides choose press-ons</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 24 }}>
           {[
@@ -74,7 +74,7 @@ export default function BridalPage() {
             { icon: "📸", title: "Photo-ready finish", body: "Even length, even shape — every single nail." },
             { icon: "🔁", title: "Re-wearable", body: "Remove gently after the events and wear again — up to 4 times." },
           ].map((f) => (
-            <div key={f.title} style={{ border: "1px solid rgba(227,183,166,.14)", padding: "28px 24px", background: "var(--panel)" }}>
+            <div key={f.title} style={{ border: "1px solid rgba(168,121,104,.14)", padding: "28px 24px", background: "var(--panel)" }}>
               <div style={{ fontSize: 26, marginBottom: 14 }}>{f.icon}</div>
               <div style={{ fontFamily: "var(--serif)", fontSize: 22, marginBottom: 10 }}>{f.title}</div>
               <div style={{ fontSize: 13.5, lineHeight: 1.8, color: "rgba(247,241,237,.55)", fontWeight: 300 }}>{f.body}</div>
@@ -88,8 +88,8 @@ export default function BridalPage() {
         <h2 style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 42, margin: "0 0 40px" }}>Bridal packages</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(270px,1fr))", gap: 20 }}>
           {PACKAGES.map((pkg) => (
-            <div key={pkg.name} style={{ border: `1px solid ${pkg.highlight ? "rgba(227,183,166,.5)" : "rgba(227,183,166,.16)"}`, background: pkg.highlight ? "rgba(227,183,166,.06)" : "var(--panel)", padding: 30, position: "relative" }}>
-              {pkg.highlight && <div style={{ position: "absolute", top: -12, left: 24, fontSize: 9.5, letterSpacing: ".22em", textTransform: "uppercase", background: "linear-gradient(100deg,#B87A62,#F2CDBB)", color: "#1A0F0A", padding: "5px 12px" }}>Most popular</div>}
+            <div key={pkg.name} style={{ border: `1px solid ${pkg.highlight ? "rgba(168,121,104,.5)" : "rgba(168,121,104,.16)"}`, background: pkg.highlight ? "rgba(168,121,104,.06)" : "var(--panel)", padding: 30, position: "relative" }}>
+              {pkg.highlight && <div style={{ position: "absolute", top: -12, left: 24, fontSize: 9.5, letterSpacing: ".22em", textTransform: "uppercase", background: "linear-gradient(100deg,#8C6252,#E8CFC8)", color: "#1A0F0A", padding: "5px 12px" }}>Most popular</div>}
               <div style={{ fontFamily: "var(--serif)", fontSize: 26, marginBottom: 6 }}>{pkg.name}</div>
               <div style={{ fontSize: 30, fontFamily: "var(--serif)", color: "var(--rose-light)", marginBottom: 4 }}>{pkg.price}</div>
               <div style={{ fontSize: 11, letterSpacing: ".16em", color: "rgba(247,241,237,.4)", marginBottom: 22 }}>{pkg.per}</div>
@@ -100,7 +100,7 @@ export default function BridalPage() {
                   </div>
                 ))}
               </div>
-              <a href={waLink(`Hi Myso Nails! I'm interested in the ${pkg.name} package`)} target="_blank" rel="noreferrer" className="btn-wa" style={{ display: "block", textAlign: "center", padding: "14px 20px", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Book this package</a>
+              <a href={waLink(`Hi Press-Ons by Myra! I'm interested in the ${pkg.name} package`)} target="_blank" rel="noreferrer" className="btn-wa" style={{ display: "block", textAlign: "center", padding: "14px 20px", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Book this package</a>
             </div>
           ))}
         </div>
@@ -110,9 +110,9 @@ export default function BridalPage() {
       {/* Timeline */}
       <div style={{ marginBottom: 80 }}>
         <h2 style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 42, margin: "0 0 40px" }}>Your order timeline</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 0, borderTop: "1px solid rgba(227,183,166,.14)" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 0, borderTop: "1px solid rgba(168,121,104,.14)" }}>
           {TIMELINE.map((t, i) => (
-            <div key={t.day} style={{ padding: "28px 26px 28px 0", borderRight: i < TIMELINE.length - 1 ? "1px solid rgba(227,183,166,.12)" : "none" }}>
+            <div key={t.day} style={{ padding: "28px 26px 28px 0", borderRight: i < TIMELINE.length - 1 ? "1px solid rgba(168,121,104,.12)" : "none" }}>
               <div style={{ fontSize: 10, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 8 }}>{t.day}</div>
               <div style={{ fontFamily: "var(--serif)", fontSize: 22, marginBottom: 12 }}>{t.label}</div>
               <div style={{ fontSize: 13, lineHeight: 1.8, color: "rgba(247,241,237,.55)", fontWeight: 300 }}>{t.body}</div>
@@ -122,12 +122,12 @@ export default function BridalPage() {
       </div>
 
       {/* CTA */}
-      <div className="bridal-cta" style={{ border: "1px solid rgba(227,183,166,.2)", background: "var(--panel)", padding: "52px 48px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 28 }}>
+      <div className="bridal-cta" style={{ border: "1px solid rgba(168,121,104,.2)", background: "var(--panel)", padding: "52px 48px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 28 }}>
         <div>
           <div style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 36, marginBottom: 10 }}>Book at least 2 weeks early</div>
           <div style={{ fontSize: 13.5, color: "rgba(247,241,237,.55)", lineHeight: 1.8, maxWidth: 520 }}>Bridal slots fill up fast around Eid and wedding season. WhatsApp me now to check availability for your date.</div>
         </div>
-        <a href={waLink("Hi Myso Nails! I'd like to book a bridal set. My wedding date is ")} target="_blank" rel="noreferrer" className="btn-wa bridal-cta-btn" style={{ padding: "18px 34px", fontSize: 11.5, letterSpacing: ".24em", textTransform: "uppercase", textAlign: "center" }}>Check availability on WhatsApp</a>
+        <a href={waLink("Hi Press-Ons by Myra! I'd like to book a bridal set. My wedding date is ")} target="_blank" rel="noreferrer" className="btn-wa bridal-cta-btn" style={{ padding: "18px 34px", fontSize: 11.5, letterSpacing: ".24em", textTransform: "uppercase", textAlign: "center" }}>Check availability on WhatsApp</a>
       </div>
     </div>
   );

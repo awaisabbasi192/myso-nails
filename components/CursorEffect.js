@@ -38,13 +38,13 @@ export default function CursorEffect() {
     function onEnter() {
       ring.style.width = "60px";
       ring.style.height = "60px";
-      ring.style.borderColor = "rgba(155,27,42,.8)";
+      ring.style.borderColor = "rgba(168,121,104,.8)";
       dot.style.transform += " scale(1.5)";
     }
     function onLeave() {
       ring.style.width = "38px";
       ring.style.height = "38px";
-      ring.style.borderColor = "rgba(155,27,42,.5)";
+      ring.style.borderColor = "rgba(168,121,104,.5)";
     }
 
     document.addEventListener("mousemove", move2);

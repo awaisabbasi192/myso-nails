@@ -67,7 +67,7 @@ export default function ResetPasswordPage() {
                 <span style={lab}>Confirm new password</span>
                 <input type="password" value={form.confirm} onChange={(e) => { setForm((f) => ({ ...f, confirm: e.target.value })); setError(""); }} onKeyDown={(e) => e.key === "Enter" && submit()} placeholder="Re-enter password" style={inputStyle} />
               </div>
-              {error && <div style={{ fontSize: 12, color: "#E39B9B", borderLeft: "2px solid rgba(200,90,90,.6)", paddingLeft: 12 }}>{error}</div>}
+              {error && <div style={{ fontSize: 12, color: "#E0A099", borderLeft: "2px solid rgba(200,90,90,.6)", paddingLeft: 12 }}>{error}</div>}
               <div onClick={submit} className="shimmer" style={{ cursor: "pointer", textAlign: "center", padding: 15, fontSize: 11, letterSpacing: ".26em", textTransform: "uppercase", marginTop: 4 }}>
                 {status === "saving" ? "Saving…" : "Reset password"}
               </div>

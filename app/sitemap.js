@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mysonails.store";
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pressonsbymyra.pk";
 
 export default async function sitemap() {
   const staticPages = [

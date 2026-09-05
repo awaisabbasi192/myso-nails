@@ -118,7 +118,7 @@ export default function CartCheckout({ prefill }) {
   function waOrderText() {
     const lines = cart.map((c) => `• ${c.name} (${c.size}) × ${c.qty} — ${rs(c.price * c.qty)}`);
     return (
-      `Assalam o Alaikum Myso Nails! 🌸 I'd like to place this order:\n\n` +
+      `Assalam o Alaikum Press-Ons by Myra! 🌸 I'd like to place this order:\n\n` +
       `${lines.join("\n")}\n\n` +
       `Subtotal: ${rs(subtotal)}\n` +
       (couponDiscount ? `Discount: − ${rs(couponDiscount)}\n` : "") +
@@ -128,7 +128,7 @@ export default function CartCheckout({ prefill }) {
     );
   }
 
-  const inputStyle = { background: "transparent", border: "1px solid rgba(227,183,166,.25)", color: "var(--ink)", padding: 14, fontSize: 13, outline: "none", width: "100%", minWidth: 0 };
+  const inputStyle = { background: "transparent", border: "1px solid rgba(168,121,104,.25)", color: "var(--ink)", padding: 14, fontSize: 13, outline: "none", width: "100%", minWidth: 0 };
   const lab = { fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.45)" };
   const STEP_LABELS = ["Bag", "Details", "Payment", "Done"];
 
@@ -140,7 +140,7 @@ export default function CartCheckout({ prefill }) {
           const n = i + 1, active = step === n, done = step > n;
           return (
             <div key={l} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ width: 26, height: 26, borderRadius: "50%", display: "grid", placeItems: "center", fontSize: 11, border: `1px solid ${active || done ? "var(--bronze)" : "rgba(227,183,166,.25)"}`, background: active ? "var(--bronze)" : "transparent", color: active ? "#1A0F0A" : done ? "var(--rose-light)" : "rgba(247,241,237,.4)" }}>{done ? "✓" : n}</span>
+              <span style={{ width: 26, height: 26, borderRadius: "50%", display: "grid", placeItems: "center", fontSize: 11, border: `1px solid ${active || done ? "var(--bronze)" : "rgba(168,121,104,.25)"}`, background: active ? "var(--bronze)" : "transparent", color: active ? "#1A0F0A" : done ? "var(--rose-light)" : "rgba(247,241,237,.4)" }}>{done ? "✓" : n}</span>
               <span style={{ fontSize: 10.5, letterSpacing: ".24em", textTransform: "uppercase", color: active ? "var(--rose-light)" : "rgba(247,241,237,.4)" }}>{l}</span>
             </div>
           );
@@ -153,16 +153,16 @@ export default function CartCheckout({ prefill }) {
           <div>
             <h1 style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 44, margin: "0 0 26px" }}>Your bag</h1>
             {ready && cart.length === 0 && (
-              <div style={{ border: "1px dashed rgba(227,183,166,.25)", padding: 40, textAlign: "center", color: "rgba(247,241,237,.5)", fontSize: 13.5 }}>Your bag is empty. <Link href="/shop" style={{ color: "var(--rose)", borderBottom: "1px solid rgba(227,183,166,.4)" }}>Browse the sets</Link></div>
+              <div style={{ border: "1px dashed rgba(168,121,104,.25)", padding: 40, textAlign: "center", color: "rgba(247,241,237,.5)", fontSize: 13.5 }}>Your bag is empty. <Link href="/shop" style={{ color: "var(--rose)", borderBottom: "1px solid rgba(168,121,104,.4)" }}>Browse the sets</Link></div>
             )}
             {cart.map((c, i) => (
-              <div key={c.slug + c.size + i} className="bag-item" style={{ display: "grid", gridTemplateColumns: "96px 1fr auto", gap: 20, alignItems: "center", borderTop: "1px solid rgba(227,183,166,.14)", padding: "22px 0" }}>
+              <div key={c.slug + c.size + i} className="bag-item" style={{ display: "grid", gridTemplateColumns: "96px 1fr auto", gap: 20, alignItems: "center", borderTop: "1px solid rgba(168,121,104,.14)", padding: "22px 0" }}>
                 <img src={c.image} alt={c.name} style={{ width: 96, height: 112, objectFit: "cover" }} />
                 <div style={{ minWidth: 0 }}>
                   <div style={{ fontFamily: "var(--serif)", fontSize: 23 }}>{c.name}</div>
                   <div style={{ fontSize: 11.5, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(247,241,237,.42)", margin: "7px 0 14px" }}>{c.size} · {rs(c.price)} each</div>
                   <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
-                    <div style={{ display: "flex", alignItems: "center", border: "1px solid rgba(227,183,166,.28)" }}>
+                    <div style={{ display: "flex", alignItems: "center", border: "1px solid rgba(168,121,104,.28)" }}>
                       <div onClick={() => decItem(i)} style={{ cursor: "pointer", padding: "5px 13px", color: "rgba(247,241,237,.6)" }}>−</div>
                       <div style={{ minWidth: 26, textAlign: "center", fontSize: 13 }}>{c.qty}</div>
                       <div onClick={() => incItem(i)} style={{ cursor: "pointer", padding: "5px 13px", color: "rgba(247,241,237,.6)" }}>+</div>
@@ -176,7 +176,7 @@ export default function CartCheckout({ prefill }) {
           </div>
           <Summary {...{ subtotal, shipping, discount, total, coupon, setCoupon, applyCoupon, availablePoints, pointsRedeem, setPointsRedeem, pointsDiscount }}>
             <div onClick={() => cart.length && next()} className="shimmer" style={{ cursor: cart.length ? "pointer" : "not-allowed", opacity: cart.length ? 1 : 0.5, textAlign: "center", marginTop: 22, padding: 17, fontSize: 11.5, letterSpacing: ".26em", textTransform: "uppercase" }}>Checkout</div>
-            <a href={cart.length ? waLink(waOrderText()) : waLink("Hi Myso Nails! I'd like to place an order.")} target="_blank" rel="noreferrer" className="btn-wa" style={{ display: "block", textAlign: "center", marginTop: 10, padding: 15, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Order on WhatsApp instead</a>
+            <a href={cart.length ? waLink(waOrderText()) : waLink("Hi Press-Ons by Myra! I'd like to place an order.")} target="_blank" rel="noreferrer" className="btn-wa" style={{ display: "block", textAlign: "center", marginTop: 10, padding: 15, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Order on WhatsApp instead</a>
           </Summary>
         </div>
       )}
@@ -192,13 +192,13 @@ export default function CartCheckout({ prefill }) {
               <div style={{ gridColumn: "span 2", display: "flex", flexDirection: "column", gap: 8 }}><span style={lab}>Address</span><input value={details.address} onChange={set("address")} placeholder="House, street, area" style={inputStyle} /></div>
               <Field label="City" style={lab} inputStyle={inputStyle} value={details.city} onChange={set("city")} placeholder="Lahore" />
               <Field label="Nail sizes (optional)" style={lab} inputStyle={inputStyle} value={details.nailSizes} onChange={set("nailSizes")} placeholder="e.g. 9,7,8,8,6" />
-              <div style={{ gridColumn: "span 2", display: "flex", flexDirection: "column", gap: 8 }}><span style={lab}>Notes for Maya</span><textarea rows={3} value={details.notes} onChange={set("notes")} placeholder="Event date, design references, anything else" style={{ ...inputStyle, resize: "vertical" }} /></div>
+              <div style={{ gridColumn: "span 2", display: "flex", flexDirection: "column", gap: 8 }}><span style={lab}>Notes for Myra</span><textarea rows={3} value={details.notes} onChange={set("notes")} placeholder="Event date, design references, anything else" style={{ ...inputStyle, resize: "vertical" }} /></div>
             </div>
             <div style={{ display: "flex", gap: 12, marginTop: 26 }}>
-              <div onClick={prev} style={{ cursor: "pointer", border: "1px solid rgba(227,183,166,.3)", padding: "16px 26px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.7)" }}>Back</div>
+              <div onClick={prev} style={{ cursor: "pointer", border: "1px solid rgba(168,121,104,.3)", padding: "16px 26px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.7)" }}>Back</div>
               <div onClick={() => (details.customerName && details.phone && details.address && details.city) ? next() : setErr("Please fill name, phone, address and city") } className="gradient-warm" style={{ cursor: "pointer", padding: "16px 34px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase" }}>Continue to payment</div>
             </div>
-            {err && <div style={{ marginTop: 14, fontSize: 12, color: "#E39B9B" }}>{err}</div>}
+            {err && <div style={{ marginTop: 14, fontSize: 12, color: "#E0A099" }}>{err}</div>}
           </div>
           <MiniSummary cart={cart} total={total} />
         </div>
@@ -212,20 +212,20 @@ export default function CartCheckout({ prefill }) {
             We take <span style={{ color: "var(--rose)" }}>100% advance payment via JazzCash</span> to confirm every order. Cash on delivery is not available.
           </div>
 
-          <div style={{ border: "1px solid rgba(227,183,166,.2)", padding: 30, background: "var(--panel)" }}>
+          <div style={{ border: "1px solid rgba(168,121,104,.2)", padding: 30, background: "var(--panel)" }}>
             <div data-r="split" style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: 30, alignItems: "start" }}>
               <div style={{ width: 150, height: 150, background: "#fff", display: "grid", placeItems: "center", padding: 8, flexShrink: 0 }}>
                 <img src="/assets/jazzcash-qr.png" alt="JazzCash QR" style={{ width: "100%", height: "100%", objectFit: "contain" }} onError={(e) => { e.target.style.display = "none"; e.target.nextSibling.style.display = "flex"; }} />
-                <div style={{ display: "none", width: "100%", height: "100%", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, color: "#C08A72", fontSize: 10, textAlign: "center", letterSpacing: ".1em", textTransform: "uppercase" }}>
+                <div style={{ display: "none", width: "100%", height: "100%", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, color: "#A87968", fontSize: 10, textAlign: "center", letterSpacing: ".1em", textTransform: "uppercase" }}>
                   <span style={{ fontSize: 28 }}>⬡</span>QR here
                 </div>
               </div>
               <div>
                 <div style={{ fontSize: 10.5, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--rose)" }}>Send exactly {rs(total)} to</div>
                 <div style={{ fontFamily: "var(--serif)", fontSize: 34, margin: "10px 0 4px", letterSpacing: ".04em" }}>0306 2451766</div>
-                <div style={{ fontSize: 12.5, color: "rgba(247,241,237,.5)" }}>JazzCash · <span style={{ color: "var(--rose-light)" }}>Naseem</span> · Myso Nails Studio</div>
+                <div style={{ fontSize: 12.5, color: "rgba(247,241,237,.5)" }}>JazzCash · <span style={{ color: "var(--rose-light)" }}>Naseem</span> · Press-Ons by Myra</div>
                 <div style={{ fontSize: 12, color: "rgba(247,241,237,.42)", marginTop: 8, lineHeight: 1.7 }}>Open JazzCash → Send Money → enter the number above → send the exact total → screenshot the confirmation.</div>
-                <label style={{ cursor: "pointer", display: "block", marginTop: 18, border: `1px dashed ${proof ? "rgba(143,214,166,.5)" : "rgba(227,183,166,.4)"}`, padding: 20, textAlign: "center", fontSize: 11.5, letterSpacing: ".18em", textTransform: "uppercase", color: proof ? "var(--good)" : "rgba(247,241,237,.6)" }}>
+                <label style={{ cursor: "pointer", display: "block", marginTop: 18, border: `1px dashed ${proof ? "rgba(143,214,166,.5)" : "rgba(168,121,104,.4)"}`, padding: 20, textAlign: "center", fontSize: 11.5, letterSpacing: ".18em", textTransform: "uppercase", color: proof ? "var(--good)" : "rgba(247,241,237,.6)" }}>
                   {uploading ? "Uploading…" : proof ? `✓ ${proof.name} uploaded` : "+ Upload payment screenshot *"}
                   <input type="file" accept="image/*" onChange={uploadProof} style={{ display: "none" }} />
                 </label>
@@ -236,13 +236,13 @@ export default function CartCheckout({ prefill }) {
 
           {/* Terms agreement */}
           <label style={{ display: "flex", alignItems: "flex-start", gap: 11, marginTop: 22, cursor: "pointer", fontSize: 12.5, color: "rgba(247,241,237,.6)", lineHeight: 1.6 }}>
-            <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} style={{ marginTop: 3, accentColor: "#C08A72", width: 15, height: 15, flexShrink: 0 }} />
-            <span>I have paid in advance via JazzCash and I agree to the <Link href="/policies" target="_blank" style={{ color: "var(--rose)", borderBottom: "1px solid rgba(227,183,166,.4)" }}>Terms &amp; Refund Policy</Link>.</span>
+            <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} style={{ marginTop: 3, accentColor: "#A87968", width: 15, height: 15, flexShrink: 0 }} />
+            <span>I have paid in advance via JazzCash and I agree to the <Link href="/policies" target="_blank" style={{ color: "var(--rose)", borderBottom: "1px solid rgba(168,121,104,.4)" }}>Terms &amp; Refund Policy</Link>.</span>
           </label>
 
-          {err && <div style={{ marginTop: 16, fontSize: 12, color: "#E39B9B" }}>{err}</div>}
+          {err && <div style={{ marginTop: 16, fontSize: 12, color: "#E0A099" }}>{err}</div>}
           <div style={{ display: "flex", gap: 12, marginTop: 26, flexWrap: "wrap" }}>
-            <div onClick={prev} style={{ cursor: "pointer", border: "1px solid rgba(227,183,166,.3)", padding: "16px 26px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.7)" }}>Back</div>
+            <div onClick={prev} style={{ cursor: "pointer", border: "1px solid rgba(168,121,104,.3)", padding: "16px 26px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.7)" }}>Back</div>
             <div onClick={placeOrder} className="shimmer" style={{ cursor: "pointer", padding: "16px 40px", fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase" }}>{placing ? "Placing…" : `Place order · ${rs(total)}`}</div>
           </div>
         </div>
@@ -271,7 +271,7 @@ export default function CartCheckout({ prefill }) {
           {/* Thank you card */}
           <div className="celebration-card" style={{ maxWidth: 640, margin: "20px auto", textAlign: "center", padding: "64px 40px 52px", background: "var(--panel)", border: "1px solid var(--card-b)", borderRadius: 4, position: "relative", overflow: "hidden" }}>
             {/* Background glow */}
-            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 0%, rgba(196,35,61,.13) 0%, transparent 65%)", pointerEvents: "none" }} />
+            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 0%, rgba(214,168,150,.13) 0%, transparent 65%)", pointerEvents: "none" }} />
 
             {/* Script headline */}
             <div className="text-gradient" style={{ fontFamily: "var(--script)", fontSize: 68, lineHeight: 1, position: "relative" }}>
@@ -337,7 +337,7 @@ function Field({ label, style, inputStyle, ...props }) {
 
 function Summary({ subtotal, shipping, discount, total, coupon, setCoupon, applyCoupon, availablePoints, pointsRedeem, setPointsRedeem, pointsDiscount, children }) {
   return (
-    <div style={{ border: "1px solid rgba(227,183,166,.18)", background: "var(--panel)", padding: 30 }}>
+    <div style={{ border: "1px solid rgba(168,121,104,.18)", background: "var(--panel)", padding: 30 }}>
       <div style={{ fontSize: 10.5, letterSpacing: ".3em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 22 }}>Order summary</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 13, fontSize: 13.5, color: "rgba(247,241,237,.6)" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}><span>Subtotal</span><span style={{ color: "var(--ink)" }}>{rs(subtotal)}</span></div>
@@ -346,7 +346,7 @@ function Summary({ subtotal, shipping, discount, total, coupon, setCoupon, apply
         {pointsDiscount > 0 && <div style={{ display: "flex", justifyContent: "space-between" }}><span>Points redeemed</span><span style={{ color: "#8FD6A6" }}>− {rs(pointsDiscount)}</span></div>}
       </div>
       {availablePoints > 0 && (
-        <label style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 16, cursor: "pointer", padding: "12px 14px", border: `1px solid ${pointsRedeem ? "rgba(143,214,166,.4)" : "rgba(227,183,166,.2)"}`, background: pointsRedeem ? "rgba(143,214,166,.06)" : "transparent" }}>
+        <label style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 16, cursor: "pointer", padding: "12px 14px", border: `1px solid ${pointsRedeem ? "rgba(143,214,166,.4)" : "rgba(168,121,104,.2)"}`, background: pointsRedeem ? "rgba(143,214,166,.06)" : "transparent" }}>
           <input type="checkbox" checked={pointsRedeem} onChange={(e) => setPointsRedeem(e.target.checked)} style={{ accentColor: "#8FD6A6", width: 15, height: 15, flexShrink: 0 }} />
           <span style={{ fontSize: 12.5, color: "rgba(247,241,237,.7)", lineHeight: 1.5 }}>Redeem <strong style={{ color: "#8FD6A6" }}>{availablePoints} points</strong> → save up to {rs(Math.min(availablePoints, Math.floor(total * 0.2) + (pointsRedeem ? pointsDiscount : 0)))}</span>
         </label>
@@ -355,12 +355,12 @@ function Summary({ subtotal, shipping, discount, total, coupon, setCoupon, apply
         <div style={{ fontSize: 11, color: "rgba(247,241,237,.42)", marginTop: 10, lineHeight: 1.6 }}>Add {rs(5000 - subtotal)} more for <span style={{ color: "var(--rose)" }}>free delivery</span> (orders Rs 5,000+).</div>
       )}
       <div style={{ display: "flex", gap: 8, margin: "20px 0" }}>
-        <input value={coupon.code} onChange={(e) => setCoupon((c) => ({ ...c, code: e.target.value }))} placeholder="Coupon or gift card code" style={{ flex: 1, background: "transparent", border: "1px solid rgba(227,183,166,.25)", color: "var(--ink)", padding: 12, fontSize: 12.5, outline: "none" }} />
-        <div onClick={applyCoupon} style={{ cursor: "pointer", border: "1px solid rgba(227,183,166,.3)", padding: "12px 16px", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(247,241,237,.7)" }}>Apply</div>
+        <input value={coupon.code} onChange={(e) => setCoupon((c) => ({ ...c, code: e.target.value }))} placeholder="Coupon or gift card code" style={{ flex: 1, background: "transparent", border: "1px solid rgba(168,121,104,.25)", color: "var(--ink)", padding: 12, fontSize: 12.5, outline: "none" }} />
+        <div onClick={applyCoupon} style={{ cursor: "pointer", border: "1px solid rgba(168,121,104,.3)", padding: "12px 16px", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(247,241,237,.7)" }}>Apply</div>
       </div>
-      {coupon.error && <div style={{ fontSize: 11.5, color: "#E39B9B", marginBottom: 12 }}>{coupon.error}</div>}
+      {coupon.error && <div style={{ fontSize: 11.5, color: "#E0A099", marginBottom: 12 }}>{coupon.error}</div>}
       {coupon.applied && <div style={{ fontSize: 11.5, color: "var(--good)", marginBottom: 12 }}>{coupon.applied.code} applied ✓{coupon.applied.type === "giftcard" && coupon.applied.balance ? ` · Rs ${coupon.applied.balance.toLocaleString("en-PK")} balance` : ""}</div>}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderTop: "1px solid rgba(227,183,166,.16)", paddingTop: 18 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderTop: "1px solid rgba(168,121,104,.16)", paddingTop: 18 }}>
         <span style={{ fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", color: "rgba(247,241,237,.55)" }}>Total</span>
         <span style={{ fontFamily: "var(--serif)", fontSize: 30, color: "var(--rose-light)" }}>{rs(total)}</span>
       </div>
@@ -371,7 +371,7 @@ function Summary({ subtotal, shipping, discount, total, coupon, setCoupon, apply
 
 function MiniSummary({ cart, total }) {
   return (
-    <div style={{ border: "1px solid rgba(227,183,166,.18)", background: "var(--panel)", padding: 28 }}>
+    <div style={{ border: "1px solid rgba(168,121,104,.18)", background: "var(--panel)", padding: 28 }}>
       <div style={{ fontSize: 10.5, letterSpacing: ".3em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 20 }}>In your bag</div>
       {cart.map((c, i) => (
         <div key={c.slug + i} style={{ display: "flex", gap: 14, alignItems: "center", marginBottom: 16 }}>
@@ -383,7 +383,7 @@ function MiniSummary({ cart, total }) {
           <div style={{ fontSize: 13, color: "var(--rose-light)" }}>{rs(c.price * c.qty)}</div>
         </div>
       ))}
-      <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid rgba(227,183,166,.16)", paddingTop: 16, fontSize: 13.5 }}><span style={{ color: "rgba(247,241,237,.6)" }}>Total</span><span style={{ color: "var(--rose-light)", fontSize: 19 }}>{rs(total)}</span></div>
+      <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid rgba(168,121,104,.16)", paddingTop: 16, fontSize: 13.5 }}><span style={{ color: "rgba(247,241,237,.6)" }}>Total</span><span style={{ color: "var(--rose-light)", fontSize: 19 }}>{rs(total)}</span></div>
     </div>
   );
 }

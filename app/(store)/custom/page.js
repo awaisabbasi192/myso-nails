@@ -196,7 +196,7 @@ export default function CustomOrderPage() {
             <div onClick={() => setStep(1)} style={{ cursor: "pointer", padding: "14px 24px", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", border: "1px solid var(--card-b)", color: "var(--ink-muted)" }}>← Back</div>
             <div onClick={() => { if (!form.designNotes) { setError("Please describe your design."); return; } setError(""); setStep(3); }} className="shimmer" style={{ cursor: "pointer", padding: "14px 32px", fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase" }}>Next — Contact →</div>
           </div>
-          {error && <div style={{ fontSize: 12, color: "#E39B9B", paddingLeft: 12, borderLeft: "2px solid rgba(200,90,90,.6)" }}>{error}</div>}
+          {error && <div style={{ fontSize: 12, color: "#E0A099", paddingLeft: 12, borderLeft: "2px solid rgba(200,90,90,.6)" }}>{error}</div>}
         </div>
       )}
 
@@ -229,7 +229,7 @@ export default function CustomOrderPage() {
             </div>
           </div>
 
-          {error && <div style={{ fontSize: 12, color: "#E39B9B", paddingLeft: 12, borderLeft: "2px solid rgba(200,90,90,.6)" }}>{error}</div>}
+          {error && <div style={{ fontSize: 12, color: "#E0A099", paddingLeft: 12, borderLeft: "2px solid rgba(200,90,90,.6)" }}>{error}</div>}
 
           <div style={{ display: "flex", gap: 12, justifyContent: "space-between" }}>
             <div onClick={() => setStep(2)} style={{ cursor: "pointer", padding: "14px 24px", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", border: "1px solid var(--card-b)", color: "var(--ink-muted)" }}>← Back</div>

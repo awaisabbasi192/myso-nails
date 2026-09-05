@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { rs } from "@/lib/format";
+import { showToast } from "./Toast";
 
 const TABS = ["Overview", "Orders", "Products", "Categories", "Customers", "Reviews", "Coupons", "Gift Cards", "Messages", "Media", "Analytics", "Bundle Deals", "Custom Orders", "Drops", "Settings", "Homepage"];
 const ORDER_FILTERS = ["All", "Pending", "Confirmed", "Shipped", "Delivered", "Rejected"];
 const ASSET_IMAGES = ["/assets/p1-french.jpeg", "/assets/p2-maroon.jpeg", "/assets/p3-leopard.jpeg", "/assets/p4-nude.jpeg", "/assets/g1.jpeg", "/assets/g2.jpeg", "/assets/g3.jpeg"];
 // Mirrors lib/deal.js DEAL_THEMES (kept here so this client file doesn't import server code)
 const DEAL_THEME_UI = [
-  { key: "red",    label: "Cherry (default)", emoji: "⚡",  text: "#ffffff", swatch: "#C4233D", grad: "linear-gradient(100deg,#9B1B2A,#C4233D 60%,#9B1B2A)" },
+  { key: "red",    label: "Cherry (default)", emoji: "⚡",  text: "#ffffff", swatch: "#C0907C", grad: "linear-gradient(100deg,#A87968,#C0907C 60%,#A87968)" },
   { key: "green",  label: "Azadi green",      emoji: "🇵🇰", text: "#ffffff", swatch: "#14833F", grad: "linear-gradient(100deg,#0A5C2E,#14833F 60%,#0A5C2E)" },
   { key: "gold",   label: "Eid gold",         emoji: "🌙", text: "#1A0F0A", swatch: "#C79A2E", grad: "linear-gradient(100deg,#8A6410,#C79A2E 55%,#8A6410)" },
   { key: "purple", label: "Royal purple",     emoji: "✨", text: "#ffffff", swatch: "#6B21A8", grad: "linear-gradient(100deg,#3D1163,#6B21A8 60%,#3D1163)" },
@@ -31,20 +32,23 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
   const [orderPage, setOrderPage] = useState(1);
   const ORDERS_PER_PAGE = 15;
   const [waTpls, setWaTpls] = useState({
-    Confirmed: content?.waConfirmed || "Assalam o Alaikum {name}! 🎉 Aapka order *{code}* confirm ho gaya hai. — Myso Nails Studio",
-    Shipped:   content?.waShipped   || "Assalam o Alaikum {name}! 📦 Aapka order *{code}* ship ho gaya! — Myso Nails Studio",
-    Delivered: content?.waDelivered || "Assalam o Alaikum {name}! ✅ Aapka order *{code}* deliver ho gaya. — Myso Nails Studio",
-    Rejected:  content?.waRejected  || "Assalam o Alaikum {name}! Aapka order *{code}* ke baray mein kuch masla hai. — Myso Nails Studio",
+    Confirmed: content?.waConfirmed || "Assalam o Alaikum {name}! 🎉 Aapka order *{code}* confirm ho gaya hai. — Press-Ons by Myra",
+    Shipped:   content?.waShipped   || "Assalam o Alaikum {name}! 📦 Aapka order *{code}* ship ho gaya! — Press-Ons by Myra",
+    Delivered: content?.waDelivered || "Assalam o Alaikum {name}! ✅ Aapka order *{code}* deliver ho gaya. — Press-Ons by Myra",
+    Rejected:  content?.waRejected  || "Assalam o Alaikum {name}! Aapka order *{code}* ke baray mein kuch masla hai. — Press-Ons by Myra",
   });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  async function call(url, method, body) {
+  async function call(url, method, body, successMsg) {
     setBusy(true);
     try {
       const res = await fetch(url, { method, headers: body ? { "Content-Type": "application/json" } : undefined, body: body ? JSON.stringify(body) : undefined });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) alert(data.error || "Something went wrong");
-      else router.refresh();
+      if (!res.ok) showToast(data.error || "Something went wrong", "error");
+      else {
+        showToast(successMsg || (method === "DELETE" ? "Deleted" : "Saved"), "success");
+        router.refresh();
+      }
       return res.ok;
     } finally { setBusy(false); }
   }
@@ -108,11 +112,11 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
         <div className="admin-drawer-close" onClick={() => setMobileMenuOpen(false)}>×</div>
         <div style={{ fontSize: 10, letterSpacing: ".3em", textTransform: "uppercase", color: "var(--ink-muted)", padding: "0 24px 18px" }}>Studio admin</div>
         {TABS.map((t) => (
-          <div key={t} className="admin-tab" onClick={() => { setTab(t); setMobileMenuOpen(false); }} style={{ cursor: "pointer", padding: "13px 24px", fontSize: 12.5, letterSpacing: ".1em", color: tab === t ? "var(--rose)" : "var(--ink-muted)", background: tab === t ? "rgba(155,27,42,.08)" : "transparent", borderLeft: `2px solid ${tab === t ? "var(--rose)" : "transparent"}` }}>{t}</div>
+          <div key={t} className="admin-tab" onClick={() => { setTab(t); setMobileMenuOpen(false); }} style={{ cursor: "pointer", padding: "13px 24px", fontSize: 12.5, letterSpacing: ".1em", color: tab === t ? "var(--rose)" : "var(--ink-muted)", background: tab === t ? "rgba(168,121,104,.08)" : "transparent", borderLeft: `2px solid ${tab === t ? "var(--rose)" : "transparent"}` }}>{t}</div>
         ))}
         <div className="admin-side-foot" style={{ margin: "26px 24px 0", paddingTop: 20, borderTop: "1px solid var(--card-b)", fontSize: 11.5, lineHeight: 1.9, color: "var(--ink-muted)" }}>
           Signed in as<br /><span style={{ color: "var(--rose)" }}>{adminEmail}</span>
-          <a href="/" style={{ display: "block", marginTop: 14, fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "10px 12px", textAlign: "center" }}>↗ Visit site</a>
+          <a href="/" style={{ display: "block", marginTop: 14, fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "10px 12px", textAlign: "center" }}>↗ Visit site</a>
           <div onClick={logout} style={{ cursor: "pointer", marginTop: 10, fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "9px 12px", textAlign: "center", color: "var(--ink-muted)" }}>Sign out</div>
         </div>
       </aside>
@@ -132,7 +136,7 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
               <h1 style={{ ...h1, marginBottom: 0 }}>Orders</h1>
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
                 {selectedOrders.size > 0 && (
-                  <div onClick={deleteSelected} style={{ cursor: "pointer", border: "1px solid rgba(200,90,90,.45)", color: "#E39B9B", padding: "10px 18px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase" }}>
+                  <div onClick={deleteSelected} style={{ cursor: "pointer", border: "1px solid rgba(200,90,90,.45)", color: "#E0A099", padding: "10px 18px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase" }}>
                     {busy ? "Deleting…" : `Delete (${selectedOrders.size})`}
                   </div>
                 )}
@@ -149,12 +153,12 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
             </div>
             <div data-scroll-x="1" style={{ border: "1px solid var(--card-b)", background: "var(--panel)" }}>
               <div style={{ minWidth: 1060, display: "grid", gridTemplateColumns: "40px 110px 1.4fr 1fr 110px 160px auto", gap: 14, padding: "16px 22px", borderBottom: "1px solid var(--card-b)", fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--ink-faint)", alignItems: "center" }}>
-                <input type="checkbox" checked={shownOrders.length > 0 && selectedOrders.size === shownOrders.length} onChange={toggleAllOrders} style={{ cursor: "pointer", accentColor: "#9B1B2A", width: 14, height: 14 }} />
+                <input type="checkbox" checked={shownOrders.length > 0 && selectedOrders.size === shownOrders.length} onChange={toggleAllOrders} style={{ cursor: "pointer", accentColor: "#A87968", width: 14, height: 14 }} />
                 <div>Order</div><div>Customer</div><div>Items</div><div>Total</div><div>Status</div><div>Action</div>
               </div>
               {shownOrders.map((o) => (
-                <div key={o.id} style={{ minWidth: 1060, display: "grid", gridTemplateColumns: "40px 110px 1.4fr 1fr 110px 160px auto", gap: 14, padding: "18px 22px", borderBottom: "1px solid var(--card-b)", alignItems: "start", fontSize: 12.5, background: selectedOrders.has(o.id) ? "rgba(155,27,42,.06)" : "transparent" }}>
-                  <input type="checkbox" checked={selectedOrders.has(o.id)} onChange={() => toggleSelectOrder(o.id)} style={{ cursor: "pointer", accentColor: "#9B1B2A", width: 14, height: 14, marginTop: 3 }} />
+                <div key={o.id} style={{ minWidth: 1060, display: "grid", gridTemplateColumns: "40px 110px 1.4fr 1fr 110px 160px auto", gap: 14, padding: "18px 22px", borderBottom: "1px solid var(--card-b)", alignItems: "start", fontSize: 12.5, background: selectedOrders.has(o.id) ? "rgba(168,121,104,.06)" : "transparent" }}>
+                  <input type="checkbox" checked={selectedOrders.has(o.id)} onChange={() => toggleSelectOrder(o.id)} style={{ cursor: "pointer", accentColor: "#A87968", width: 14, height: 14, marginTop: 3 }} />
                   <div><div style={{ color: "var(--rose-light)" }}>{o.code}</div><div style={{ fontSize: 10.5, color: "var(--ink-faint)", marginTop: 3 }}>{o.date}</div></div>
                   <div><div>{o.customerName}</div><div style={{ fontSize: 11, color: "var(--ink-faint)", marginTop: 3 }}>{o.city} · {o.phone}</div></div>
                   <div style={{ color: "var(--ink-muted)", fontSize: 11.5 }}>{o.items}</div>
@@ -175,14 +179,15 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
                   </div>
                   <div style={{ display: "flex", gap: 7, alignItems: "center", flexWrap: "wrap", paddingTop: 2 }}>
                     <div onClick={() => setShot(o)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "7px 9px", color: "var(--ink-muted)", whiteSpace: "nowrap" }}>{o.paymentProof ? "Receipt" : "Details"}</div>
+                    <a href={`/invoice/${encodeURIComponent(o.code)}`} target="_blank" rel="noreferrer" style={{ fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "7px 9px", color: "var(--ink-muted)", whiteSpace: "nowrap" }}>Invoice</a>
                     {(o.status === "Pending" || o.status === "Confirmed" || o.status === "Shipped") && (
-                      <div onClick={() => updateStatus(o, nextStatus(o.status))} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "7px 10px", whiteSpace: "nowrap" }}>{advanceLabel(o.status)}</div>
+                      <div onClick={() => updateStatus(o, nextStatus(o.status))} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "7px 10px", whiteSpace: "nowrap" }}>{advanceLabel(o.status)}</div>
                     )}
                     {(o.status === "Rejected" || o.status === "Cancelled") && (
-                      <div onClick={() => updateStatus(o, "Pending")} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "7px 10px", whiteSpace: "nowrap" }}>Reopen</div>
+                      <div onClick={() => updateStatus(o, "Pending")} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "7px 10px", whiteSpace: "nowrap" }}>Reopen</div>
                     )}
                     {(o.status === "Pending" || o.status === "Confirmed" || o.status === "Shipped") && (
-                      <div onClick={() => updateStatus(o, "Rejected")} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.4)", color: "#E39B9B", padding: "7px 9px", whiteSpace: "nowrap" }}>Reject</div>
+                      <div onClick={() => updateStatus(o, "Rejected")} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.4)", color: "#E0A099", padding: "7px 9px", whiteSpace: "nowrap" }}>Reject</div>
                     )}
                     <div onClick={() => confirm(`Delete order ${o.code}?`) && call(`/api/admin/orders/${o.id}`, "DELETE")} style={{ cursor: "pointer", fontSize: 13, color: "rgba(227,145,145,.5)", padding: "5px 9px", lineHeight: 1 }} title="Delete">✕</div>
                   </div>
@@ -216,8 +221,8 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
               <h1 style={{ ...h1, marginBottom: 0 }}>Products</h1>
               <div style={{ display: "flex", gap: 10 }}>
                 <div onClick={() => { setBulkEdit((b) => !b); setBulkStocks(Object.fromEntries(products.map((p) => [p.id, p.stock]))); }} style={{ cursor: "pointer", border: "1px solid var(--card-b)", color: bulkEdit ? "var(--rose-light)" : "var(--ink-muted)", padding: "12px 20px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{bulkEdit ? "Cancel bulk edit" : "Bulk edit stock"}</div>
-                {bulkEdit && <div onClick={async () => { setBusy(true); try { for (const [id, stock] of Object.entries(bulkStocks)) { await fetch(`/api/admin/products/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ stock: Number(stock) }) }); } router.refresh(); setBulkEdit(false); } finally { setBusy(false); } }} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "12px 20px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "Saving…" : "Save all stock"}</div>}
-                <div onClick={() => setEditProduct({})} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "12px 20px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>+ New product</div>
+                {bulkEdit && <div onClick={async () => { setBusy(true); try { for (const [id, stock] of Object.entries(bulkStocks)) { await fetch(`/api/admin/products/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ stock: Number(stock) }) }); } router.refresh(); setBulkEdit(false); } finally { setBusy(false); } }} style={{ cursor: "pointer", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "12px 20px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "Saving…" : "Save all stock"}</div>}
+                <div onClick={() => setEditProduct({})} style={{ cursor: "pointer", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "12px 20px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>+ New product</div>
               </div>
             </div>
             {bulkEdit ? (
@@ -229,7 +234,7 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
                   <div key={p.id} style={{ display: "grid", gridTemplateColumns: "56px 1fr 120px 110px", gap: 14, padding: "12px 22px", borderBottom: "1px solid var(--card-b)", alignItems: "center", fontSize: 12.5 }}>
                     <img src={p.image} alt="" style={{ width: 40, height: 48, objectFit: "cover" }} />
                     <div><div style={{ fontFamily: "var(--serif)", fontSize: 17 }}>{p.name}</div><div style={{ fontSize: 11, color: "var(--ink-faint)" }}>{rs(p.price)}</div></div>
-                    <div style={{ color: p.stock <= 3 ? "#E39B9B" : "var(--ink-muted)" }}>{p.stock} units</div>
+                    <div style={{ color: p.stock <= 3 ? "#E0A099" : "var(--ink-muted)" }}>{p.stock} units</div>
                     <input type="number" min="0" value={bulkStocks[p.id] ?? p.stock} onChange={(e) => setBulkStocks((s) => ({ ...s, [p.id]: e.target.value }))} style={{ ...adminInput, padding: "8px 10px", fontSize: 13, width: 90 }} />
                   </div>
                 ))}
@@ -245,11 +250,11 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
                     <div><div style={{ fontFamily: "var(--serif)", fontSize: 19 }}>{p.name}</div><div style={{ fontSize: 11, color: "var(--ink-faint)", marginTop: 3 }}>{p.colorway}</div></div>
                     <div style={{ color: "var(--ink-muted)" }}>{p.categoryName}</div>
                     <div style={{ color: "var(--rose-light)" }}>{rs(p.price)}{p.wasPrice ? <span style={{ fontSize: 10, color: "var(--ink-faint)", textDecoration: "line-through", marginLeft: 6 }}>{rs(p.wasPrice)}</span> : null}</div>
-                    <div style={{ color: p.stock <= 3 ? "#E39B9B" : "inherit" }}>{p.stock}{p.stock <= 3 ? " ⚠" : ""}</div>
+                    <div style={{ color: p.stock <= 3 ? "#E0A099" : "inherit" }}>{p.stock}{p.stock <= 3 ? " ⚠" : ""}</div>
                     <div style={{ color: "var(--rose)" }}>{p.featured ? "Featured" : "—"}</div>
                     <div style={{ display: "flex", gap: 8 }}>
                       <div onClick={() => setEditProduct(p)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "8px 11px", color: "var(--ink-muted)" }}>Edit</div>
-                      <div onClick={() => confirm(`Delete "${p.name}"?`) && call(`/api/admin/products/${p.id}`, "DELETE")} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E39B9B", padding: "8px 11px" }}>Delete</div>
+                      <div onClick={() => confirm(`Delete "${p.name}"?`) && call(`/api/admin/products/${p.id}`, "DELETE")} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E0A099", padding: "8px 11px" }}>Delete</div>
                     </div>
                   </div>
                 ))}
@@ -337,12 +342,12 @@ export default function AdminDashboard({ adminEmail, kpis, orders, products, cus
             {shot.paymentProof ? (
               <img src={shot.paymentProof} alt="Payment proof" style={{ width: "100%", objectFit: "contain", background: "#000", display: "block" }} />
             ) : (
-              <div style={{ padding: 30, textAlign: "center", color: "var(--ink-muted)", border: "1px dashed rgba(227,183,166,.25)", fontSize: 13 }}>{shot.paymentMethod === "cod" ? "Cash on delivery — no screenshot." : "No screenshot uploaded."}</div>
+              <div style={{ padding: 30, textAlign: "center", color: "var(--ink-muted)", border: "1px dashed rgba(168,121,104,.25)", fontSize: 13 }}>{shot.paymentMethod === "cod" ? "Cash on delivery — no screenshot." : "No screenshot uploaded."}</div>
             )}
             <div style={{ marginTop: 16, fontSize: 12.5, color: "var(--ink-muted)" }}>{shot.customerName} · {shot.phone} · {shot.city}<br />{shot.items} · <span style={{ color: "var(--rose-light)" }}>{rs(shot.total)}</span></div>
             <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
-              <div onClick={() => { updateStatus(shot, "Confirmed"); setShot(null); }} style={{ cursor: "pointer", flex: 1, textAlign: "center", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: 14, fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase" }}>Confirm payment</div>
-              <div onClick={() => { updateStatus(shot, "Rejected"); setShot(null); }} style={{ cursor: "pointer", border: "1px solid rgba(200,90,90,.4)", color: "#E39B9B", padding: "14px 18px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase" }}>Reject</div>
+              <div onClick={() => { updateStatus(shot, "Confirmed"); setShot(null); }} style={{ cursor: "pointer", flex: 1, textAlign: "center", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: 14, fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase" }}>Confirm payment</div>
+              <div onClick={() => { updateStatus(shot, "Rejected"); setShot(null); }} style={{ cursor: "pointer", border: "1px solid rgba(200,90,90,.4)", color: "#E0A099", padding: "14px 18px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase" }}>Reject</div>
             </div>
           </div>
         </div>
@@ -364,7 +369,7 @@ function Overview({ kpis, orders, products }) {
     { label: "Customers", value: String(kpis.customers), delta: "Registered", color: "#8FD6A6" },
     { label: "Newsletter subscribers", value: String(kpis.subscribers || 0), delta: "Email list", color: "#8FD6A6" },
     { label: "Pending verification", value: String(kpis.pending), delta: kpis.pending ? "Review now →" : "All clear", color: kpis.pending ? "var(--rose)" : "#8FD6A6" },
-    { label: "Low stock", value: `${kpis.lowStock} sets`, delta: kpis.lowStockName ? `${kpis.lowStockName} needs restock` : "Stock healthy", color: kpis.lowStock ? "#E39B9B" : "#8FD6A6" },
+    { label: "Low stock", value: `${kpis.lowStock} sets`, delta: kpis.lowStockName ? `${kpis.lowStockName} needs restock` : "Stock healthy", color: kpis.lowStock ? "#E0A099" : "#8FD6A6" },
   ];
 
   const chart = kpis.revenueChart || [];
@@ -372,7 +377,7 @@ function Overview({ kpis, orders, products }) {
   const alerts = [];
   if (kpis.pending) alerts.push({ title: `${kpis.pending} order${kpis.pending > 1 ? "s" : ""} pending payment verification`, meta: "Open Orders tab → check receipts", dot: "var(--rose)" });
   if (kpis.messages > 0) alerts.push({ title: `${kpis.messages} contact message${kpis.messages > 1 ? "s" : ""} received`, meta: "Open Messages tab → reply on WhatsApp", dot: "#d4a89a" });
-  products.filter((p) => p.stock <= 3).forEach((p) => alerts.push({ title: `${p.name} — only ${p.stock} left`, meta: "Restock or hide from shop", dot: "#E39B9B" }));
+  products.filter((p) => p.stock <= 3).forEach((p) => alerts.push({ title: `${p.name} — only ${p.stock} left`, meta: "Restock or hide from shop", dot: "#E0A099" }));
   if (alerts.length === 0) alerts.push({ title: "Everything looks good", meta: "No urgent actions needed", dot: "#8FD6A6" });
 
   return (
@@ -400,7 +405,7 @@ function Overview({ kpis, orders, products }) {
               const isMax = d.total === maxVal && d.total > 0;
               return (
                 <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4, height: "100%", justifyContent: "flex-end" }} title={`${d.date}: ${rs(d.total)}`}>
-                  <div style={{ width: "100%", height: `${Math.max(pct, 2)}%`, background: isMax ? "linear-gradient(180deg,#C4233D,#9B1B2A)" : "linear-gradient(180deg,#9B1B2A,#620F1A)", borderRadius: "1px 1px 0 0", minHeight: 3 }} />
+                  <div style={{ width: "100%", height: `${Math.max(pct, 2)}%`, background: isMax ? "linear-gradient(180deg,#C0907C,#A87968)" : "linear-gradient(180deg,#A87968,#620F1A)", borderRadius: "1px 1px 0 0", minHeight: 3 }} />
                   {i % 4 === 0 && <div style={{ fontSize: 8.5, color: "var(--ink-faint)", whiteSpace: "nowrap", transform: "rotate(-30deg)", transformOrigin: "top" }}>{d.date.slice(5)}</div>}
                 </div>
               );
@@ -446,9 +451,9 @@ function Coupons({ coupons, call, busy }) {
                 <div style={{ fontSize: 11.5, color: "var(--ink-faint)", marginTop: 5 }}>{c.detail || (c.type === "percentage" ? `${c.value}% off` : `Rs ${c.value} off`)} · used {c.usedCount}×</div>
               </div>
               <div className="admin-flex-actions" style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <span style={{ fontSize: 10, letterSpacing: ".16em", textTransform: "uppercase", border: "1px solid rgba(227,183,166,.28)", padding: "6px 10px", color: c.active ? "#8FD6A6" : "var(--ink-faint)" }}>{c.active ? "Active" : "Off"}</span>
-                <div onClick={() => call(`/api/admin/coupons/${c.id}`, "PATCH", { active: !c.active })} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(227,183,166,.28)", padding: "8px 11px", color: "var(--ink-muted)" }}>{c.active ? "Disable" : "Enable"}</div>
-                <div onClick={() => confirm(`Delete ${c.code}?`) && call(`/api/admin/coupons/${c.id}`, "DELETE")} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E39B9B", padding: "8px 11px" }}>Delete</div>
+                <span style={{ fontSize: 10, letterSpacing: ".16em", textTransform: "uppercase", border: "1px solid rgba(168,121,104,.28)", padding: "6px 10px", color: c.active ? "#8FD6A6" : "var(--ink-faint)" }}>{c.active ? "Active" : "Off"}</span>
+                <div onClick={() => call(`/api/admin/coupons/${c.id}`, "PATCH", { active: !c.active })} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(168,121,104,.28)", padding: "8px 11px", color: "var(--ink-muted)" }}>{c.active ? "Disable" : "Enable"}</div>
+                <div onClick={() => confirm(`Delete ${c.code}?`) && call(`/api/admin/coupons/${c.id}`, "DELETE")} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E0A099", padding: "8px 11px" }}>Delete</div>
               </div>
             </div>
           ))}
@@ -463,7 +468,7 @@ function Coupons({ coupons, call, busy }) {
             <input value={form.value} onChange={set("value")} placeholder={form.type === "percentage" ? "15" : "500"} style={adminInput} />
           </div>
           <input type="date" value={form.expiresAt} onChange={set("expiresAt")} style={adminInput} />
-          <div onClick={create} style={{ cursor: "pointer", textAlign: "center", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: 14, fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "…" : "Create coupon"}</div>
+          <div onClick={create} style={{ cursor: "pointer", textAlign: "center", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: 14, fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "…" : "Create coupon"}</div>
         </div>
       </div>
     </div>
@@ -507,9 +512,9 @@ function Categories({ categories, call, busy, router }) {
                 <div style={{ fontSize: 11, color: "var(--ink-faint)", marginTop: 3 }}>/{c.slug}</div>
               </div>
               <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                <span onClick={() => call(`/api/admin/categories/${c.id}`, "PATCH", { showOnHome: !c.showOnHome })} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(227,183,166,.28)", padding: "7px 10px", color: c.showOnHome ? "#8FD6A6" : "var(--ink-faint)" }}>{c.showOnHome ? "Shown" : "Hidden"}</span>
+                <span onClick={() => call(`/api/admin/categories/${c.id}`, "PATCH", { showOnHome: !c.showOnHome })} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(168,121,104,.28)", padding: "7px 10px", color: c.showOnHome ? "#8FD6A6" : "var(--ink-faint)" }}>{c.showOnHome ? "Shown" : "Hidden"}</span>
                 <div onClick={() => setEditCat({ ...c })} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "7px 10px", color: "var(--ink-muted)" }}>Edit</div>
-                <div onClick={() => confirm(`Delete "${c.name}"? Products will be uncategorised.`) && call(`/api/admin/categories/${c.id}`, "DELETE")} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E39B9B", padding: "7px 10px" }}>Delete</div>
+                <div onClick={() => confirm(`Delete "${c.name}"? Products will be uncategorised.`) && call(`/api/admin/categories/${c.id}`, "DELETE")} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E0A099", padding: "7px 10px" }}>Delete</div>
               </div>
             </div>
           ))}
@@ -525,11 +530,11 @@ function Categories({ categories, call, busy, router }) {
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {ASSET_IMAGES.map((img) => <img key={img} src={img} onClick={() => setNewForm((f) => ({ ...f, image: img }))} alt="" style={{ width: 40, height: 48, objectFit: "cover", cursor: "pointer", border: `1px solid ${newForm.image === img ? "var(--rose)" : "transparent"}` }} />)}
             </div>
-            <label style={{ cursor: "pointer", border: "1px dashed rgba(227,183,166,.4)", padding: "11px 14px", textAlign: "center", fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--ink-muted)" }}>
+            <label style={{ cursor: "pointer", border: "1px dashed rgba(168,121,104,.4)", padding: "11px 14px", textAlign: "center", fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--ink-muted)" }}>
               {uploading ? "Uploading…" : "Upload photo"}
               <input type="file" accept="image/*" onChange={(e) => uploadImg(e, (p) => setNewForm((f) => ({ ...f, image: p })))} style={{ display: "none" }} />
             </label>
-            <div onClick={createCat} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: 13, fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", textAlign: "center" }}>{busy ? "…" : "Create category"}</div>
+            <div onClick={createCat} style={{ cursor: "pointer", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: 13, fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", textAlign: "center" }}>{busy ? "…" : "Create category"}</div>
           </div>
         </div>
 
@@ -566,7 +571,7 @@ function CategoryEditor({ cat, onClose, onSaved, uploading, setUploading }) {
     if (busy) return; setBusy(true);
     try {
       const res = await fetch(`/api/admin/categories/${cat.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
-      if (!res.ok) { alert("Could not save"); return; }
+      if (!res.ok) { showToast("Could not save", "error"); return; }
       onSaved();
     } finally { setBusy(false); }
   }
@@ -581,7 +586,7 @@ function CategoryEditor({ cat, onClose, onSaved, uploading, setUploading }) {
         <div style={{ display: "flex", gap: 14, marginBottom: 16 }}>
           <img src={form.image} alt="" style={{ width: 72, height: 88, objectFit: "cover", border: "1px solid var(--card-b)" }} />
           <div style={{ flex: 1 }}>
-            <label style={{ cursor: "pointer", display: "block", border: "1px dashed rgba(227,183,166,.4)", padding: 12, textAlign: "center", fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--ink-muted)" }}>
+            <label style={{ cursor: "pointer", display: "block", border: "1px dashed rgba(168,121,104,.4)", padding: 12, textAlign: "center", fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--ink-muted)" }}>
               {uploading ? "Uploading…" : "Upload photo"}
               <input type="file" accept="image/*" onChange={upload} style={{ display: "none" }} />
             </label>
@@ -596,7 +601,7 @@ function CategoryEditor({ cat, onClose, onSaved, uploading, setUploading }) {
           <Labeled label="Sort order"><input type="number" value={form.sortOrder} onChange={set("sortOrder")} style={adminInput} /></Labeled>
         </div>
         <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
-          <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "13px 28px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "Saving…" : "Save changes"}</div>
+          <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "13px 28px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "Saving…" : "Save changes"}</div>
           <div onClick={onClose} style={{ cursor: "pointer", border: "1px solid var(--card-b)", padding: "13px 22px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--ink-muted)" }}>Cancel</div>
         </div>
       </div>
@@ -618,7 +623,7 @@ function Homepage({ content, call, busy, waTpls, setWaTpls }) {
     aboutBody2: content?.aboutBody2 || "", aboutArtistImg: content?.aboutArtistImg || "/assets/p4-nude.jpeg",
     aboutArtistName: content?.aboutArtistName || "", aboutArtistBio: content?.aboutArtistBio || "",
     aboutArtistSign: content?.aboutArtistSign || "",
-    instagramHandle: content?.instagramHandle || "_myso.nails",
+    instagramHandle: content?.instagramHandle || "pressonsby_myra",
   });
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
   const [igPostsText, setIgPostsText] = useState(() => {
@@ -666,7 +671,7 @@ function Homepage({ content, call, busy, waTpls, setWaTpls }) {
           <Labeled label="Hero image">
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               {ASSET_IMAGES.slice(0, 4).map((img) => (
-                <img key={img} src={img} onClick={() => setForm((f) => ({ ...f, heroImage: img }))} alt="" style={{ width: 68, height: 82, objectFit: "cover", border: `1px solid ${form.heroImage === img ? "var(--rose)" : "rgba(227,183,166,.3)"}`, cursor: "pointer" }} />
+                <img key={img} src={img} onClick={() => setForm((f) => ({ ...f, heroImage: img }))} alt="" style={{ width: 68, height: 82, objectFit: "cover", border: `1px solid ${form.heroImage === img ? "var(--rose)" : "rgba(168,121,104,.3)"}`, cursor: "pointer" }} />
               ))}
             </div>
           </Labeled>
@@ -680,7 +685,7 @@ function Homepage({ content, call, busy, waTpls, setWaTpls }) {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: 20, alignItems: "start" }}>
           <div>
             <img src={form.studioImage} alt="" style={{ width: "100%", aspectRatio: "4/5", objectFit: "cover", border: "1px solid var(--card-b)", display: "block", marginBottom: 10 }} />
-            <label style={{ cursor: "pointer", display: "block", border: "1px dashed rgba(227,183,166,.4)", padding: "10px 14px", textAlign: "center", fontSize: 10.5, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--ink-muted)", marginBottom: 8 }}>
+            <label style={{ cursor: "pointer", display: "block", border: "1px dashed rgba(168,121,104,.4)", padding: "10px 14px", textAlign: "center", fontSize: 10.5, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--ink-muted)", marginBottom: 8 }}>
               {uploading ? "Uploading…" : "Upload new photo"}
               <input type="file" accept="image/*" onChange={uploadStudio} style={{ display: "none" }} />
             </label>
@@ -704,7 +709,7 @@ function Homepage({ content, call, busy, waTpls, setWaTpls }) {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: 20, alignItems: "start" }}>
           <div>
             <img src={form.aboutImage1} alt="" style={{ width: "100%", aspectRatio: "4/5", objectFit: "cover", border: "1px solid var(--card-b)", display: "block", marginBottom: 10 }} />
-            <label style={{ cursor: "pointer", display: "block", border: "1px dashed rgba(227,183,166,.4)", padding: "10px 14px", textAlign: "center", fontSize: 10.5, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--ink-muted)", marginBottom: 8 }}>
+            <label style={{ cursor: "pointer", display: "block", border: "1px dashed rgba(168,121,104,.4)", padding: "10px 14px", textAlign: "center", fontSize: 10.5, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--ink-muted)", marginBottom: 8 }}>
               {uploading ? "Uploading…" : "Upload new photo"}
               <input type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (!file) return; setUploading(true); const fd = new FormData(); fd.append("file", file); fetch("/api/upload", { method: "POST", body: fd }).then((r) => r.json()).then((d) => { if (d.path) setForm((f) => ({ ...f, aboutImage1: d.path })); }).finally(() => setUploading(false)); }} style={{ display: "none" }} />
             </label>
@@ -725,7 +730,7 @@ function Homepage({ content, call, busy, waTpls, setWaTpls }) {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: 20, alignItems: "start" }}>
           <div>
             <img src={form.aboutArtistImg} alt="" style={{ width: "100%", aspectRatio: "4/5", objectFit: "cover", border: "1px solid var(--card-b)", display: "block", marginBottom: 10 }} />
-            <label style={{ cursor: "pointer", display: "block", border: "1px dashed rgba(227,183,166,.4)", padding: "10px 14px", textAlign: "center", fontSize: 10.5, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--ink-muted)", marginBottom: 8 }}>
+            <label style={{ cursor: "pointer", display: "block", border: "1px dashed rgba(168,121,104,.4)", padding: "10px 14px", textAlign: "center", fontSize: 10.5, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--ink-muted)", marginBottom: 8 }}>
               {uploading ? "Uploading…" : "Upload new photo"}
               <input type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (!file) return; setUploading(true); const fd = new FormData(); fd.append("file", file); fetch("/api/upload", { method: "POST", body: fd }).then((r) => r.json()).then((d) => { if (d.path) setForm((f) => ({ ...f, aboutArtistImg: d.path })); }).finally(() => setUploading(false)); }} style={{ display: "none" }} />
             </label>
@@ -748,7 +753,7 @@ function Homepage({ content, call, busy, waTpls, setWaTpls }) {
           Paste the links of the Instagram posts you want to show on the homepage — <strong style={{ color: "var(--rose-light)" }}>one link per line</strong>. These display as real Instagram posts (not website product photos). Leave empty to show a "Follow us" card.
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <Labeled label="Instagram handle (without @)"><input value={form.instagramHandle} onChange={set("instagramHandle")} placeholder="_myso.nails" style={adminInput} /></Labeled>
+          <Labeled label="Instagram handle (without @)"><input value={form.instagramHandle} onChange={set("instagramHandle")} placeholder="pressonsby_myra" style={adminInput} /></Labeled>
           <Labeled label="Post links (one per line)">
             <textarea rows={5} value={igPostsText} onChange={(e) => setIgPostsText(e.target.value)} placeholder={"https://www.instagram.com/p/ABC123/\nhttps://www.instagram.com/reel/XYZ789/"} style={{ ...adminInput, resize: "vertical", fontSize: 12.5, lineHeight: 1.7 }} />
           </Labeled>
@@ -782,7 +787,7 @@ function Homepage({ content, call, busy, waTpls, setWaTpls }) {
       </div>
 
       <div style={{ display: "flex", gap: 12 }}>
-        <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "14px 32px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "…" : saved ? "Published ✓" : "Publish changes"}</div>
+        <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "14px 32px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "…" : saved ? "Published ✓" : "Publish changes"}</div>
         <a href="/" style={{ border: "1px solid var(--card-b)", padding: "14px 24px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--ink-muted)" }}>Preview storefront</a>
       </div>
     </div>
@@ -843,7 +848,7 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
       delete payload.salePercent;
       const res = await fetch(url, { method: isNew ? "POST" : "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) { alert(data.error || "Failed"); return; }
+      if (!res.ok) { showToast(data.error || "Failed", "error"); return; }
       onSaved();
     } finally { setBusy(false); }
   }
@@ -860,7 +865,7 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
         <div style={{ display: "flex", gap: 16, marginBottom: 16 }}>
           <img src={form.image} alt="" style={{ width: 90, height: 108, objectFit: "cover", border: "1px solid var(--card-b)" }} />
           <div style={{ flex: 1 }}>
-            <label style={{ cursor: "pointer", display: "block", border: "1px dashed rgba(227,183,166,.4)", padding: 14, textAlign: "center", fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--ink-muted)" }}>
+            <label style={{ cursor: "pointer", display: "block", border: "1px dashed rgba(168,121,104,.4)", padding: 14, textAlign: "center", fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--ink-muted)" }}>
               {uploading ? "Uploading…" : "Upload photo"}
               <input type="file" accept="image/*" onChange={upload} style={{ display: "none" }} />
             </label>
@@ -878,7 +883,7 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
               <div onClick={() => setExtraImages((imgs) => imgs.filter((_, j) => j !== i))} style={{ position: "absolute", top: -6, right: -6, width: 16, height: 16, borderRadius: "50%", background: "var(--rose)", color: "#fff", fontSize: 10, display: "grid", placeItems: "center", cursor: "pointer" }}>×</div>
             </div>
           ))}
-          <label style={{ cursor: "pointer", width: 52, height: 62, border: "1px dashed rgba(227,183,166,.4)", display: "grid", placeItems: "center", fontSize: 18, color: "var(--ink-faint)" }}>
+          <label style={{ cursor: "pointer", width: 52, height: 62, border: "1px dashed rgba(168,121,104,.4)", display: "grid", placeItems: "center", fontSize: 18, color: "var(--ink-faint)" }}>
             {uploadingExtra ? "…" : "+"}
             <input type="file" accept="image/*" onChange={uploadExtra} style={{ display: "none" }} />
           </label>
@@ -902,7 +907,7 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
           <input type="checkbox" checked={form.featured} onChange={(e) => setForm((f) => ({ ...f, featured: e.target.checked }))} /> Feature on homepage
         </label>
         <div style={{ display: "flex", gap: 12, marginTop: 22 }}>
-          <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "14px 30px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "Saving…" : isNew ? "Create product" : "Save changes"}</div>
+          <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "14px 30px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase" }}>{busy ? "Saving…" : isNew ? "Create product" : "Save changes"}</div>
           <div onClick={onClose} style={{ cursor: "pointer", border: "1px solid var(--card-b)", padding: "14px 24px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--ink-muted)" }}>Cancel</div>
         </div>
       </div>
@@ -936,8 +941,8 @@ function MessagesTab({ messages, subscribers }) {
       <div className="admin-flex-row" style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24 }}>
         <h1 style={{ ...h1, marginBottom: 0 }}>{view === "messages" ? "Messages" : "Newsletter subscribers"}</h1>
         <div className="admin-flex-actions" style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
-          <div onClick={() => setView("messages")} style={{ cursor: "pointer", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", padding: "9px 16px", border: `1px solid ${view === "messages" ? "var(--bronze)" : "rgba(227,183,166,.25)"}`, color: view === "messages" ? "var(--rose-light)" : "var(--ink-muted)" }}>Messages ({messages.length})</div>
-          <div onClick={() => setView("subscribers")} style={{ cursor: "pointer", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", padding: "9px 16px", border: `1px solid ${view === "subscribers" ? "var(--bronze)" : "rgba(227,183,166,.25)"}`, color: view === "subscribers" ? "var(--rose-light)" : "var(--ink-muted)" }}>Subscribers ({subscribers.length})</div>
+          <div onClick={() => setView("messages")} style={{ cursor: "pointer", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", padding: "9px 16px", border: `1px solid ${view === "messages" ? "var(--bronze)" : "rgba(168,121,104,.25)"}`, color: view === "messages" ? "var(--rose-light)" : "var(--ink-muted)" }}>Messages ({messages.length})</div>
+          <div onClick={() => setView("subscribers")} style={{ cursor: "pointer", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", padding: "9px 16px", border: `1px solid ${view === "subscribers" ? "var(--bronze)" : "rgba(168,121,104,.25)"}`, color: view === "subscribers" ? "var(--rose-light)" : "var(--ink-muted)" }}>Subscribers ({subscribers.length})</div>
         </div>
       </div>
 
@@ -952,7 +957,7 @@ function MessagesTab({ messages, subscribers }) {
                   <div style={{ fontSize: 11.5, color: "var(--ink-faint)" }}>{m.phone || "No phone"}{m.topic ? " · " + m.topic : ""} · {m.date}</div>
                 </div>
                 {m.phone && (
-                  <a href={`https://wa.me/92${m.phone.replace(/^\+?0*/, "").replace(/\D/g, "")}?text=${encodeURIComponent("Hi " + m.name + "! Thanks for reaching out to Myso Nails Studio.")}`} target="_blank" rel="noreferrer" className="btn-wa" style={{ fontSize: 10, letterSpacing: ".16em", textTransform: "uppercase", padding: "8px 14px", whiteSpace: "nowrap" }}>Reply on WhatsApp</a>
+                  <a href={`https://wa.me/92${m.phone.replace(/^\+?0*/, "").replace(/\D/g, "")}?text=${encodeURIComponent("Hi " + m.name + "! Thanks for reaching out to Press-Ons by Myra.")}`} target="_blank" rel="noreferrer" className="btn-wa" style={{ fontSize: 10, letterSpacing: ".16em", textTransform: "uppercase", padding: "8px 14px", whiteSpace: "nowrap" }}>Reply on WhatsApp</a>
                 )}
               </div>
               <p style={{ fontSize: 13.5, lineHeight: 1.8, color: "var(--ink-muted)", margin: "12px 0 0", maxWidth: 680 }}>{m.body}</p>
@@ -1029,7 +1034,7 @@ function ReviewsTab({ reviews }) {
                 </div>
                 <textarea rows={4} value={editing.body} onChange={(e) => setEditing((x) => ({ ...x, body: e.target.value }))} style={{ ...adminInput, resize: "vertical" }} />
                 <div style={{ display: "flex", gap: 8 }}>
-                  <div onClick={saveEdit} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "9px 18px", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase" }}>Save</div>
+                  <div onClick={saveEdit} style={{ cursor: "pointer", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "9px 18px", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase" }}>Save</div>
                   <div onClick={() => setEditing(null)} style={{ cursor: "pointer", border: "1px solid var(--card-b)", padding: "9px 16px", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--ink-muted)" }}>Cancel</div>
                 </div>
               </div>
@@ -1042,7 +1047,7 @@ function ReviewsTab({ reviews }) {
                     <span style={{ fontSize: 11, color: "var(--ink-faint)" }}>{r.date}</span>
                     {!r.verified && <span style={{ fontSize: 9.5, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,130,0,.4)", color: "#C88200", padding: "3px 8px" }}>Hidden</span>}
                   </div>
-                  <div style={{ fontSize: 11.5, color: "rgba(227,183,166,.7)", marginBottom: 8 }}>on <span style={{ color: "var(--rose-light)" }}>{r.productName}</span></div>
+                  <div style={{ fontSize: 11.5, color: "rgba(168,121,104,.7)", marginBottom: 8 }}>on <span style={{ color: "var(--rose-light)" }}>{r.productName}</span></div>
                   <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--ink-muted)", margin: 0 }}>{r.body}</p>
                   {(r.image || r.image2) && (
                     <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
@@ -1052,11 +1057,11 @@ function ReviewsTab({ reviews }) {
                   )}
                 </div>
                 <div style={{ display: "flex", gap: 8, flexShrink: 0, flexWrap: "wrap" }}>
-                  <div onClick={() => patch(r.id, { verified: !r.verified })} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: `1px solid ${r.verified ? "rgba(143,214,166,.5)" : "rgba(227,183,166,.3)"}`, padding: "7px 11px", color: r.verified ? "#8FD6A6" : "var(--ink-muted)", whiteSpace: "nowrap" }}>
+                  <div onClick={() => patch(r.id, { verified: !r.verified })} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: `1px solid ${r.verified ? "rgba(143,214,166,.5)" : "rgba(168,121,104,.3)"}`, padding: "7px 11px", color: r.verified ? "#8FD6A6" : "var(--ink-muted)", whiteSpace: "nowrap" }}>
                     {r.verified ? "✓ Shown on site" : "Show on site"}
                   </div>
                   <div onClick={() => setEditing({ id: r.id, body: r.body, rating: r.rating, name: r.name })} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "7px 11px", color: "var(--ink-muted)" }}>Edit</div>
-                  <div onClick={() => del(r.id)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E39B9B", padding: "7px 11px" }}>Delete</div>
+                  <div onClick={() => del(r.id)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E0A099", padding: "7px 11px" }}>Delete</div>
                 </div>
               </div>
             )}
@@ -1082,7 +1087,7 @@ function AnalyticsTab() {
   function exportReport() {
     if (!data) return;
     const L = [];
-    L.push("MYSO NAILS STUDIO — SALES REPORT");
+    L.push("PRESS-ONS BY MYRA — SALES REPORT");
     L.push(`Generated,${new Date().toLocaleString("en-GB")}`);
     L.push("");
     L.push("Summary,Revenue,Orders");
@@ -1103,7 +1108,7 @@ function AnalyticsTab() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `myso-sales-report-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.download = `pressonsbymyra-sales-report-${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -1111,12 +1116,12 @@ function AnalyticsTab() {
   if (!data) return (
     <div>
       <h1 style={{ ...h1, marginBottom: 10 }}>Analytics</h1>
-      <div onClick={load} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "13px 26px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>{loading ? "Loading…" : "Load analytics"}</div>
+      <div onClick={load} style={{ cursor: "pointer", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "13px 26px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>{loading ? "Loading…" : "Load analytics"}</div>
     </div>
   );
 
   const maxRev = Math.max(...data.monthlyData.map((m) => m.revenue), 1);
-  const statusColors = { Pending: "#C88200", Confirmed: "#1E8C3C", Shipped: "#1E8C3C", Delivered: "#8FD6A6", Rejected: "#C83232", Cancelled: "#9B1B2A" };
+  const statusColors = { Pending: "#C88200", Confirmed: "#1E8C3C", Shipped: "#1E8C3C", Delivered: "#8FD6A6", Rejected: "#C83232", Cancelled: "#A87968" };
 
   return (
     <div>
@@ -1149,7 +1154,7 @@ function AnalyticsTab() {
         <div style={{ display: "flex", alignItems: "flex-end", gap: 8, height: 120 }}>
           {data.monthlyData.map((m) => (
             <div key={m.month} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 6, height: "100%" }}>
-              <div style={{ width: "100%", background: "linear-gradient(to top,#9B1B2A,#C4233D)", height: `${Math.max(4, (m.revenue / maxRev) * 100)}%`, minHeight: 4, transition: "height .4s" }} />
+              <div style={{ width: "100%", background: "linear-gradient(to top,#A87968,#C0907C)", height: `${Math.max(4, (m.revenue / maxRev) * 100)}%`, minHeight: 4, transition: "height .4s" }} />
               <div style={{ fontSize: 9.5, color: "var(--ink-faint)", textAlign: "center", whiteSpace: "nowrap" }}>{m.month}</div>
             </div>
           ))}
@@ -1194,7 +1199,7 @@ function BundleDealsTab() {
   }
 
   async function add() {
-    if (!form.name || !form.minQty || !form.discountPercent) return alert("Fill all fields");
+    if (!form.name || !form.minQty || !form.discountPercent) return showToast("Fill all fields", "error");
     setBusy(true);
     const res = await fetch("/api/admin/bundle-rules", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
     if (res.ok) { setForm({ name: "", minQty: "", discountPercent: "" }); load(); }
@@ -1215,7 +1220,7 @@ function BundleDealsTab() {
   if (!rules) return (
     <div>
       <h1 style={{ ...h1, marginBottom: 10 }}>Bundle Deals</h1>
-      <div onClick={load} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "13px 26px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>Load rules</div>
+      <div onClick={load} style={{ cursor: "pointer", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "13px 26px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>Load rules</div>
     </div>
   );
 
@@ -1240,7 +1245,7 @@ function BundleDealsTab() {
             <div style={{ fontSize: 10, color: "var(--ink-faint)", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 7 }}>Discount %</div>
             <input type="number" min="1" max="90" value={form.discountPercent} onChange={(e) => setForm((f) => ({ ...f, discountPercent: e.target.value }))} placeholder="10" style={adminInput} />
           </div>
-          <div onClick={add} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "13px 18px", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", whiteSpace: "nowrap" }}>{busy ? "…" : "Add"}</div>
+          <div onClick={add} style={{ cursor: "pointer", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "13px 18px", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", whiteSpace: "nowrap" }}>{busy ? "…" : "Add"}</div>
         </div>
       </div>
 
@@ -1254,8 +1259,8 @@ function BundleDealsTab() {
               <div style={{ fontSize: 12, color: "var(--ink-muted)" }}>Buy {r.minQty}+ items → <strong style={{ color: "var(--rose)" }}>{r.discountPercent}% off</strong></div>
             </div>
             <div style={{ display: "flex", gap: 8 }}>
-              <div onClick={() => toggle(r)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: `1px solid ${r.active ? "rgba(143,214,166,.5)" : "rgba(227,183,166,.3)"}`, padding: "7px 12px", color: r.active ? "#8FD6A6" : "var(--ink-muted)", whiteSpace: "nowrap" }}>{r.active ? "✓ Active" : "Inactive"}</div>
-              <div onClick={() => del(r.id)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E39B9B", padding: "7px 12px" }}>Delete</div>
+              <div onClick={() => toggle(r)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: `1px solid ${r.active ? "rgba(143,214,166,.5)" : "rgba(168,121,104,.3)"}`, padding: "7px 12px", color: r.active ? "#8FD6A6" : "var(--ink-muted)", whiteSpace: "nowrap" }}>{r.active ? "✓ Active" : "Inactive"}</div>
+              <div onClick={() => del(r.id)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E0A099", padding: "7px 12px" }}>Delete</div>
             </div>
           </div>
         ))}
@@ -1292,7 +1297,7 @@ function CustomOrdersTab() {
   if (!reqs) return (
     <div>
       <h1 style={{ ...h1, marginBottom: 10 }}>Custom Orders</h1>
-      <div onClick={load} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "13px 26px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>Load requests</div>
+      <div onClick={load} style={{ cursor: "pointer", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "13px 26px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>Load requests</div>
     </div>
   );
 
@@ -1354,7 +1359,7 @@ function CustomOrdersTab() {
             </div>
             <div style={{ display: "flex", gap: 8 }}>
               <div onClick={() => setDetail(r)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "7px 12px", color: "var(--ink-muted)" }}>View</div>
-              <div onClick={() => del(r.id)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E39B9B", padding: "7px 12px" }}>Delete</div>
+              <div onClick={() => del(r.id)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E0A099", padding: "7px 12px" }}>Delete</div>
             </div>
           </div>
         ))}
@@ -1375,7 +1380,7 @@ function DropsTab() {
   }
 
   async function add() {
-    if (!form.name || !form.launchAt) return alert("Name and launch date required");
+    if (!form.name || !form.launchAt) return showToast("Name and launch date required", "error");
     setBusy(true);
     const res = await fetch("/api/admin/drops", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
     if (res.ok) { setForm({ name: "", description: "", launchAt: "", image: "" }); load(); }
@@ -1396,7 +1401,7 @@ function DropsTab() {
   if (!drops) return (
     <div>
       <h1 style={{ ...h1, marginBottom: 10 }}>Drops</h1>
-      <div onClick={load} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "13px 26px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>Load drops</div>
+      <div onClick={load} style={{ cursor: "pointer", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "13px 26px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>Load drops</div>
     </div>
   );
 
@@ -1426,7 +1431,7 @@ function DropsTab() {
             <input value={form.image} onChange={(e) => setForm((f) => ({ ...f, image: e.target.value }))} placeholder="/assets/p1-french.jpeg" style={adminInput} />
           </div>
         </div>
-        <div onClick={add} style={{ cursor: "pointer", marginTop: 14, background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "12px 24px", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", display: "inline-block" }}>{busy ? "Saving…" : "Schedule drop"}</div>
+        <div onClick={add} style={{ cursor: "pointer", marginTop: 14, background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "12px 24px", fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", display: "inline-block" }}>{busy ? "Saving…" : "Schedule drop"}</div>
       </div>
 
       {/* Drops list */}
@@ -1442,8 +1447,8 @@ function DropsTab() {
                 {d.description && <div style={{ fontSize: 12, color: "var(--ink-muted)" }}>{d.description}</div>}
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <div onClick={() => toggle(d)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: `1px solid ${d.active ? "rgba(143,214,166,.5)" : "rgba(227,183,166,.3)"}`, padding: "7px 12px", color: d.active ? "#8FD6A6" : "var(--ink-muted)" }}>{d.active ? "✓ Active" : "Hidden"}</div>
-                <div onClick={() => del(d.id)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E39B9B", padding: "7px 12px" }}>Delete</div>
+                <div onClick={() => toggle(d)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: `1px solid ${d.active ? "rgba(143,214,166,.5)" : "rgba(168,121,104,.3)"}`, padding: "7px 12px", color: d.active ? "#8FD6A6" : "var(--ink-muted)" }}>{d.active ? "✓ Active" : "Hidden"}</div>
+                <div onClick={() => del(d.id)} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E0A099", padding: "7px 12px" }}>Delete</div>
               </div>
             </div>
           );
@@ -1508,7 +1513,7 @@ function SettingsTab({ content, call, busy }) {
           <div onClick={() => setForm((f) => ({ ...f, storeClosed: !f.storeClosed }))} style={{ width: 44, height: 24, borderRadius: 12, background: form.storeClosed ? "var(--rose)" : "var(--panel)", position: "relative", transition: "background .2s", border: "1px solid var(--card-b)", cursor: "pointer" }}>
             <div style={{ width: 18, height: 18, borderRadius: "50%", background: form.storeClosed ? "#1A0F0A" : "var(--ink-muted)", position: "absolute", top: 2, left: form.storeClosed ? 22 : 2, transition: "left .2s" }} />
           </div>
-          <span style={{ fontSize: 13, color: form.storeClosed ? "#E39B9B" : "#8FD6A6" }}>{form.storeClosed ? "Store is CLOSED" : "Store is OPEN"}</span>
+          <span style={{ fontSize: 13, color: form.storeClosed ? "#E0A099" : "#8FD6A6" }}>{form.storeClosed ? "Store is CLOSED" : "Store is OPEN"}</span>
         </label>
         <div>
           <div style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ink-faint)", marginBottom: 8 }}>Closed message (shown to visitors)</div>
@@ -1591,7 +1596,7 @@ function SettingsTab({ content, call, busy }) {
               const on = form.dealMode === m.key;
               const pct = Number(form.dealPercent) > 0 ? Number(form.dealPercent) : 50;
               return (
-                <div key={m.key} onClick={() => setForm((f) => ({ ...f, dealMode: m.key }))} style={{ cursor: "pointer", border: `1px solid ${on ? "var(--rose)" : "var(--card-b)"}`, background: on ? "rgba(155,27,42,.06)" : "transparent", padding: "12px 14px", borderRadius: 4 }}>
+                <div key={m.key} onClick={() => setForm((f) => ({ ...f, dealMode: m.key }))} style={{ cursor: "pointer", border: `1px solid ${on ? "var(--rose)" : "var(--card-b)"}`, background: on ? "rgba(168,121,104,.06)" : "transparent", padding: "12px 14px", borderRadius: 4 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div style={{ width: 15, height: 15, borderRadius: "50%", border: `2px solid ${on ? "var(--rose)" : "var(--ink-faint)"}`, background: on ? "var(--rose)" : "transparent", flexShrink: 0 }} />
                     <div style={{ fontSize: 13, color: "var(--ink)" }}>{m.title}</div>
@@ -1614,10 +1619,10 @@ function SettingsTab({ content, call, busy }) {
             {Number(form.dealMaxOrders) > 0 && <strong style={{ marginLeft: 8, padding: "2px 9px", borderRadius: 20, background: "rgba(255,255,255,.22)", fontSize: 11 }}>Only {form.dealMaxOrders} left!</strong>}
           </span>
         </div>
-        {form.dealActive && !(Number(form.dealPercent) > 0) && <div style={{ marginTop: 12, fontSize: 12, color: "#E39B9B" }}>⚠ Set a discount % above 0 for the deal to actually apply.</div>}
+        {form.dealActive && !(Number(form.dealPercent) > 0) && <div style={{ marginTop: 12, fontSize: 12, color: "#E0A099" }}>⚠ Set a discount % above 0 for the deal to actually apply.</div>}
       </div>
 
-      <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "14px 34px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>{busy ? "Saving…" : saved ? "Saved ✓" : "Save settings"}</div>
+      <div onClick={save} style={{ cursor: "pointer", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "14px 34px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>{busy ? "Saving…" : saved ? "Saved ✓" : "Save settings"}</div>
 
       {/* Change password */}
       <div style={{ border: "1px solid var(--card-b)", background: "var(--panel)", padding: 28, marginTop: 30 }}>
@@ -1636,7 +1641,7 @@ function SettingsTab({ content, call, busy }) {
             <div style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ink-faint)", marginBottom: 8 }}>Confirm new password</div>
             <input type="password" value={pw.confirm} onChange={(e) => { setPw((p) => ({ ...p, confirm: e.target.value })); setPwError(""); }} onKeyDown={(e) => e.key === "Enter" && changePassword()} style={adminInput} />
           </div>
-          {pwError && <div style={{ fontSize: 12, color: "#E39B9B" }}>{pwError}</div>}
+          {pwError && <div style={{ fontSize: 12, color: "#E0A099" }}>{pwError}</div>}
           <div onClick={changePassword} style={{ cursor: "pointer", border: "1px solid var(--card-b)", color: "var(--ink)", padding: "13px 26px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", justifySelf: "start" }}>{pwStatus === "saving" ? "Saving…" : "Change password"}</div>
         </div>
       </div>
@@ -1714,7 +1719,7 @@ function MediaTab() {
       <div>
         <h1 style={{ ...h1, marginBottom: 10 }}>Media</h1>
         <div style={{ fontSize: 12, color: "var(--ink-faint)", marginBottom: 24 }}>Manage uploaded images in your store.</div>
-        <div onClick={load} style={{ cursor: "pointer", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", padding: "13px 26px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>{loading ? "Loading…" : "Load uploaded files"}</div>
+        <div onClick={load} style={{ cursor: "pointer", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", padding: "13px 26px", fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>{loading ? "Loading…" : "Load uploaded files"}</div>
       </div>
     );
   }
@@ -1726,7 +1731,7 @@ function MediaTab() {
         <div onClick={load} style={{ cursor: "pointer", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", border: "1px solid var(--card-b)", padding: "9px 16px", color: "var(--ink-muted)" }}>Refresh</div>
       </div>
       {files.length === 0 ? (
-        <div style={{ border: "1px dashed rgba(227,183,166,.25)", padding: 40, textAlign: "center", color: "var(--ink-muted)", fontSize: 13 }}>No uploaded files yet. Images appear here when you upload via product or category editors.</div>
+        <div style={{ border: "1px dashed rgba(168,121,104,.25)", padding: 40, textAlign: "center", color: "var(--ink-muted)", fontSize: 13 }}>No uploaded files yet. Images appear here when you upload via product or category editors.</div>
       ) : (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(160px,1fr))", gap: 14 }}>
           {files.map((f) => (
@@ -1737,7 +1742,7 @@ function MediaTab() {
               <div style={{ padding: "10px 12px" }}>
                 <div style={{ fontSize: 10.5, color: "var(--ink-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom: 6 }}>{f.name}</div>
                 <div style={{ fontSize: 10, color: "var(--ink-faint)", marginBottom: 10 }}>{(f.size / 1024).toFixed(0)} KB</div>
-                <div onClick={() => del(f.name)} style={{ cursor: "pointer", fontSize: 9.5, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E39B9B", padding: "6px 10px", textAlign: "center" }}>Delete</div>
+                <div onClick={() => del(f.name)} style={{ cursor: "pointer", fontSize: 9.5, letterSpacing: ".14em", textTransform: "uppercase", border: "1px solid rgba(200,90,90,.35)", color: "#E0A099", padding: "6px 10px", textAlign: "center" }}>Delete</div>
               </div>
             </div>
           ))}
@@ -1759,9 +1764,9 @@ function statusBadge(status) {
     Shipped:   ["rgba(30,140,60,.45)",  "#1E8C3C"],
     Delivered: ["rgba(30,140,60,.45)",  "#1E8C3C"],
     Rejected:  ["rgba(200,50,50,.45)",  "#C83232"],
-    Cancelled: ["rgba(155,27,42,.35)",  "#9B1B2A"],
+    Cancelled: ["rgba(168,121,104,.35)",  "#A87968"],
   };
-  const [border, color] = map[status] || ["rgba(155,27,42,.2)", "var(--rose)"];
+  const [border, color] = map[status] || ["rgba(168,121,104,.2)", "var(--rose)"];
   return { fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", border: `1px solid ${border}`, color, padding: "6px 9px" };
 }
 function nextStatus(s) {

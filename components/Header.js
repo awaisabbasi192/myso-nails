@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useCart } from "./CartContext";
 import ThemeToggle from "./ThemeToggle";
 import SearchBar from "./SearchBar";
@@ -24,6 +24,18 @@ export default function Header({ announcement, user }) {
   const { cartCount, wishCount } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // Pop the bag count whenever it grows, so adding to cart is felt, not just seen.
+  const [bagPop, setBagPop] = useState(false);
+  const prevCount = useRef(cartCount);
+  useEffect(() => {
+    const grew = cartCount > prevCount.current;
+    prevCount.current = cartCount;
+    if (!grew) return;
+    setBagPop(true);
+    const t = setTimeout(() => setBagPop(false), 460);
+    return () => clearTimeout(t);
+  }, [cartCount]);
+
   return (
     <>
       {/* Announcement bar — continuous scrolling ticker */}
@@ -35,11 +47,11 @@ export default function Header({ announcement, user }) {
         </div>
       </div>
 
-      <header style={{ position: "sticky", top: 0, zIndex: 80, background: "rgba(10,10,11,.94)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(227,183,166,.14)" }}>
+      <header style={{ position: "sticky", top: 0, zIndex: 80, background: "rgba(10,10,11,.94)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(168,121,104,.14)" }}>
         {/* Desktop header */}
         <div className="header-desktop" style={{ maxWidth: 1240, margin: "0 auto", padding: "14px 24px", display: "flex", alignItems: "center", gap: 16 }}>
-          <Link href="/" style={{ display: "flex", alignItems: "center", flexShrink: 0, position: "relative", height: 50, width: 100 }}>
-            <Image src="/assets/logo.png" alt="Myso Nails Studio" fill style={{ objectFit: "contain" }} />
+          <Link href="/" className="brand-logo" style={{ display: "flex", alignItems: "center", flexShrink: 0, position: "relative", height: 66, width: 66 }}>
+            <Image src="/assets/logo-myra.jpeg" alt="Press-Ons by Myra" fill sizes="66px" style={{ objectFit: "contain" }} priority />
           </Link>
 
           <nav className="desktop-nav" style={{ display: "flex", gap: 16, marginLeft: 6, flexWrap: "nowrap" }}>
@@ -71,7 +83,7 @@ export default function Header({ announcement, user }) {
             </Link>
             <Link href="/cart" className="btn-outline" style={{ display: "flex", alignItems: "center", gap: 9, padding: "9px 16px", borderRadius: 2 }}>
               <span style={{ fontSize: 12, letterSpacing: ".18em", textTransform: "uppercase" }}>Bag</span>
-              <span style={{ fontSize: 11, color: "var(--rose)" }}>({cartCount})</span>
+              <span className={bagPop ? "badge-pop" : ""} style={{ fontSize: 11, color: "var(--rose)", display: "inline-block" }}>({cartCount})</span>
             </Link>
           </div>
         </div>
@@ -90,8 +102,8 @@ export default function Header({ announcement, user }) {
           </button>
 
           {/* Logo center */}
-          <Link href="/" style={{ display: "flex", alignItems: "center", position: "relative", height: 40, width: 90 }}>
-            <Image src="/assets/logo.png" alt="Myso Nails Studio" fill style={{ objectFit: "contain" }} />
+          <Link href="/" className="brand-logo" style={{ display: "flex", alignItems: "center", position: "relative", height: 48, width: 48 }}>
+            <Image src="/assets/logo-myra.jpeg" alt="Press-Ons by Myra" fill sizes="48px" style={{ objectFit: "contain" }} priority />
           </Link>
 
           {/* Dark mode toggle + Cart */}
@@ -104,7 +116,7 @@ export default function Header({ announcement, user }) {
                 <path d="M16 10a4 4 0 01-8 0"/>
               </svg>
               {cartCount > 0 && (
-                <span style={{ position: "absolute", top: 2, right: -2, fontFamily: "var(--sans)", fontSize: 9, fontWeight: 600, background: "var(--rose)", color: "#fff", borderRadius: 10, padding: "1px 5px", lineHeight: 1.4 }}>{cartCount}</span>
+                <span className={bagPop ? "badge-pop" : ""} style={{ position: "absolute", top: 2, right: -2, fontFamily: "var(--sans)", fontSize: 9, fontWeight: 600, background: "var(--rose)", color: "#fff", borderRadius: 10, padding: "1px 5px", lineHeight: 1.4 }}>{cartCount}</span>
               )}
             </Link>
           </div>
@@ -152,10 +164,10 @@ export default function Header({ announcement, user }) {
 
           {/* Drawer footer */}
           <div style={{ padding: "20px 24px 32px", borderTop: "1px solid var(--header-border)", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-            <Link href="/cart" onClick={() => setMobileOpen(false)} style={{ textAlign: "center", padding: "13px 16px", background: "linear-gradient(100deg,#9B1B2A,#C4233D)", color: "#fff", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>
+            <Link href="/cart" onClick={() => setMobileOpen(false)} style={{ textAlign: "center", padding: "13px 16px", background: "linear-gradient(100deg,#A87968,#C0907C)", color: "#fff", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>
               Bag ({cartCount})
             </Link>
-            <a href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP || "923020909786"}?text=${encodeURIComponent("Hi Myso Nails! I'd like to place an order.")}`} target="_blank" rel="noreferrer" style={{ textAlign: "center", padding: "13px 16px", border: "1px solid rgba(37,211,102,.4)", color: "var(--ink)", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>
+            <a href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP || "923020909786"}?text=${encodeURIComponent("Hi Press-Ons by Myra! I'd like to place an order.")}`} target="_blank" rel="noreferrer" style={{ textAlign: "center", padding: "13px 16px", border: "1px solid rgba(37,211,102,.4)", color: "var(--ink)", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>
               WhatsApp
             </a>
           </div>

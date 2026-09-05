@@ -37,9 +37,9 @@ export async function PUT(request) {
         announcement: b.announcement || "Free delivery over Rs 5,000 · Handmade in Pakistan",
         studioImage: b.studioImage || "/assets/p4-nude.jpeg",
         studioHeadline: b.studioHeadline || "Every set is painted by hand — mine.",
-        studioBody1: b.studioBody1 || "I started M&S in my bedroom with one brush and a lamp.",
+        studioBody1: b.studioBody1 || "I started Press-Ons by Myra in my bedroom with one brush and a lamp.",
         studioBody2: b.studioBody2 || "If you can send me a photo of it, I can paint it.",
-        studioFounder: b.studioFounder || "Maya",
+        studioFounder: b.studioFounder || "Myra",
         studioRole: b.studioRole || "Founder & nail artist",
       },
     });

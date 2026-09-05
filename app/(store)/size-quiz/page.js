@@ -53,7 +53,7 @@ export default function SizeQuizPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {QUESTIONS[current].opts.map(([label, val]) => (
               <div key={label} onClick={() => answer(val)} style={{ cursor: "pointer", padding: "14px 20px", border: "1px solid var(--card-b)", fontSize: 14, color: "var(--ink)", transition: "border-color .2s, background .2s" }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--rose)"; e.currentTarget.style.background = "rgba(155,27,42,.06)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--rose)"; e.currentTarget.style.background = "rgba(168,121,104,.06)"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--card-b)"; e.currentTarget.style.background = "transparent"; }}>
                 {label}
               </div>

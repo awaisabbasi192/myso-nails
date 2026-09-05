@@ -36,7 +36,7 @@ export default async function StoreLayout({ children }) {
 
       {/* Store status / promotional deal banner (admin-controlled) */}
       {storeClosed ? (
-        <div style={{ background: "linear-gradient(100deg,#5E0F18,#9B1B2A)", color: "#fff", textAlign: "center", padding: "12px 20px", fontSize: 13, letterSpacing: ".05em", display: "flex", alignItems: "center", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
+        <div style={{ background: "linear-gradient(100deg,#6E4B3E,#A87968)", color: "#fff", textAlign: "center", padding: "12px 20px", fontSize: 13, letterSpacing: ".05em", display: "flex", alignItems: "center", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
           <span style={{ fontSize: 15 }}>🚫</span>
           <span><strong style={{ letterSpacing: ".14em", textTransform: "uppercase", fontSize: 11 }}>Store Closed</strong> — {storeClosedMsg}</span>
         </div>

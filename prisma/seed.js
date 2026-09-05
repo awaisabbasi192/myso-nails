@@ -1,4 +1,4 @@
-/* Seed the database with Myso Nails Studio's real starting data.
+/* Seed the database with Press-Ons by Myra's real starting data.
    Everything here is editable later from the admin panel. */
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("Seeding Myso Nails Studio…");
+  console.log("Seeding Press-Ons by Myra…");
 
   // Wipe (order matters for FKs)
   await prisma.orderItem.deleteMany();
@@ -47,7 +47,7 @@ async function main() {
       blurb: "A milk-white French tip traced with a fine line of rose-gold glitter over a warm nude base. The set that started the studio.",
       reviews: [
         { name: "Mahira S.", rating: 5, body: "Sizing was perfect straight off the chart and the glitter line is so neat it looks like gel work. Got compliments all week.", image: "/assets/p1-french.jpeg", image2: "/assets/p4-nude.jpeg" },
-        { name: "Iqra A.", rating: 5, body: "Ordered for my walima, Maya sent progress photos on WhatsApp. Nails survived two days of pictures and a lot of hand-holding.", image: "/assets/p1-french.jpeg", image2: "/assets/p2-maroon.jpeg" },
+        { name: "Iqra A.", rating: 5, body: "Ordered for my walima, Myra sent progress photos on WhatsApp. Nails survived two days of pictures and a lot of hand-holding.", image: "/assets/p1-french.jpeg", image2: "/assets/p2-maroon.jpeg" },
         { name: "Sana T.", rating: 4, body: "Beautiful finish, thumb was slightly wide for me but they replaced it free. Packaging is so pretty I kept the box.", image: "/assets/p1-french.jpeg", image2: "/assets/p3-leopard.jpeg" },
       ],
     },
@@ -78,7 +78,7 @@ async function main() {
       reviewsCount: 78, stock: 6, featured: true, sortOrder: 4, categoryId: catByName["Custom Bridal"],
       blurb: "Mauve and butter-cream nails with painted 3D florals, gold-rimmed edges and micro flower charms. Made for nikkah day.",
       reviews: [
-        { name: "Hafsa N.", rating: 5, body: "Maya matched my custom bridal set to my dupatta from a photo. The gold rims are hand painted, I still cannot believe it.", image: "/assets/p4-nude.jpeg", image2: "/assets/p1-french.jpeg" },
+        { name: "Hafsa N.", rating: 5, body: "Myra matched my custom bridal set to my dupatta from a photo. The gold rims are hand painted, I still cannot believe it.", image: "/assets/p4-nude.jpeg", image2: "/assets/p1-french.jpeg" },
       ],
     },
     {
@@ -139,7 +139,7 @@ async function main() {
   const demoPass = await bcrypt.hash("password", 10);
 
   await prisma.customer.create({
-    data: { name: "Maya Iqbal", email: "admin@mysonails.pk", phone: "0302 090 9786", password: adminPass, role: "admin", city: "Lahore" },
+    data: { name: "Myra", email: "admin@pressonsbymyra.pk", phone: "0302 090 9786", password: adminPass, role: "admin", city: "Lahore" },
   });
 
   const areeba = await prisma.customer.create({

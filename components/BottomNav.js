@@ -7,7 +7,7 @@ import { useCart } from "./CartContext";
 function IconHome({ active }) {
   const c = active ? "var(--rose)" : "var(--ink-muted)";
   return (
-    <svg width="21" height="21" viewBox="0 0 24 24" fill={active ? "rgba(155,27,42,.12)" : "none"} stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="21" height="21" viewBox="0 0 24 24" fill={active ? "rgba(168,121,104,.12)" : "none"} stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9.5z"/>
       <path d="M9 21V12h6v9"/>
     </svg>

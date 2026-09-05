@@ -41,7 +41,7 @@ async function notifyAdmin(order) {
   const apikey = process.env.CALLMEBOT_APIKEY;
   const phone = process.env.ADMIN_WHATSAPP;
   if (!apikey || apikey === "your_callmebot_key_here" || !phone) return;
-  const msg = `🛍 New Myso order ${order.code}\nFrom: ${order.customerName}\nPhone: ${order.phone}\nCity: ${order.city}\nTotal: Rs ${order.total}\nPayment: ${order.paymentMethod.toUpperCase()}`;
+  const msg = `🛍 New Press-Ons by Myra order ${order.code}\nFrom: ${order.customerName}\nPhone: ${order.phone}\nCity: ${order.city}\nTotal: Rs ${order.total}\nPayment: ${order.paymentMethod.toUpperCase()}`;
   const url = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${encodeURIComponent(msg)}&apikey=${apikey}`;
   await fetch(url).catch(() => {});
 }
@@ -89,7 +89,7 @@ export async function POST(request) {
       return {
         productId: p ? p.id : null,
         name: p ? p.name : i.name || "Item",
-        image: p ? p.image : i.image || "/assets/logo.png",
+        image: p ? p.image : i.image || "/assets/logo-myra.jpeg",
         size: i.size || "Medium set",
         unitPrice,
         qty,

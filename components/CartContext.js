@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import { showToast } from "./Toast";
 
 const CartContext = createContext(null);
 
@@ -40,6 +41,7 @@ export function CartProvider({ children }) {
       }
       return [...prev, { ...item, qty }];
     });
+    showToast(`${item.name} added to your bag`, "success", "🛍");
   }
   function incItem(i) {
     setCart((prev) => prev.map((c, j) => (j === i ? { ...c, qty: c.qty + 1 } : c)));
@@ -53,12 +55,15 @@ export function CartProvider({ children }) {
     });
   }
   function removeItem(i) {
+    showToast(`${cart[i]?.name || "Item"} removed`, "info", "×");
     setCart((prev) => prev.filter((_, j) => j !== i));
   }
   function clearCart() {
     setCart([]);
   }
   function toggleWish(slug) {
+    const has = wishlist.includes(slug);
+    showToast(has ? "Removed from wishlist" : "Saved to your wishlist", has ? "info" : "success", has ? "♡" : "♥");
     setWishlist((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]));
   }
   const isWished = (slug) => wishlist.includes(slug);

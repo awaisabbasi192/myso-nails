@@ -18,7 +18,7 @@ export default function ContactForm() {
     } catch { setSent(true); } finally { setLoading(false); }
   }
 
-  const inputStyle = { background: "transparent", border: "1px solid rgba(227,183,166,.25)", color: "var(--ink)", padding: 14, fontSize: 13, outline: "none", width: "100%", minWidth: 0 };
+  const inputStyle = { background: "transparent", border: "1px solid rgba(168,121,104,.25)", color: "var(--ink)", padding: 14, fontSize: 13, outline: "none", width: "100%", minWidth: 0 };
   const lab = { fontSize: 10.5, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.45)" };
 
   return (
@@ -39,7 +39,7 @@ export default function ContactForm() {
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}><span style={lab}>Message</span><textarea value={form.body} onChange={set("body")} rows={5} placeholder="Event date, design idea, shape and length you like…" style={{ ...inputStyle, resize: "vertical" }} /></div>
       <div onClick={send} className="shimmer" style={{ cursor: "pointer", textAlign: "center", padding: 17, fontSize: 11, letterSpacing: ".26em", textTransform: "uppercase" }}>{sent ? "Message sent ✓" : loading ? "…" : "Send message"}</div>
-      <a href={waLink("Hi M&S!")} target="_blank" rel="noreferrer" className="btn-wa" style={{ textAlign: "center", padding: 16, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Chat instead</a>
+      <a href={waLink("Hi Myra!")} target="_blank" rel="noreferrer" className="btn-wa" style={{ textAlign: "center", padding: 16, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase" }}>Chat instead</a>
     </div>
   );
 }

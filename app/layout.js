@@ -3,6 +3,8 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { CartProvider } from "@/components/CartContext";
 import ScrollReveal from "@/components/ScrollReveal";
+import Toast from "@/components/Toast";
+import PageChrome from "@/components/PageChrome";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -22,15 +24,30 @@ const parisienne = Parisienne({
 });
 
 export const metadata = {
-  title: "Myso Nails Studio — Hand-painted press-on nail sets",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://pressonsbymyra.pk"),
+  title: {
+    default: "Press-Ons by Myra — Hand-painted press-on nails, handmade with love",
+    template: "%s — Press-Ons by Myra",
+  },
   description:
-    "Hand-painted press-on nail sets, custom bridal work and size-fitted reusable sets. Shipped nationwide from Lahore.",
-  appleWebApp: { capable: true, title: "Myso Nails", statusBarStyle: "black-translucent" },
-  icons: { apple: "/assets/logo.png" },
+    "Hand-painted press-on nail sets, custom bridal work and size-fitted reusable sets. Handmade with love, shipped nationwide from Lahore.",
+  keywords: [
+    "press on nails Pakistan", "press-ons by Myra", "bridal nails Lahore",
+    "custom press on nails", "reusable nail sets", "hand painted nails Pakistan",
+  ],
+  appleWebApp: { capable: true, title: "Press-Ons by Myra", statusBarStyle: "default" },
+  icons: { icon: "/assets/logo-myra.jpeg", apple: "/assets/logo-myra.jpeg" },
+  openGraph: {
+    type: "website",
+    siteName: "Press-Ons by Myra",
+    title: "Press-Ons by Myra — Handmade with love",
+    description: "Hand-painted press-on nail sets, sized to your nails. Shipped nationwide from Lahore.",
+    images: ["/assets/logo-myra.jpeg"],
+  },
 };
 
 export const viewport = {
-  themeColor: "#9B1B2A",
+  themeColor: "#A87968",
   width: "device-width",
   initialScale: 1,
 };
@@ -44,7 +61,9 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <ScrollReveal />
+        <PageChrome />
         <CartProvider>{children}</CartProvider>
+        <Toast />
         <Analytics />
       </body>
     </html>

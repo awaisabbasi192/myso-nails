@@ -2,7 +2,7 @@ import Link from "next/link";
 import { waLink } from "@/lib/format";
 
 export const metadata = {
-  title: "FAQ — Myso Nails Studio",
+  title: "FAQ — Press-Ons by Myra",
   description: "Common questions about press-on nails, sizing, delivery, JazzCash payment, custom orders and more.",
 };
 
@@ -96,7 +96,7 @@ export default function FAQPage() {
           Can&apos;t find your answer? WhatsApp us directly.
         </p>
         <a
-          href={waLink("Hi! I have a question about Myso Nails.")}
+          href={waLink("Hi! I have a question about Press-Ons by Myra.")}
           target="_blank"
           rel="noreferrer"
           style={{ display: "inline-flex", alignItems: "center", gap: 7, border: "1px solid #25D366", color: "var(--ink)", padding: "11px 22px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", borderRadius: 2 }}
@@ -127,7 +127,7 @@ export default function FAQPage() {
           </p>
           <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
             <a href={waLink("Hi! I have a question about my order.")} target="_blank" rel="noreferrer" className="shimmer" style={{ padding: "13px 28px", fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", borderRadius: 2 }}>
-              WhatsApp Maya
+              WhatsApp Myra
             </a>
             <Link href="/shop" className="btn-outline" style={{ padding: "13px 28px", fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", borderRadius: 2 }}>
               Shop the sets

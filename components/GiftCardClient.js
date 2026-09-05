@@ -50,11 +50,11 @@ export default function GiftCardClient() {
         {/* Visual */}
         <div style={{ position: "relative" }}>
           <div style={{ position: "relative", aspectRatio: "4/5", borderRadius: 6, overflow: "hidden", border: "1px solid var(--card-b)", boxShadow: "0 30px 70px rgba(0,0,0,.3)" }}>
-            <img src={GIFT_IMAGE} alt="Myso Nails Gift Card" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <img src={GIFT_IMAGE} alt="Press-Ons by Myra Gift Card" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(10,4,6,.92) 8%, transparent 55%)" }} />
             <div style={{ position: "absolute", bottom: 28, left: 28, right: 28 }}>
               <div style={{ fontFamily: "var(--script)", fontSize: 40, color: "#fff", lineHeight: 1 }}>Gift Card</div>
-              <div style={{ fontSize: 11, letterSpacing: ".3em", textTransform: "uppercase", color: "rgba(255,255,255,.7)", marginTop: 8 }}>Myso Nails Studio</div>
+              <div style={{ fontSize: 11, letterSpacing: ".3em", textTransform: "uppercase", color: "rgba(255,255,255,.7)", marginTop: 8 }}>Press-Ons by Myra</div>
               <div style={{ fontFamily: "var(--serif)", fontSize: 34, color: "var(--rose-light)", marginTop: 14 }}>{rs(finalAmount)}</div>
               {recipient.trim() && <div style={{ fontSize: 13, color: "rgba(255,255,255,.85)", marginTop: 6 }}>To: {recipient.trim()}</div>}
             </div>
