@@ -9,8 +9,17 @@ const TABS = ["Overview", "Orders", "Products", "Categories", "Customers", "Revi
 const ORDER_FILTERS = ["All", "Pending", "Confirmed", "Shipped", "Delivered", "Rejected"];
 const ASSET_IMAGES = ["/assets/p1-french.jpeg", "/assets/p2-maroon.jpeg", "/assets/p3-leopard.jpeg", "/assets/p4-nude.jpeg", "/assets/g1.jpeg", "/assets/g2.jpeg", "/assets/g3.jpeg"];
 // Mirrors lib/deal.js DEAL_THEMES (kept here so this client file doesn't import server code)
+// Site-wide palettes — must stay in sync with the [data-palette] blocks in globals.css
+const SITE_PALETTES = [
+  { key: "blush",    label: "Blush",    note: "Matches the logo",   swatch: "linear-gradient(100deg,#8C6252,#A87968 45%,#C0907C)" },
+  { key: "mono",     label: "Black & White", note: "Clean, editorial", swatch: "linear-gradient(100deg,#000000,#333333 45%,#111111)" },
+  { key: "emerald",  label: "Emerald",  note: "Deep botanical green", swatch: "linear-gradient(100deg,#1B4231,#2E6B4F 45%,#3F8A67)" },
+  { key: "midnight", label: "Midnight", note: "Navy + soft silver",   swatch: "linear-gradient(100deg,#222C4F,#38487E 45%,#4E62A3)" },
+  { key: "rose",     label: "Rose",     note: "Bright candy pink",    swatch: "linear-gradient(100deg,#8E2C4B,#B03A5F 45%,#CE5A7E)" },
+];
+
 const DEAL_THEME_UI = [
-  { key: "red",    label: "Cherry (default)", emoji: "⚡",  text: "#ffffff", swatch: "#C0907C", grad: "linear-gradient(100deg,#A87968,#C0907C 60%,#A87968)" },
+  { key: "red",    label: "Match site theme", emoji: "⚡",  text: "var(--btn-fg)", swatch: "var(--grad)", grad: "var(--grad)" },
   { key: "green",  label: "Azadi green",      emoji: "🇵🇰", text: "#ffffff", swatch: "#14833F", grad: "linear-gradient(100deg,#0A5C2E,#14833F 60%,#0A5C2E)" },
   { key: "gold",   label: "Eid gold",         emoji: "🌙", text: "#1A0F0A", swatch: "#C79A2E", grad: "linear-gradient(100deg,#8A6410,#C79A2E 55%,#8A6410)" },
   { key: "purple", label: "Royal purple",     emoji: "✨", text: "#ffffff", swatch: "#6B21A8", grad: "linear-gradient(100deg,#3D1163,#6B21A8 60%,#3D1163)" },
@@ -1489,6 +1498,7 @@ function SettingsTab({ content, call, busy }) {
     dealMaxOrders: content?.dealMaxOrders ?? 0,
     dealTheme: content?.dealTheme ?? "red",
     dealMode: content?.dealMode ?? "real",
+    sitePalette: content?.sitePalette ?? "blush",
   });
   const [saved, setSaved] = useState(false);
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -1522,6 +1532,33 @@ function SettingsTab({ content, call, busy }) {
     <div style={{ maxWidth: 680 }}>
       <h1 style={{ ...h1, marginBottom: 8 }}>Store settings</h1>
       <div style={{ fontSize: 12, color: "var(--ink-faint)", marginBottom: 28 }}>Changes take effect immediately on the storefront.</div>
+
+      {/* ── Site colour theme ── */}
+      <div style={{ border: "1px solid var(--card-b)", background: "var(--panel)", padding: 28, marginBottom: 18 }}>
+        <div style={{ fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 8 }}>Website colour theme</div>
+        <div style={{ fontSize: 12, color: "var(--ink-muted)", marginBottom: 20, lineHeight: 1.6 }}>
+          Pick a palette — it applies to the whole storefront and this admin panel. Each one works in both light and dark mode, so visitors keep their own light/dark choice.
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 12 }}>
+          {SITE_PALETTES.map((p) => {
+            const active = form.sitePalette === p.key;
+            return (
+              <div key={p.key} onClick={() => setForm((f) => ({ ...f, sitePalette: p.key }))}
+                   style={{ cursor: "pointer", border: `2px solid ${active ? "var(--rose)" : "var(--card-b)"}`, borderRadius: 5, padding: 12, background: active ? "rgba(168,121,104,.07)" : "transparent", transition: "border-color .2s, background .2s" }}>
+                <div style={{ height: 42, borderRadius: 3, background: p.swatch, marginBottom: 10 }} />
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 6 }}>
+                  <span style={{ fontSize: 12.5, color: "var(--ink)" }}>{p.label}</span>
+                  {active && <span style={{ fontSize: 11, color: "var(--rose)" }}>✓</span>}
+                </div>
+                <div style={{ fontSize: 10.5, color: "var(--ink-faint)", marginTop: 3 }}>{p.note}</div>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ fontSize: 11.5, color: "var(--ink-faint)", marginTop: 14 }}>
+          Save below, then refresh the storefront to see it applied.
+        </div>
+      </div>
 
       <div style={{ border: "1px solid var(--card-b)", background: "var(--panel)", padding: 28, marginBottom: 18 }}>
         <div style={{ fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--rose)", marginBottom: 20 }}>Store status</div>

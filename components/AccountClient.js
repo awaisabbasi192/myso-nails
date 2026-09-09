@@ -241,7 +241,7 @@ export default function AccountClient({ user: initUser, orders: initOrders, addr
             {nextTier ? (
               <div style={{ marginTop: 18 }}>
                 <div style={{ height: 8, background: "rgba(168,121,104,.14)", borderRadius: 20, overflow: "hidden" }}>
-                  <div style={{ width: `${tierProgress}%`, height: "100%", background: "linear-gradient(100deg,#8C6252,#E8CFC8)" }} />
+                  <div style={{ width: `${tierProgress}%`, height: "100%", background: "var(--grad)" }} />
                 </div>
                 <div style={{ fontSize: 11.5, color: "rgba(247,241,237,.45)", marginTop: 8 }}>Spend {rs(Math.max(0, nextTier.min - totalSpent))} more to reach <span style={{ color: "var(--rose-light)" }}>{nextTier.name}</span></div>
               </div>
@@ -362,7 +362,7 @@ export default function AccountClient({ user: initUser, orders: initOrders, addr
         <div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 22 }}>
             <div style={{ fontSize: 13, color: "rgba(247,241,237,.5)" }}>{addresses.length} saved address{addresses.length !== 1 ? "es" : ""}</div>
-            <div onClick={openNewAddr} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", background: "linear-gradient(100deg,#8C6252,#E8CFC8)", color: "#1A0F0A", padding: "10px 20px" }}>+ Add address</div>
+            <div onClick={openNewAddr} style={{ cursor: "pointer", fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", background: "var(--grad)", color: "var(--btn-fg)", padding: "10px 20px" }}>+ Add address</div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 18 }}>
             {addresses.map((a) => (
@@ -397,7 +397,7 @@ export default function AccountClient({ user: initUser, orders: initOrders, addr
                   <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 12.5, color: "rgba(247,241,237,.7)", cursor: "pointer" }}><input type="checkbox" checked={!!addrForm.isDefault} onChange={(e) => setAddrForm((f) => ({ ...f, isDefault: e.target.checked }))} /> Set as default</label>
                 </div>
                 <div style={{ display: "flex", gap: 12, marginTop: 22 }}>
-                  <div onClick={saveAddr} style={{ cursor: "pointer", background: "linear-gradient(100deg,#8C6252,#E8CFC8)", color: "#1A0F0A", padding: "14px 28px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase" }}>{addrBusy ? "Saving…" : addrForm.id ? "Save changes" : "Add address"}</div>
+                  <div onClick={saveAddr} style={{ cursor: "pointer", background: "var(--grad)", color: "var(--btn-fg)", padding: "14px 28px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase" }}>{addrBusy ? "Saving…" : addrForm.id ? "Save changes" : "Add address"}</div>
                   <div onClick={() => setAddrForm(null)} style={{ cursor: "pointer", border: "1px solid rgba(168,121,104,.3)", padding: "14px 22px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.7)" }}>Cancel</div>
                 </div>
               </div>
@@ -417,7 +417,7 @@ export default function AccountClient({ user: initUser, orders: initOrders, addr
               <div><div style={{ fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.4)", marginBottom: 8 }}>Full name</div><input value={profileForm.name} onChange={(e) => setProfileForm((f) => ({ ...f, name: e.target.value }))} style={inp} /></div>
               <div><div style={{ fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.4)", marginBottom: 8 }}>Phone</div><input value={profileForm.phone} onChange={(e) => setProfileForm((f) => ({ ...f, phone: e.target.value }))} placeholder="0300 1234567" style={inp} /></div>
               {profileError && <div style={{ fontSize: 12, color: "#E0A099" }}>{profileError}</div>}
-              <div onClick={saveProfile} style={{ cursor: "pointer", background: "linear-gradient(100deg,#8C6252,#E8CFC8)", color: "#1A0F0A", padding: "13px 26px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", alignSelf: "flex-start" }}>{profileStatus === "saving" ? "Saving…" : "Save profile"}</div>
+              <div onClick={saveProfile} style={{ cursor: "pointer", background: "var(--grad)", color: "var(--btn-fg)", padding: "13px 26px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", alignSelf: "flex-start" }}>{profileStatus === "saving" ? "Saving…" : "Save profile"}</div>
             </div>
           </div>
 
@@ -443,7 +443,7 @@ export default function AccountClient({ user: initUser, orders: initOrders, addr
               </div>
             ))}
             {nailStatus === "error" && <div style={{ fontSize: 12, color: "#E0A099", marginBottom: 10 }}>Could not save — try again.</div>}
-            <div onClick={saveNailSizes} style={{ cursor: "pointer", background: "linear-gradient(100deg,#8C6252,#E8CFC8)", color: "#1A0F0A", padding: "13px 26px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block", marginTop: 4 }}>{nailStatus === "saving" ? "Saving…" : "Save sizes"}</div>
+            <div onClick={saveNailSizes} style={{ cursor: "pointer", background: "var(--grad)", color: "var(--btn-fg)", padding: "13px 26px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block", marginTop: 4 }}>{nailStatus === "saving" ? "Saving…" : "Save sizes"}</div>
           </div>
 
           {/* Referral code */}
@@ -456,13 +456,13 @@ export default function AccountClient({ user: initUser, orders: initOrders, addr
                   {typeof window !== "undefined" ? `${window.location.origin}/login?ref=${referralCode}` : `/login?ref=${referralCode}`}
                 </div>
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  <div onClick={copyReferral} style={{ cursor: "pointer", background: "linear-gradient(100deg,#8C6252,#E8CFC8)", color: "#1A0F0A", padding: "11px 22px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", display: "inline-block" }}>{referralCopied ? "✓ Copied!" : "Copy link"}</div>
+                  <div onClick={copyReferral} style={{ cursor: "pointer", background: "var(--grad)", color: "var(--btn-fg)", padding: "11px 22px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", display: "inline-block" }}>{referralCopied ? "✓ Copied!" : "Copy link"}</div>
                   <a href={`https://wa.me/?text=${encodeURIComponent(`Press-Ons by Myra se nails order karo! Mera referral link use karo signup pe: ${typeof window !== "undefined" ? window.location.origin : ""}/login?ref=${referralCode} 🌸`)}`} target="_blank" rel="noreferrer" style={{ border: "1px solid #25D366", color: "#25D366", padding: "11px 18px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase" }}>Share on WhatsApp</a>
                 </div>
                 <div style={{ fontSize: 11, color: "rgba(247,241,237,.35)" }}>Your code: <span style={{ fontFamily: "var(--serif)", fontSize: 14, letterSpacing: ".1em" }}>{referralCode}</span></div>
               </div>
             ) : (
-              <div onClick={generateReferral} style={{ cursor: "pointer", background: "linear-gradient(100deg,#8C6252,#E8CFC8)", color: "#1A0F0A", padding: "13px 26px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>Generate referral link</div>
+              <div onClick={generateReferral} style={{ cursor: "pointer", background: "var(--grad)", color: "var(--btn-fg)", padding: "13px 26px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", display: "inline-block" }}>Generate referral link</div>
             )}
           </div>
 
@@ -475,7 +475,7 @@ export default function AccountClient({ user: initUser, orders: initOrders, addr
               <div><div style={{ fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.4)", marginBottom: 8 }}>New password</div><input type="password" value={pwForm.newPassword} onChange={(e) => setPwForm((f) => ({ ...f, newPassword: e.target.value }))} placeholder="Min. 8 characters" style={inp} /></div>
               <div><div style={{ fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,241,237,.4)", marginBottom: 8 }}>Confirm new password</div><input type="password" value={pwForm.confirm} onChange={(e) => setPwForm((f) => ({ ...f, confirm: e.target.value }))} style={inp} /></div>
               {pwError && <div style={{ fontSize: 12, color: "#E0A099" }}>{pwError}</div>}
-              <div onClick={changePassword} style={{ cursor: "pointer", background: "linear-gradient(100deg,#8C6252,#E8CFC8)", color: "#1A0F0A", padding: "13px 26px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", alignSelf: "flex-start" }}>{pwStatus === "saving" ? "Saving…" : "Change password"}</div>
+              <div onClick={changePassword} style={{ cursor: "pointer", background: "var(--grad)", color: "var(--btn-fg)", padding: "13px 26px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", alignSelf: "flex-start" }}>{pwStatus === "saving" ? "Saving…" : "Change password"}</div>
             </div>
           </div>
         </div>
@@ -518,7 +518,7 @@ export default function AccountClient({ user: initUser, orders: initOrders, addr
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               <Link href={`/invoice/${encodeURIComponent(orderDetail.code)}`} style={{ border: "1px solid rgba(168,121,104,.3)", padding: "12px 22px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ink-muted)" }}>View invoice</Link>
               {orderDetail.status === "Pending" && <div onClick={() => { cancelOrder(orderDetail); setOrderDetail(null); }} style={{ cursor: "pointer", border: "1px solid rgba(200,90,90,.4)", color: "#E0A099", padding: "12px 22px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase" }}>Cancel order</div>}
-              <div onClick={() => setOrderDetail(null)} style={{ cursor: "pointer", background: "linear-gradient(100deg,#8C6252,#E8CFC8)", color: "#1A0F0A", padding: "12px 22px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase" }}>Close</div>
+              <div onClick={() => setOrderDetail(null)} style={{ cursor: "pointer", background: "var(--grad)", color: "var(--btn-fg)", padding: "12px 22px", fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase" }}>Close</div>
             </div>
           </div>
         </div>
@@ -542,7 +542,7 @@ export default function AccountClient({ user: initUser, orders: initOrders, addr
                 </div>
                 <div><div style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(247,241,237,.4)", marginBottom: 8 }}>Your review</div><textarea value={reviewForm.body} onChange={(e) => setReviewForm((f) => ({ ...f, body: e.target.value }))} rows={4} placeholder="How did the set look? How long did it last?" style={{ ...inp, resize: "vertical" }} /></div>
                 {reviewStatus === "error" && <div style={{ fontSize: 12, color: "#E0A099" }}>Could not submit — please try again.</div>}
-                <div onClick={submitReview} style={{ cursor: "pointer", background: "linear-gradient(100deg,#8C6252,#E8CFC8)", color: "#1A0F0A", padding: "14px 28px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", alignSelf: "flex-start" }}>{reviewStatus === "submitting" ? "Submitting…" : "Submit review"}</div>
+                <div onClick={submitReview} style={{ cursor: "pointer", background: "var(--grad)", color: "var(--btn-fg)", padding: "14px 28px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", alignSelf: "flex-start" }}>{reviewStatus === "submitting" ? "Submitting…" : "Submit review"}</div>
               </div>
             )}
           </div>

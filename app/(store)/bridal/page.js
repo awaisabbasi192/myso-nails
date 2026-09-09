@@ -89,7 +89,7 @@ export default function BridalPage() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(270px,1fr))", gap: 20 }}>
           {PACKAGES.map((pkg) => (
             <div key={pkg.name} style={{ border: `1px solid ${pkg.highlight ? "rgba(168,121,104,.5)" : "rgba(168,121,104,.16)"}`, background: pkg.highlight ? "rgba(168,121,104,.06)" : "var(--panel)", padding: 30, position: "relative" }}>
-              {pkg.highlight && <div style={{ position: "absolute", top: -12, left: 24, fontSize: 9.5, letterSpacing: ".22em", textTransform: "uppercase", background: "linear-gradient(100deg,#8C6252,#E8CFC8)", color: "#1A0F0A", padding: "5px 12px" }}>Most popular</div>}
+              {pkg.highlight && <div style={{ position: "absolute", top: -12, left: 24, fontSize: 9.5, letterSpacing: ".22em", textTransform: "uppercase", background: "var(--grad)", color: "var(--btn-fg)", padding: "5px 12px" }}>Most popular</div>}
               <div style={{ fontFamily: "var(--serif)", fontSize: 26, marginBottom: 6 }}>{pkg.name}</div>
               <div style={{ fontSize: 30, fontFamily: "var(--serif)", color: "var(--rose-light)", marginBottom: 4 }}>{pkg.price}</div>
               <div style={{ fontSize: 11, letterSpacing: ".16em", color: "rgba(247,241,237,.4)", marginBottom: 22 }}>{pkg.per}</div>

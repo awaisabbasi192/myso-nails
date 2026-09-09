@@ -192,6 +192,9 @@ model SiteContent {
   dealMode         String    @default("real") // real = reduce price; inflate = keep price, show bigger original
   instagramHandle  String  @default("pressonsby_myra")
   instagramPosts   String  @default("[]")
+  // Site-wide colour palette, chosen by the admin. Layers on top of each
+  // visitor's own light/dark preference. blush | mono | emerald | midnight | rose
+  sitePalette      String  @default("blush")
   updatedAt      DateTime @updatedAt
 }
 

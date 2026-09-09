@@ -1,10 +1,23 @@
 import { Cormorant_Garamond, Jost, Parisienne } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+import { prisma } from "@/lib/prisma";
 import { CartProvider } from "@/components/CartContext";
 import ScrollReveal from "@/components/ScrollReveal";
 import Toast from "@/components/Toast";
 import PageChrome from "@/components/PageChrome";
+
+const PALETTES = ["blush", "mono", "emerald", "midnight", "rose"];
+
+/** Admin-chosen site palette. Falls back to blush if the DB is unreachable. */
+async function getSitePalette() {
+  try {
+    const c = await prisma.siteContent.findUnique({ where: { id: 1 }, select: { sitePalette: true } });
+    return PALETTES.includes(c?.sitePalette) ? c.sitePalette : "blush";
+  } catch {
+    return "blush";
+  }
+}
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -52,12 +65,13 @@ export const viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const palette = await getSitePalette();
   return (
     /* suppressHydrationWarning: the inline script below flips data-theme to
        "dark" before React hydrates, so the server/client attribute differs
        by design. Suppression is scoped to this element only. */
-    <html lang="en" data-theme="light" suppressHydrationWarning className={`${cormorant.variable} ${jost.variable} ${parisienne.variable}`}>
+    <html lang="en" data-theme="light" data-palette={palette} suppressHydrationWarning className={`${cormorant.variable} ${jost.variable} ${parisienne.variable}`}>
       <head>
         {/* Apply saved dark theme before first paint — no fallback so default stays light */}
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();` }} />

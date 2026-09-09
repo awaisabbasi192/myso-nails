@@ -41,7 +41,7 @@ export default async function StoreLayout({ children }) {
           <span><strong style={{ letterSpacing: ".14em", textTransform: "uppercase", fontSize: 11 }}>Store Closed</strong> — {storeClosedMsg}</span>
         </div>
       ) : deal.active ? (
-        <div className="deal-banner" style={{ background: dt.grad, backgroundSize: "200% 100%", animation: "msShimmer 7s linear infinite", color: dt.text, textAlign: "center", padding: "11px 18px", fontSize: 13, letterSpacing: ".04em", display: "flex", alignItems: "center", justifyContent: "center", gap: 10, flexWrap: "wrap", lineHeight: 1.5 }}>
+        <div className="deal-banner" style={{ backgroundImage: dt.grad, backgroundSize: "200% 100%", animation: "msShimmer 7s linear infinite", color: dt.text, textAlign: "center", padding: "11px 18px", fontSize: 13, letterSpacing: ".04em", display: "flex", alignItems: "center", justifyContent: "center", gap: 10, flexWrap: "wrap", lineHeight: 1.5 }}>
           <span style={{ fontSize: 16 }}>{dt.emoji}</span>
           <span className="deal-banner-text">
             <strong style={{ letterSpacing: ".12em", textTransform: "uppercase", fontSize: 12 }}>{deal.title}</strong>

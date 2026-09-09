@@ -25,6 +25,7 @@
   --card-b: rgba(168,121,104,.24);
   --card-b-h: rgba(168,121,104,.55);
   --grad: linear-gradient(100deg,#8C6252,#A87968 45%,#C0907C);
+  --btn-fg: #ffffff;
 }
 
 /* ── DARK MODE (deep espresso + warm blush) ───────────────────────── */
@@ -49,6 +50,110 @@
   --card-b: rgba(214,168,150,.20);
   --card-b-h: rgba(214,168,150,.48);
   --grad: linear-gradient(100deg,#8C6252,#B98876 45%,#D6A896);
+  --btn-fg: #14100F;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SITE PALETTES — chosen by the admin, applied via data-palette on <html>.
+   These layer on top of the visitor's own light/dark choice, so every
+   palette defines both a light and a dark variant.
+   `blush` is the default and lives in the :root / [data-theme] blocks above.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── Mono: black & white, editorial ── */
+[data-palette="mono"] {
+  --bg: #FFFFFF; --panel: #F4F4F4; --panel-2: #EAEAEA;
+  --ink: #0E0E0E; --rose: #1A1A1A; --rose-light: #444444;
+  --bronze: #2B2B2B; --brown: #1A1A1A; --dark-brown: #000000; --blush: #E4E4E4;
+  --header-bg: rgba(255,255,255,.94); --header-border: rgba(0,0,0,.14);
+  --drawer-bg: rgba(255,255,255,.99);
+  --ink-muted: rgba(14,14,14,.62); --ink-faint: rgba(14,14,14,.38);
+  --card-b: rgba(0,0,0,.16); --card-b-h: rgba(0,0,0,.42);
+  --grad: linear-gradient(100deg,#000000,#333333 45%,#111111);
+  --btn-fg: #ffffff;
+}
+[data-palette="mono"][data-theme="dark"] {
+  --bg: #0B0B0B; --panel: #171717; --panel-2: #050505;
+  --ink: #F5F5F5; --rose: #EDEDED; --rose-light: #FFFFFF;
+  --bronze: #C9C9C9; --brown: #A8A8A8; --dark-brown: #8A8A8A; --blush: #DCDCDC;
+  --header-bg: rgba(11,11,11,.94); --header-border: rgba(255,255,255,.16);
+  --drawer-bg: rgba(11,11,11,.99);
+  --ink-muted: rgba(245,245,245,.64); --ink-faint: rgba(245,245,245,.38);
+  --card-b: rgba(255,255,255,.16); --card-b-h: rgba(255,255,255,.42);
+  --grad: linear-gradient(100deg,#4A4A4A,#8A8A8A 45%,#DCDCDC);
+  --btn-fg: #0B0B0B;
+}
+
+/* ── Emerald: deep botanical green ── */
+[data-palette="emerald"] {
+  --bg: #FBFCFB; --panel: #EEF4F0; --panel-2: #E2ECE6;
+  --ink: #12201A; --rose: #2E6B4F; --rose-light: #3F8A67;
+  --bronze: #24553F; --brown: #1B4231; --dark-brown: #123024; --blush: #CFE3D8;
+  --header-bg: rgba(251,252,251,.94); --header-border: rgba(46,107,79,.18);
+  --drawer-bg: rgba(251,252,251,.99);
+  --ink-muted: rgba(18,32,26,.62); --ink-faint: rgba(18,32,26,.36);
+  --card-b: rgba(46,107,79,.22); --card-b-h: rgba(46,107,79,.52);
+  --grad: linear-gradient(100deg,#1B4231,#2E6B4F 45%,#3F8A67);
+  --btn-fg: #ffffff;
+}
+[data-palette="emerald"][data-theme="dark"] {
+  --bg: #0C1310; --panel: #16211B; --panel-2: #070C0A;
+  --ink: #EDF4EF; --rose: #6FB894; --rose-light: #8FD1B0;
+  --bronze: #4E9873; --brown: #3F8A67; --dark-brown: #2E6B4F; --blush: #CFE3D8;
+  --header-bg: rgba(12,19,16,.94); --header-border: rgba(111,184,148,.20);
+  --drawer-bg: rgba(12,19,16,.99);
+  --ink-muted: rgba(237,244,239,.64); --ink-faint: rgba(237,244,239,.36);
+  --card-b: rgba(111,184,148,.20); --card-b-h: rgba(111,184,148,.48);
+  --grad: linear-gradient(100deg,#2E6B4F,#4E9873 45%,#8FD1B0);
+  --btn-fg: #0C1310;
+}
+
+/* ── Midnight: navy + soft silver ── */
+[data-palette="midnight"] {
+  --bg: #FBFBFD; --panel: #EFF1F7; --panel-2: #E3E7F1;
+  --ink: #151A2B; --rose: #38487E; --rose-light: #4E62A3;
+  --bronze: #2C3865; --brown: #222C4F; --dark-brown: #171E37; --blush: #D3DAEC;
+  --header-bg: rgba(251,251,253,.94); --header-border: rgba(56,72,126,.18);
+  --drawer-bg: rgba(251,251,253,.99);
+  --ink-muted: rgba(21,26,43,.62); --ink-faint: rgba(21,26,43,.36);
+  --card-b: rgba(56,72,126,.22); --card-b-h: rgba(56,72,126,.52);
+  --grad: linear-gradient(100deg,#222C4F,#38487E 45%,#4E62A3);
+  --btn-fg: #ffffff;
+}
+[data-palette="midnight"][data-theme="dark"] {
+  --bg: #0C0F1A; --panel: #161B2B; --panel-2: #070911;
+  --ink: #EDF0F8; --rose: #93A5DA; --rose-light: #B3C1EC;
+  --bronze: #6E82C0; --brown: #4E62A3; --dark-brown: #38487E; --blush: #D3DAEC;
+  --header-bg: rgba(12,15,26,.94); --header-border: rgba(147,165,218,.20);
+  --drawer-bg: rgba(12,15,26,.99);
+  --ink-muted: rgba(237,240,248,.64); --ink-faint: rgba(237,240,248,.36);
+  --card-b: rgba(147,165,218,.20); --card-b-h: rgba(147,165,218,.48);
+  --grad: linear-gradient(100deg,#38487E,#6E82C0 45%,#B3C1EC);
+  --btn-fg: #0C0F1A;
+}
+
+/* ── Rose: bright candy pink ── */
+[data-palette="rose"] {
+  --bg: #FFFBFC; --panel: #FBEFF3; --panel-2: #F6E2E9;
+  --ink: #2A1119; --rose: #B03A5F; --rose-light: #CE5A7E;
+  --bronze: #8E2C4B; --brown: #72223B; --dark-brown: #52182A; --blush: #F3CBD8;
+  --header-bg: rgba(255,251,252,.94); --header-border: rgba(176,58,95,.18);
+  --drawer-bg: rgba(255,251,252,.99);
+  --ink-muted: rgba(42,17,25,.62); --ink-faint: rgba(42,17,25,.36);
+  --card-b: rgba(176,58,95,.22); --card-b-h: rgba(176,58,95,.52);
+  --grad: linear-gradient(100deg,#8E2C4B,#B03A5F 45%,#CE5A7E);
+  --btn-fg: #ffffff;
+}
+[data-palette="rose"][data-theme="dark"] {
+  --bg: #170A0F; --panel: #24121A; --panel-2: #0D0508;
+  --ink: #FAEEF2; --rose: #E894AF; --rose-light: #F5B6CA;
+  --bronze: #CE5A7E; --brown: #B03A5F; --dark-brown: #8E2C4B; --blush: #F3CBD8;
+  --header-bg: rgba(23,10,15,.94); --header-border: rgba(232,148,175,.20);
+  --drawer-bg: rgba(23,10,15,.99);
+  --ink-muted: rgba(250,238,242,.64); --ink-faint: rgba(250,238,242,.36);
+  --card-b: rgba(232,148,175,.20); --card-b-h: rgba(232,148,175,.48);
+  --grad: linear-gradient(100deg,#8E2C4B,#CE5A7E 45%,#F5B6CA);
+  --btn-fg: #170A0F;
 }
 
 * { box-sizing: border-box; }
@@ -131,18 +236,18 @@ html { overflow-x: hidden; }
 
 /* Shimmer gradient buttons */
 .shimmer {
-  background: linear-gradient(100deg, #6E4B3E, #8C6252 35%, #C0907C 65%, #8C6252);
+  background: var(--grad);
   background-size: 200% 100%;
   animation: msShimmer 7s linear infinite;
-  color: #fff;
+  color: var(--btn-fg);
 }
 .shimmer:hover { filter: brightness(1.1); }
 .gradient-warm {
-  background: linear-gradient(100deg, #8C6252, #C0907C);
-  color: #fff;
+  background: var(--grad);
+  color: var(--btn-fg);
 }
 .text-gradient {
-  background: linear-gradient(100deg, #8C6252, #C0907C 55%, #6E4B3E);
+  background: var(--grad);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -186,7 +291,7 @@ html { overflow-x: hidden; }
 
 .pill:hover { border-color: var(--rose) !important; color: var(--rose-light) !important; }
 .add-btn { transition: background .2s, color .2s, border-color .2s; }
-.add-btn:hover { background: linear-gradient(100deg, #8C6252, #C0907C); color: #fff; border-color: transparent; }
+.add-btn:hover { background: var(--grad); color: var(--btn-fg); border-color: transparent; }
 .ig:hover img { opacity: 1 !important; transform: scale(1.05); }
 
 [data-scroll-x] { overflow-x: auto; }
