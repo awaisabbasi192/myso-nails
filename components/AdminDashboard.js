@@ -383,7 +383,23 @@ function Overview({ kpis, orders, products }) {
   return (
     <div>
       <h1 style={{ ...h1, marginBottom: 6 }}>Overview</h1>
-      <div style={{ fontSize: 12, color: "var(--ink-faint)", marginBottom: 26 }}>Live from your store</div>
+      <div style={{ fontSize: 12, color: "var(--ink-faint)", marginBottom: 20 }}>Live from your store</div>
+
+      {/* Today at a glance */}
+      <div style={{ display: "flex", alignItems: "center", gap: 26, flexWrap: "wrap", border: "1px solid var(--card-b)", background: "var(--panel)", padding: "18px 24px", marginBottom: 20, borderRadius: 3 }}>
+        <div style={{ fontSize: 10, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--rose)" }}>Today</div>
+        <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+          <span style={{ fontFamily: "var(--serif)", fontSize: 26, color: "var(--ink)" }}>{kpis.todayOrders ?? 0}</span>
+          <span style={{ fontSize: 11.5, color: "var(--ink-muted)" }}>{(kpis.todayOrders ?? 0) === 1 ? "order" : "orders"}</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+          <span style={{ fontFamily: "var(--serif)", fontSize: 26, color: "var(--rose)" }}>{rs(kpis.todayRevenue ?? 0)}</span>
+          <span style={{ fontSize: 11.5, color: "var(--ink-muted)" }}>earned</span>
+        </div>
+        {(kpis.todayOrders ?? 0) === 0 && (
+          <span style={{ fontSize: 11.5, color: "var(--ink-faint)", marginLeft: "auto" }}>No orders yet today — share a set on Instagram ✨</span>
+        )}
+      </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 14, marginBottom: 20 }}>
         {kpiCards.map((k) => (
           <div key={k.label} style={{ border: "1px solid var(--card-b)", background: "var(--panel)", padding: 20 }}>

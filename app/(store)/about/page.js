@@ -4,9 +4,9 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Our story — Press-Ons by Myra",
+  title: "Our story",
   description: "How Press-Ons by Myra started in a bedroom in Lahore and became Pakistan's favourite hand-painted press-on nail brand.",
-  openGraph: { title: "Our story — Press-Ons by Myra" },
+  openGraph: { title: "Our story" },
 };
 
 const label = { fontSize: 11, letterSpacing: ".4em", textTransform: "uppercase", color: "rgba(168,121,104,.8)" };

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { waLink } from "@/lib/format";
 
 export const metadata = {
-  title: "Terms & Policies — Press-Ons by Myra",
+  title: "Terms & Policies",
   description: "Payment, delivery, refund, exchange and privacy policy for Press-Ons by Myra. All orders are paid in advance via JazzCash.",
 };
 

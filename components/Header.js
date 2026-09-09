@@ -50,8 +50,8 @@ export default function Header({ announcement, user }) {
       <header style={{ position: "sticky", top: 0, zIndex: 80, background: "rgba(10,10,11,.94)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(168,121,104,.14)" }}>
         {/* Desktop header */}
         <div className="header-desktop" style={{ maxWidth: 1240, margin: "0 auto", padding: "14px 24px", display: "flex", alignItems: "center", gap: 16 }}>
-          <Link href="/" className="brand-logo" style={{ display: "flex", alignItems: "center", flexShrink: 0, position: "relative", height: 66, width: 66 }}>
-            <Image src="/assets/logo-myra.jpeg" alt="Press-Ons by Myra" fill sizes="66px" style={{ objectFit: "contain" }} priority />
+          <Link href="/" className="brand-logo" style={{ display: "flex", alignItems: "center", flexShrink: 0, position: "relative", height: 104, width: 104 }}>
+            <Image src="/assets/logo-myra.jpeg" alt="Press-Ons by Myra" fill sizes="104px" style={{ objectFit: "contain" }} priority />
           </Link>
 
           <nav className="desktop-nav" style={{ display: "flex", gap: 16, marginLeft: 6, flexWrap: "nowrap" }}>
@@ -89,7 +89,7 @@ export default function Header({ announcement, user }) {
         </div>
 
         {/* Mobile header */}
-        <div className="header-mobile" style={{ display: "none", alignItems: "center", justifyContent: "space-between", padding: "0 16px", height: 58 }}>
+        <div className="header-mobile" style={{ display: "none", alignItems: "center", justifyContent: "space-between", padding: "0 16px", height: 72 }}>
           {/* Hamburger */}
           <button
             onClick={() => setMobileOpen((o) => !o)}
@@ -102,8 +102,8 @@ export default function Header({ announcement, user }) {
           </button>
 
           {/* Logo center */}
-          <Link href="/" className="brand-logo" style={{ display: "flex", alignItems: "center", position: "relative", height: 48, width: 48 }}>
-            <Image src="/assets/logo-myra.jpeg" alt="Press-Ons by Myra" fill sizes="48px" style={{ objectFit: "contain" }} priority />
+          <Link href="/" className="brand-logo" style={{ display: "flex", alignItems: "center", position: "relative", height: 64, width: 64 }}>
+            <Image src="/assets/logo-myra.jpeg" alt="Press-Ons by Myra" fill sizes="64px" style={{ objectFit: "contain" }} priority />
           </Link>
 
           {/* Dark mode toggle + Cart */}

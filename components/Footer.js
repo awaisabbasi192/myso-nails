@@ -7,8 +7,8 @@ export default function Footer() {
     <footer style={{ borderTop: "1px solid var(--card-b)", background: "var(--panel-2)", padding: "60px 24px 30px" }}>
       <div data-r="footer" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1fr", gap: 40 }}>
         <div>
-          <div className="brand-logo" style={{ position: "relative", height: 104, width: 104 }}>
-            <Image src="/assets/logo-myra.jpeg" alt="Press-Ons by Myra" fill sizes="104px" style={{ objectFit: "contain" }} />
+          <div className="brand-logo" style={{ position: "relative", height: 140, width: 140 }}>
+            <Image src="/assets/logo-myra.jpeg" alt="Press-Ons by Myra" fill sizes="140px" style={{ objectFit: "contain" }} />
           </div>
           <p style={{ fontSize: 13, lineHeight: 1.85, color: "var(--ink-muted)", fontWeight: 300, maxWidth: 290, margin: "18px 0 0" }}>
             Hand-painted press-on nail sets, custom bridal work and size-fitted reusable sets. Handmade with love, shipped nationwide from Lahore.

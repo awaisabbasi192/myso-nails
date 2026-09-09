@@ -45,6 +45,11 @@ export default async function AdminPage() {
     if (revenueByDay[day] !== undefined) revenueByDay[day] += o.total;
   });
 
+  // Today's snapshot — the numbers you actually check first thing in the morning.
+  const todayStart = new Date(); todayStart.setHours(0, 0, 0, 0);
+  const todaysOrders = orders.filter((o) => o.createdAt >= todayStart);
+  const todaysCounted = todaysOrders.filter((o) => o.status !== "Rejected" && o.status !== "Cancelled");
+
   const kpis = {
     revenue: revenueThisMonth,
     orders: orders.length,
@@ -54,6 +59,8 @@ export default async function AdminPage() {
     lowStockName: lowStock[0]?.name || null,
     subscribers: subscribers.length,
     messages: messages.length,
+    todayOrders: todaysOrders.length,
+    todayRevenue: todaysCounted.reduce((t, o) => t + o.total, 0),
     revenueChart: Object.entries(revenueByDay).map(([date, total]) => ({ date, total })),
   };
 

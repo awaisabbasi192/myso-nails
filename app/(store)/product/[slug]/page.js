@@ -11,7 +11,7 @@ export async function generateMetadata({ params }) {
   const product = await prisma.product.findUnique({ where: { slug }, select: { name: true, blurb: true, image: true, price: true } });
   if (!product) return {};
   return {
-    title: `${product.name} — Press-Ons by Myra`,
+    title: product.name,
     description: product.blurb?.slice(0, 160) || `Hand-painted press-on nail set — ${product.name}. Rs ${product.price}.`,
     openGraph: { title: product.name, description: product.blurb?.slice(0, 160), images: [product.image] },
   };

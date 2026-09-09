@@ -2,7 +2,7 @@ import Link from "next/link";
 import { waLink } from "@/lib/format";
 
 export const metadata = {
-  title: "Bridal press-on nails — Press-Ons by Myra",
+  title: "Bridal press-on nails",
   description: "Custom hand-painted bridal nail sets fitted to your nails. Mehndi, nikkah and walima looks. Book 2 weeks in advance.",
 };
 

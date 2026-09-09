@@ -54,7 +54,10 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-theme="light" className={`${cormorant.variable} ${jost.variable} ${parisienne.variable}`}>
+    /* suppressHydrationWarning: the inline script below flips data-theme to
+       "dark" before React hydrates, so the server/client attribute differs
+       by design. Suppression is scoped to this element only. */
+    <html lang="en" data-theme="light" suppressHydrationWarning className={`${cormorant.variable} ${jost.variable} ${parisienne.variable}`}>
       <head>
         {/* Apply saved dark theme before first paint — no fallback so default stays light */}
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();` }} />

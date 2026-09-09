@@ -351,8 +351,22 @@ function Summary({ subtotal, shipping, discount, total, coupon, setCoupon, apply
           <span style={{ fontSize: 12.5, color: "rgba(247,241,237,.7)", lineHeight: 1.5 }}>Redeem <strong style={{ color: "#8FD6A6" }}>{availablePoints} points</strong> → save up to {rs(Math.min(availablePoints, Math.floor(total * 0.2) + (pointsRedeem ? pointsDiscount : 0)))}</span>
         </label>
       )}
-      {subtotal > 0 && subtotal < 5000 && (
-        <div style={{ fontSize: 11, color: "rgba(247,241,237,.42)", marginTop: 10, lineHeight: 1.6 }}>Add {rs(5000 - subtotal)} more for <span style={{ color: "var(--rose)" }}>free delivery</span> (orders Rs 5,000+).</div>
+      {subtotal > 0 && (
+        <div style={{ marginTop: 14 }}>
+          <div style={{ height: 5, borderRadius: 99, background: "var(--panel-2)", overflow: "hidden" }}>
+            <div style={{
+              height: "100%", borderRadius: 99,
+              width: `${Math.min(100, (subtotal / FREE_DELIVERY_OVER) * 100)}%`,
+              background: subtotal >= FREE_DELIVERY_OVER ? "var(--good)" : "var(--grad)",
+              transition: "width .5s cubic-bezier(.22,1,.36,1)",
+            }} />
+          </div>
+          <div style={{ fontSize: 11, color: "var(--ink-muted)", marginTop: 8, lineHeight: 1.6 }}>
+            {subtotal >= FREE_DELIVERY_OVER
+              ? <><span style={{ color: "var(--good)" }}>✓ Free delivery unlocked</span> — nice one!</>
+              : <>Add <strong style={{ color: "var(--rose)" }}>{rs(FREE_DELIVERY_OVER - subtotal)}</strong> more for <span style={{ color: "var(--rose)" }}>free delivery</span>.</>}
+          </div>
+        </div>
       )}
       <div style={{ display: "flex", gap: 8, margin: "20px 0" }}>
         <input value={coupon.code} onChange={(e) => setCoupon((c) => ({ ...c, code: e.target.value }))} placeholder="Coupon or gift card code" style={{ flex: 1, background: "transparent", border: "1px solid rgba(168,121,104,.25)", color: "var(--ink)", padding: 12, fontSize: 12.5, outline: "none" }} />

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { waLink } from "@/lib/format";
 
 export const metadata = {
-  title: "Nail size guide — Press-Ons by Myra",
+  title: "Nail size guide",
   description: "How to measure your nails for the perfect press-on fit. Finger size chart, mm ruler guide and free sizing kit.",
 };
 

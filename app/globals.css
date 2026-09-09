@@ -619,10 +619,13 @@ main, .page-fade { animation: pageIn .45s ease both; }
    white into the warm page background in light mode; in dark mode we keep
    a soft light plate behind it so the line-work stays readable.          */
 .brand-logo img { mix-blend-mode: multiply; }
+/* The logo art is a circle on a white JPEG plate. In dark mode `multiply`
+   would erase the black line-work, so instead we keep the plate but clip it
+   to a circle — otherwise a hard white square sits in the header. */
 [data-theme="dark"] .brand-logo {
-  background: #F7F1EE;
-  border-radius: 999px;
-  padding: 4px 10px;
+  background: #FBF7F5;
+  border-radius: 50%;
+  overflow: hidden;
 }
 [data-theme="dark"] .brand-logo img { mix-blend-mode: normal; }
 

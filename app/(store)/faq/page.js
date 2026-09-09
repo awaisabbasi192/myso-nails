@@ -2,7 +2,7 @@ import Link from "next/link";
 import { waLink } from "@/lib/format";
 
 export const metadata = {
-  title: "FAQ — Press-Ons by Myra",
+  title: "FAQ",
   description: "Common questions about press-on nails, sizing, delivery, JazzCash payment, custom orders and more.",
 };
 
