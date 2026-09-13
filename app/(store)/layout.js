@@ -1,3 +1,4 @@
+import Script from "next/script";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppFab from "@/components/WhatsAppFab";
@@ -59,6 +60,14 @@ export default async function StoreLayout({ children }) {
       <Footer />
       <WhatsAppFab />
       <BottomNav user={safeUser} />
+
+      {/* Zanderio AI assistant. Storefront only — the admin panel has its own
+          layout and does not need a customer-facing chat bubble. */}
+      <Script
+        src="https://cdn.zanderio.ai/widget/loader.js"
+        data-id="wdg_ZXsr1z5Vj4w3NWF45yCOMia2"
+        strategy="afterInteractive"
+      />
     </div>
   );
 }

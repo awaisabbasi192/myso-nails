@@ -17,7 +17,9 @@ export default function WhatsAppFab() {
       className="whatsapp-fab"
       style={{
         position: "fixed",
-        bottom: 26,
+        // Sits above the Zanderio chat bubble (bottom: 20px, 56px tall)
+        // so the two floating buttons never overlap.
+        bottom: 96,
         right: 26,
         zIndex: 90,
         display: "flex",
